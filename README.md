@@ -108,6 +108,47 @@ scripts/database/initial_schema.sql
 **Updating an Existing Installation:**
 If you're upgrading from a previous version, apply the migration files in `supabase/migrations/` in order to update your database schema.
 
+### Creating Admin User
+
+After setting up the database, create your admin user via Supabase Dashboard SQL Editor:
+
+**Step 1:** Run this SQL to create the auth user (change email and password as needed):
+
+```sql
+INSERT INTO auth.users (
+  instance_id, id, aud, role, email, encrypted_password,
+  email_confirmed_at, recovery_sent_at, last_sign_in_at,
+  raw_app_meta_data, raw_user_meta_data, created_at, updated_at,
+  confirmation_token, email_change, email_change_token_new, recovery_token
+)
+VALUES (
+  '00000000-0000-0000-0000-000000000000',
+  gen_random_uuid(),
+  'authenticated',
+  'authenticated',
+  'admin@example.com',  -- Change this
+  crypt('YourSecurePassword123!', gen_salt('bf')),  -- Change this
+  now(), now(), now(),
+  '{"provider":"email","providers":["email"]}',
+  '{"role":"admin","name":"Admin User"}',
+  now(), now(), '', '', '', ''
+) RETURNING id;
+```
+
+**Step 2:** Copy the returned `id` value, then run:
+
+```sql
+INSERT INTO public.site_settings (user_id, author_name, site_url, contact_email)
+VALUES (
+  'PASTE_THE_ID_HERE',  -- Paste the UUID from Step 1
+  'Your Site Name',
+  'https://yoursite.com',
+  'admin@example.com'
+);
+```
+
+Now you can log in at `/login` with your credentials.
+
 ### Edge Functions
 
 The project includes two Supabase Edge Functions in `supabase/functions/`:
