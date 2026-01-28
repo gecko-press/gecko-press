@@ -1,0 +1,60 @@
+import {
+  Zap,
+  Shield,
+  Globe,
+  Search,
+  BookOpen,
+  Users,
+  TrendingUp,
+  Star,
+  Heart,
+  Rocket,
+  Award,
+  Target,
+  Lightbulb,
+  Cpu,
+  Smartphone,
+  Monitor,
+  Headphones,
+  Camera,
+  Gamepad2,
+  Wifi,
+  Cloud,
+  Lock,
+  Code,
+  Database,
+  type LucideIcon,
+} from "lucide-react";
+
+export const iconMap: Record<string, LucideIcon> = {
+  Zap,
+  Shield,
+  Globe,
+  Search,
+  BookOpen,
+  Users,
+  TrendingUp,
+  Star,
+  Heart,
+  Rocket,
+  Award,
+  Target,
+  Lightbulb,
+  Cpu,
+  Smartphone,
+  Monitor,
+  Headphones,
+  Camera,
+  Gamepad2,
+  Wifi,
+  Cloud,
+  Lock,
+  Code,
+  Database,
+};
+
+export const availableIcons = Object.keys(iconMap);
+
+export function getIcon(name: string): LucideIcon {
+  return iconMap[name] || Zap;
+}

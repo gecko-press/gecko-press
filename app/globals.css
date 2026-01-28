@@ -1,0 +1,315 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 150 10% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 150 10% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 10% 10%;
+    --primary: 152 60% 36%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 150 20% 96%;
+    --secondary-foreground: 150 10% 10%;
+    --muted: 150 10% 96%;
+    --muted-foreground: 150 10% 40%;
+    --accent: 152 60% 94%;
+    --accent-foreground: 152 60% 24%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 150 10% 90%;
+    --input: 150 10% 90%;
+    --ring: 152 60% 36%;
+    --chart-1: 152 60% 36%;
+    --chart-2: 180 50% 40%;
+    --chart-3: 200 50% 35%;
+    --chart-4: 40 70% 50%;
+    --chart-5: 20 80% 55%;
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    --background: 240 5% 12%;
+    --foreground: 150 10% 95%;
+    --card: 240 4% 9%;
+    --card-foreground: 150 10% 95%;
+    --popover: 160 15% 8%;
+    --popover-foreground: 150 10% 95%;
+    --primary: 152 55% 45%;
+    --primary-foreground: 160 15% 6%;
+    --secondary: 160 15% 14%;
+    --secondary-foreground: 150 10% 95%;
+    --muted: 160 15% 14%;
+    --muted-foreground: 150 10% 60%;
+    --accent: 152 40% 18%;
+    --accent-foreground: 152 55% 65%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 160 15% 16%;
+    --input: 160 15% 16%;
+    --ring: 152 55% 45%;
+    --chart-1: 152 55% 50%;
+    --chart-2: 180 50% 50%;
+    --chart-3: 200 50% 45%;
+    --chart-4: 40 70% 55%;
+    --chart-5: 20 80% 60%;
+  }
+}
+
+@layer base {
+  :root {
+    --font-heading: Inter, system-ui, sans-serif;
+    --font-body: Inter, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, monospace;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+
+  code,
+  pre {
+    font-family: var(--font-mono);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out forwards;
+  }
+}
+
+@layer components {
+  .prose {
+    @apply text-foreground;
+    font-family: var(--font-body);
+  }
+
+  .prose h1 {
+    @apply text-foreground font-bold text-3xl md:text-4xl mt-10 mb-5 leading-tight;
+    font-family: var(--font-heading);
+  }
+
+  .prose h2 {
+    @apply text-foreground font-bold text-2xl md:text-[1.625rem] mt-8 mb-4;
+    font-family: var(--font-heading);
+  }
+
+  .prose h3 {
+    @apply text-foreground font-bold text-xl md:text-[1.375rem] mt-6 mb-3;
+    font-family: var(--font-heading);
+  }
+
+  .prose p {
+    @apply text-foreground/90 mb-4 leading-relaxed;
+  }
+
+  .prose ul {
+    @apply mb-4 ml-6 list-disc;
+  }
+
+  .prose ol {
+    @apply mb-4 ml-6 list-decimal;
+  }
+
+  .prose li {
+    @apply mb-2 pl-1;
+  }
+
+  .prose li::marker {
+    @apply text-primary;
+  }
+
+  .prose a {
+    @apply text-primary hover:underline;
+  }
+
+  .prose strong {
+    @apply font-bold text-foreground;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 border-primary pl-4 italic my-6;
+  }
+
+  .prose table {
+    @apply w-full border-collapse my-6 text-sm;
+  }
+
+  .prose thead {
+    @apply border-b-2 border-border;
+  }
+
+  .prose th {
+    @apply text-left font-semibold p-3 bg-muted/50;
+  }
+
+  .prose td {
+    @apply p-3 border-b border-border;
+  }
+
+  .prose tr:hover {
+    @apply bg-muted/30;
+  }
+
+  .prose tbody tr:last-child td {
+    @apply border-b-0;
+  }
+
+  .prose code {
+    @apply bg-muted px-1.5 py-0.5 rounded text-sm text-primary;
+  }
+
+  .prose pre {
+    @apply bg-[#1e1e1e] p-4 rounded-lg overflow-x-auto my-6 relative;
+  }
+
+  .prose pre code {
+    @apply bg-transparent p-0 text-[#d4d4d4];
+  }
+
+  /* Highlight.js Theme - VS Code Dark+ inspired */
+  .hljs {
+    @apply text-[#d4d4d4];
+  }
+
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-built_in,
+  .hljs-name,
+  .hljs-tag {
+    @apply text-[#569cd6];
+  }
+
+  .hljs-string,
+  .hljs-title,
+  .hljs-section,
+  .hljs-attribute,
+  .hljs-literal,
+  .hljs-template-tag,
+  .hljs-template-variable,
+  .hljs-type {
+    @apply text-[#ce9178];
+  }
+
+  .hljs-number,
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-link,
+  .hljs-meta,
+  .hljs-selector-id,
+  .hljs-title.function_ {
+    @apply text-[#b5cea8];
+  }
+
+  .hljs-comment,
+  .hljs-quote {
+    @apply text-[#6a9955] italic;
+  }
+
+  .hljs-class .hljs-title,
+  .hljs-title.class_,
+  .hljs-title.class_.inherited__ {
+    @apply text-[#4ec9b0];
+  }
+
+  .hljs-variable,
+  .hljs-template-variable {
+    @apply text-[#9cdcfe];
+  }
+
+  .hljs-attr {
+    @apply text-[#9cdcfe];
+  }
+
+  .hljs-params {
+    @apply text-[#d4d4d4];
+  }
+
+  .hljs-regexp {
+    @apply text-[#d16969];
+  }
+
+  .hljs-punctuation {
+    @apply text-[#d4d4d4];
+  }
+
+  .hljs-operator {
+    @apply text-[#d4d4d4];
+  }
+
+  .hljs-property {
+    @apply text-[#9cdcfe];
+  }
+
+  .hljs-function {
+    @apply text-[#dcdcaa];
+  }
+
+  .hljs-deletion {
+    @apply text-[#ce9178] bg-[#5a1d1d];
+  }
+
+  .hljs-addition {
+    @apply text-[#b5cea8] bg-[#1d3d1d];
+  }
+
+  .prose img {
+    @apply rounded-lg my-6;
+  }
+
+  .prose hr {
+    @apply border-border my-8;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

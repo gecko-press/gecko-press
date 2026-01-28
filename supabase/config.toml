@@ -1,0 +1,8 @@
+# Supabase Edge Functions Configuration
+# This file configures how edge functions behave when deployed via Supabase CLI
+
+[functions.gecko-webhook]
+verify_jwt = false
+
+[functions.gecko-categories]
+verify_jwt = false
