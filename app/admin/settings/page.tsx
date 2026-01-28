@@ -461,7 +461,7 @@ export default function SettingsPage() {
         <div className="fixed bottom-4 right-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-lg p-3 flex items-center gap-3 z-50">
           <p className="text-sm text-zinc-600 dark:text-zinc-400">Unsaved changes</p>
           <Button onClick={handleSave} disabled={saving} size="sm" className="h-8">
-            {saving ? "Saving..." : "Save"}
+            {saving ? "Saving.." : "Save"}
           </Button>
         </div>
       )}
