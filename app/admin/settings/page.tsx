@@ -76,7 +76,7 @@ type Settings = {
   adsense_home_after_hero: string;
   adsense_home_between_categories: string;
   adsense_home_before_newsletter: string;
-  webhook_url: string;
+  webhook_id: string;
   webhook_secret: string;
   contact_email: string;
   contact_address: string;
@@ -107,7 +107,7 @@ const defaultSettings: Settings = {
   adsense_home_after_hero: "",
   adsense_home_between_categories: "",
   adsense_home_before_newsletter: "",
-  webhook_url: "",
+  webhook_id: "",
   webhook_secret: "",
   contact_email: "",
   contact_address: "",
@@ -161,7 +161,7 @@ export default function SettingsPage() {
           loadedSettings.adsense_home_after_hero = siteResult.data.adsense_home_after_hero || "";
           loadedSettings.adsense_home_between_categories = siteResult.data.adsense_home_between_categories || "";
           loadedSettings.adsense_home_before_newsletter = siteResult.data.adsense_home_before_newsletter || "";
-          loadedSettings.webhook_url = siteResult.data.webhook_url || "";
+          loadedSettings.webhook_id = siteResult.data.webhook_id || "";
           loadedSettings.webhook_secret = siteResult.data.webhook_secret || "";
           loadedSettings.contact_email = siteResult.data.contact_email || "";
           loadedSettings.contact_address = siteResult.data.contact_address || "";
@@ -228,7 +228,7 @@ export default function SettingsPage() {
             adsense_home_after_hero: settings.adsense_home_after_hero,
             adsense_home_between_categories: settings.adsense_home_between_categories,
             adsense_home_before_newsletter: settings.adsense_home_before_newsletter,
-            webhook_url: settings.webhook_url,
+            webhook_id: settings.webhook_id,
             webhook_secret: settings.webhook_secret,
             contact_email: settings.contact_email,
             contact_address: settings.contact_address,
@@ -254,7 +254,7 @@ export default function SettingsPage() {
           adsense_home_after_hero: settings.adsense_home_after_hero,
           adsense_home_between_categories: settings.adsense_home_between_categories,
           adsense_home_before_newsletter: settings.adsense_home_before_newsletter,
-          webhook_url: settings.webhook_url,
+          webhook_id: settings.webhook_id,
           webhook_secret: settings.webhook_secret,
           contact_email: settings.contact_email,
           contact_address: settings.contact_address,
@@ -426,7 +426,7 @@ export default function SettingsPage() {
         <TabsContent value="gecko" className="mt-4">
           <GeckoAuthorityTab
             settings={{
-              webhook_url: settings.webhook_url,
+              webhook_id: settings.webhook_id,
               webhook_secret: settings.webhook_secret,
             }}
             onChange={(geckoSettings) => setSettings({ ...settings, ...geckoSettings })}

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 type GeckoAuthoritySettings = {
-  webhook_url: string;
+  webhook_id: string;
   webhook_secret: string;
 };
 
@@ -22,8 +22,8 @@ export function GeckoAuthorityTab({ settings, onChange, supabaseUrl }: GeckoAuth
   const [copiedSecret, setCopiedSecret] = useState(false);
   const [copiedCategories, setCopiedCategories] = useState(false);
 
-  const fullWebhookUrl = settings.webhook_url
-    ? `${supabaseUrl}/functions/v1/gecko-webhook/${settings.webhook_url}`
+  const fullWebhookUrl = settings.webhook_id
+    ? `${supabaseUrl}/functions/v1/gecko-webhook/${settings.webhook_id}`
     : "";
 
   const categoriesUrl = `${supabaseUrl}/functions/v1/gecko-categories`;
@@ -39,7 +39,7 @@ export function GeckoAuthorityTab({ settings, onChange, supabaseUrl }: GeckoAuth
     const array = new Uint8Array(16);
     crypto.getRandomValues(array);
     const urlId = Array.from(array).map(b => b.toString(16).padStart(2, "0")).join("");
-    onChange({ ...settings, webhook_url: urlId });
+    onChange({ ...settings, webhook_id: urlId });
   }
 
   async function copyToClipboard(text: string, type: "url" | "secret" | "categories") {
@@ -100,7 +100,7 @@ export function GeckoAuthorityTab({ settings, onChange, supabaseUrl }: GeckoAuth
               <RefreshCw className="w-4 h-4" />
             </Button>
           </div>
-          {!settings.webhook_url && (
+          {!settings.webhook_id && (
             <p className="text-xs text-amber-600 dark:text-amber-400">
               Click the refresh button to generate a unique webhook URL
             </p>
