@@ -61,7 +61,7 @@
 - **Database**: Supabase (PostgreSQL)
 - **Styling**: Tailwind CSS
 - **UI Components**: shadcn/ui + Radix UI
-- **Deployment**: Vercel/Netlify
+- **Deployment**: Vercel
 
 ## Getting Started
 
