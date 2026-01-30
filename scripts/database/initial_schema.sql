@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS theme_settings (
       "subtitle": "Future of Tech",
       "description": "In-depth reviews, guides, and insights on the latest technology trends. Stay ahead with expert analysis and recommendations.",
       "searchPlaceholder": "What are you looking for?",
-      "imageUrl": "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200",
+      "imageUrl": "https://images.pexels.com/photos/35414673/pexels-photo-35414673.jpeg?auto=compress&cs=tinysrgb&w=1200",
       "metrics": [
         {
           "icon": "BookOpen",
