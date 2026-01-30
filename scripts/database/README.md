@@ -97,6 +97,7 @@ node scripts/database/create-admin.js
 **User Interaction:**
 - `newsletter_subscribers` - Email subscriptions
 - `contact_submissions` - Contact form submissions
+- `post_reactions` - Post reactions (like, love, etc.)
 
 ---
 
