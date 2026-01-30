@@ -74,7 +74,7 @@
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/belisoftware/gecko-press.git
+   git clone https://github.com/gecko-press/gecko-press.git
    cd gecko-press
    ```
 
