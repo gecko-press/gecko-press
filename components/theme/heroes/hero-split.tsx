@@ -1,10 +1,41 @@
 "use client";
 
-import { Search, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
-import { getIcon } from "@/lib/theme/icons";
 import type { HeroSplitSettings } from "@/lib/supabase/types";
+
+const IconSearch = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+  </svg>
+);
+
+const IconArrowRight = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+  </svg>
+);
+
+const IconBookOpen = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+  </svg>
+);
+
+const IconUsers = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+  </svg>
+);
+
+const IconTrendingUp = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+  </svg>
+);
+
+type IconComponent = ({ className }: { className?: string }) => JSX.Element;
+const metricIcons: Record<string, IconComponent> = { BookOpen: IconBookOpen, Users: IconUsers, TrendingUp: IconTrendingUp };
 
 type Props = {
   settings?: HeroSplitSettings;
@@ -27,7 +58,6 @@ const defaultSettings: HeroSplitSettings = {
 export function HeroSplit({ settings = defaultSettings }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const config = { ...defaultSettings, ...settings };
-  const BadgeIcon = getIcon("TrendingUp");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,8 +77,9 @@ export function HeroSplit({ settings = defaultSettings }: Props) {
           fill
           quality={75}
           className="object-cover"
-          sizes="50vw"
+          sizes="(max-width: 1024px) 0vw, 50vw"
           priority
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
       </div>
@@ -56,7 +87,7 @@ export function HeroSplit({ settings = defaultSettings }: Props) {
       <div className="relative z-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 w-full">
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 text-primary text-sm font-medium mb-8 animate-fade-in">
-            <BadgeIcon className="w-4 h-4" />
+            <IconTrendingUp className="w-4 h-4" />
             <span>{config.badge}</span>
           </div>
 
@@ -76,7 +107,7 @@ export function HeroSplit({ settings = defaultSettings }: Props) {
           >
             <div className="flex items-center gap-2">
               <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <IconSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type="text"
                   value={searchQuery}
@@ -90,14 +121,14 @@ export function HeroSplit({ settings = defaultSettings }: Props) {
                 className="px-6 py-4 bg-primary text-primary-foreground font-medium rounded-xl hover:bg-primary/90 transition-colors flex items-center gap-2"
               >
                 <span className="hidden sm:inline">Search</span>
-                <ArrowRight className="w-5 h-5" />
+                <IconArrowRight className="w-5 h-5" />
               </button>
             </div>
           </form>
 
           <div className="flex flex-wrap gap-6 animate-slide-up" style={{ animationDelay: "0.25s" }}>
             {config.metrics.map((metric, index) => {
-              const MetricIcon = getIcon(metric.icon);
+              const MetricIcon = metricIcons[metric.icon] || IconTrendingUp;
               return (
                 <div key={index} className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-3xl bg-primary/10 flex items-center justify-center">

@@ -11,9 +11,9 @@ interface CardClassicProps {
 export function CardClassic({ post }: CardClassicProps) {
   const formattedDate = post.published_at
     ? new Date(post.published_at).toLocaleDateString("en-US", {
-      day: "numeric",
-      month: "short",
-    })
+        day: "numeric",
+        month: "short",
+      })
     : "";
 
   const categoryName = post.category?.name || "Uncategorized";

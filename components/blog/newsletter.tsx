@@ -67,7 +67,7 @@ export function Newsletter() {
   };
 
   return (
-    <section className="relative overflow-hidden py-16 mt-8">
+    <section className="relative overflow-hidden py-16 mt-12">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-primary/10 to-transparent" />
       <div className="absolute top-0 left-1/4 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />

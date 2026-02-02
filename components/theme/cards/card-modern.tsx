@@ -10,10 +10,10 @@ interface CardModernProps {
 export function CardModern({ post }: CardModernProps) {
   const formattedDate = post.published_at
     ? new Date(post.published_at).toLocaleDateString("en-US", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    })
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
     : "";
 
   const categoryName = post.category?.name || "Uncategorized";

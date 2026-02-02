@@ -1,9 +1,34 @@
 "use client";
 
-import { Search } from "lucide-react";
 import { useState } from "react";
-import { getIcon } from "@/lib/theme/icons";
 import type { HeroCenteredSettings } from "@/lib/supabase/types";
+
+const IconSearch = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+  </svg>
+);
+
+const IconZap = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
+  </svg>
+);
+
+const IconGlobe = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
+  </svg>
+);
+
+const IconShield = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+  </svg>
+);
+
+type IconComponent = ({ className }: { className?: string }) => JSX.Element;
+const featureIcons: Record<string, IconComponent> = { Zap: IconZap, Globe: IconGlobe, Shield: IconShield };
 
 type Props = {
   settings?: HeroCenteredSettings;
@@ -25,7 +50,6 @@ const defaultSettings: HeroCenteredSettings = {
 export function HeroCentered({ settings = defaultSettings }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
   const config = { ...defaultSettings, ...settings };
-  const BadgeIcon = getIcon("Zap");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +66,7 @@ export function HeroCentered({ settings = defaultSettings }: Props) {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 sm:pt-20 pb-20 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-8 animate-fade-in border border-primary/20">
-          <BadgeIcon className="w-4 h-4" />
+          <IconZap className="w-4 h-4" />
           <span>{config.badge}</span>
         </div>
 
@@ -64,7 +88,7 @@ export function HeroCentered({ settings = defaultSettings }: Props) {
           <div className="relative group">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 to-accent/50 rounded-3xl blur opacity-30 group-hover:opacity-50 transition duration-300" />
             <div className="relative flex items-center">
-              <Search className="absolute left-4 w-5 h-5 text-muted-foreground" />
+              <IconSearch className="absolute left-4 w-5 h-5 text-muted-foreground" />
               <input
                 type="text"
                 value={searchQuery}
@@ -84,7 +108,7 @@ export function HeroCentered({ settings = defaultSettings }: Props) {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto animate-slide-up mt-20" style={{ animationDelay: "0.3s" }}>
           {config.features.map((feature, index) => {
-            const FeatureIcon = getIcon(feature.icon);
+            const FeatureIcon = featureIcons[feature.icon] || IconZap;
             return (
               <div key={index} className="flex flex-col items-center gap-2 p-5 rounded-xl bg-card border transition-all hover:shadow-lg hover:-translate-y-1">
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">

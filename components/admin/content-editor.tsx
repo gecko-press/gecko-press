@@ -136,10 +136,11 @@ export function ContentEditor({ content, onContentChange }: ContentEditorProps) 
           <button
             type="button"
             onClick={() => handleTabChange("visual")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${activeTab === "visual"
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+              activeTab === "visual"
                 ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-sm"
                 : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
-              }`}
+            }`}
           >
             <Type className="w-3.5 h-3.5" />
             Visual
@@ -147,10 +148,11 @@ export function ContentEditor({ content, onContentChange }: ContentEditorProps) 
           <button
             type="button"
             onClick={() => handleTabChange("html")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${activeTab === "html"
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+              activeTab === "html"
                 ? "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-sm"
                 : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
-              }`}
+            }`}
           >
             <Code className="w-3.5 h-3.5" />
             HTML

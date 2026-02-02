@@ -20,6 +20,7 @@ export default function ViewsChart({ data }: ViewsChartProps) {
   const [pathLength, setPathLength] = useState(0);
   const [isAnimate, setIsAnimate] = useState(false);
 
+  // 1. Boyut ve Renk Yönetimi
   useEffect(() => {
     const update = () => {
       if (containerRef.current) {
@@ -36,11 +37,13 @@ export default function ViewsChart({ data }: ViewsChartProps) {
     return () => ro.disconnect();
   }, []);
 
+  // 2. Animasyon Tetikleyici (Kritik Bölge)
   useEffect(() => {
     if (pathRef.current && dimensions.width > 0) {
       const length = pathRef.current.getTotalLength();
       setPathLength(length);
 
+      // Önceki animasyon kalıntılarını temizlemek için küçük bir delay
       const timer = setTimeout(() => {
         setIsAnimate(true);
       }, 50);
@@ -85,14 +88,11 @@ export default function ViewsChart({ data }: ViewsChartProps) {
           </linearGradient>
         </defs>
 
-        {/* Tül Efekti (Area Fill)
-          Line animasyonu 2 saniye sürdüğü için delay'i 2000ms (2s) yaptık.
-        */}
+        {/* Tül Efekti */}
         <path
           d={areaPath}
           fill="url(#areaGrad)"
-          className={`transition-opacity duration-700 ${isAnimate ? 'opacity-100' : 'opacity-0'}`}
-          style={{ transitionDelay: isAnimate ? '2000ms' : '0ms' }}
+          className={`transition-opacity duration-1000 delay-500 ${isAnimate ? 'opacity-100' : 'opacity-0'}`}
         />
 
         {/* Ana Çizgi */}
@@ -108,17 +108,18 @@ export default function ViewsChart({ data }: ViewsChartProps) {
             strokeDasharray: pathLength,
             strokeDashoffset: isAnimate ? 0 : pathLength,
             transition: isAnimate ? "stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
-            opacity: pathLength > 0 ? 1 : 0
+            opacity: pathLength > 0 ? 1 : 0 // Uzunluk hesaplanana kadar gizle
           }}
         />
 
-        {/* Eksenler ve Etkileşim aynı kalıyor... */}
+        {/* Eksenler */}
         {data.map((d, i) => (
           <text key={i} x={getX(i)} y={height - 5} textAnchor="middle" className="fill-zinc-400 text-[10px] font-bold">
             {d.month}
           </text>
         ))}
 
+        {/* Etkileşim ve Tooltip */}
         {data.map((d, i) => {
           const x = getX(i);
           const y = getY(d.views);
@@ -126,9 +127,11 @@ export default function ViewsChart({ data }: ViewsChartProps) {
           return (
             <g key={i} className="group">
               <rect x={x - bw / 2} y={0} width={bw} height={height} fill="transparent" className="cursor-pointer" />
+
               <g className="opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none">
                 <line x1={x} y1={padding.top} x2={x} y2={height - padding.bottom} className="stroke-zinc-200 dark:stroke-zinc-800" strokeDasharray="4" />
                 <circle cx={x} cy={y} r="6" fill={hslColor} stroke="white" strokeWidth="3" />
+
                 <rect x={x - 45} y={y - 45} width="90" height="30" rx="8" className="fill-zinc-900 dark:fill-zinc-50 shadow-xl" />
                 <text x={x} y={y - 26} textAnchor="middle" className="fill-white dark:fill-zinc-900 text-[11px] font-bold">
                   {d.views.toLocaleString()}

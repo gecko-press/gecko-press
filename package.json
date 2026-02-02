@@ -56,7 +56,6 @@
     "@tiptap/react": "^3.17.1",
     "@tiptap/starter-kit": "^3.17.1",
     "@types/highlight.js": "^9.12.4",
-    "@types/node": "20.6.2",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
@@ -88,6 +87,7 @@
   },
   "devDependencies": {
     "@types/highlight.js": "^9.12.4",
+    "@types/node": "^25.2.0",
     "critters": "^0.0.23"
   },
   "browserslist": [

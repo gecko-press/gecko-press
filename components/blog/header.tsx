@@ -4,11 +4,64 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useState, useRef } from "react";
-import { Moon, Sun, Menu, X, Home, LayoutGrid, ChevronDown, ExternalLink, Rss } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase/client";
 import { useThemeConfig } from "@/lib/theme/context";
+
+const IconHome = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+  </svg>
+);
+
+const IconGrid = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+  </svg>
+);
+
+const IconMoon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+  </svg>
+);
+
+const IconSun = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+  </svg>
+);
+
+const IconMenu = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
+  </svg>
+);
+
+const IconX = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+  </svg>
+);
+
+const IconChevronDown = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m6 9 6 6 6-6"/>
+  </svg>
+);
+
+const IconExternalLink = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+  </svg>
+);
+
+const IconRss = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/>
+  </svg>
+);
 
 type MenuItem = {
   id: string;
@@ -23,8 +76,8 @@ type MenuItem = {
 };
 
 const defaultNavigation = [
-  { name: "Home", href: "/", icon: Home },
-  { name: "Categories", href: "/categories", icon: LayoutGrid },
+  { name: "Home", href: "/", icon: IconHome },
+  { name: "Categories", href: "/categories", icon: IconGrid },
 ];
 
 export function Header() {
@@ -133,7 +186,7 @@ export function Header() {
                         className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-accent"
                       >
                         {item.label}
-                        <ChevronDown className={cn("h-4 w-4 transition-transform", openDropdown === item.id && "rotate-180")} />
+                        <IconChevronDown className={cn("h-4 w-4 transition-transform", openDropdown === item.id && "rotate-180")} />
                       </button>
 
                       {openDropdown === item.id && (
@@ -148,7 +201,7 @@ export function Header() {
                               className="flex items-center gap-2 px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
                             >
                               {child.label}
-                              {child.open_in_new_tab && <ExternalLink className="h-3 w-3" />}
+                              {child.open_in_new_tab && <IconExternalLink className="h-3 w-3" />}
                             </Link>
                           ))}
                         </div>
@@ -166,7 +219,7 @@ export function Header() {
                     className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-accent"
                   >
                     {item.label}
-                    {item.open_in_new_tab && <ExternalLink className="h-3 w-3" />}
+                    {item.open_in_new_tab && <IconExternalLink className="h-3 w-3" />}
                   </Link>
                 );
               })}
@@ -184,7 +237,7 @@ export function Header() {
                 className="rounded-md h-8 w-8"
                 aria-label="RSS Feed"
               >
-                <Rss className="h-4 w-4" />
+                <IconRss className="h-4 w-4" />
               </Button>
             </Link>
 
@@ -197,9 +250,9 @@ export function Header() {
                 aria-label="Toggle theme"
               >
                 {resolvedTheme === "dark" ? (
-                  <Sun className="h-4 w-4" />
+                  <IconSun className="h-4 w-4" />
                 ) : (
-                  <Moon className="h-4 w-4" />
+                  <IconMoon className="h-4 w-4" />
                 )}
               </Button>
             )}
@@ -212,9 +265,9 @@ export function Header() {
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? (
-                <X className="h-4 w-4" />
+                <IconX className="h-4 w-4" />
               ) : (
-                <Menu className="h-4 w-4" />
+                <IconMenu className="h-4 w-4" />
               )}
             </Button>
           </div>
@@ -250,7 +303,7 @@ export function Header() {
                         className="flex items-center justify-between w-full px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-accent"
                       >
                         {item.label}
-                        <ChevronDown className={cn("h-4 w-4 transition-transform", isOpen && "rotate-180")} />
+                        <IconChevronDown className={cn("h-4 w-4 transition-transform", isOpen && "rotate-180")} />
                       </button>
                       {isOpen && (
                         <div className="ml-4 mt-1 space-y-1">
@@ -264,7 +317,7 @@ export function Header() {
                               className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-accent"
                             >
                               {child.label}
-                              {child.open_in_new_tab && <ExternalLink className="h-3 w-3" />}
+                              {child.open_in_new_tab && <IconExternalLink className="h-3 w-3" />}
                             </Link>
                           ))}
                         </div>
@@ -283,7 +336,7 @@ export function Header() {
                     className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-accent"
                   >
                     {item.label}
-                    {item.open_in_new_tab && <ExternalLink className="h-3 w-3" />}
+                    {item.open_in_new_tab && <IconExternalLink className="h-3 w-3" />}
                   </Link>
                 );
               })}
