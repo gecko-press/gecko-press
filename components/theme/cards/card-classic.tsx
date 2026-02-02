@@ -11,9 +11,9 @@ interface CardClassicProps {
 export function CardClassic({ post }: CardClassicProps) {
   const formattedDate = post.published_at
     ? new Date(post.published_at).toLocaleDateString("en-US", {
-        day: "numeric",
-        month: "short",
-      })
+      day: "numeric",
+      month: "short",
+    })
     : "";
 
   const categoryName = post.category?.name || "Uncategorized";
@@ -26,6 +26,7 @@ export function CardClassic({ post }: CardClassicProps) {
             src={post.cover_image}
             alt={post.title}
             fill
+            quality={70}
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
@@ -53,15 +54,15 @@ export function CardClassic({ post }: CardClassicProps) {
           {post.excerpt}
         </p>
 
-        <div className="mt-auto flex items-center gap-3 text-xs text-muted-foreground">
+        <div className="mt-auto flex items-center gap-3 text-sm text-muted-foreground">
           {formattedDate && (
             <div className="flex items-center gap-1">
-              <Calendar className="w-3 h-3" />
+              <Calendar className="w-3.5 h-3.5" />
               <span>{formattedDate}</span>
             </div>
           )}
           <div className="flex items-center gap-1">
-            <Clock className="w-3 h-3" />
+            <Clock className="w-3.5 h-3.5" />
             <span>{post.reading_time} min</span>
           </div>
         </div>

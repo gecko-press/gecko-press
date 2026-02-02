@@ -10,10 +10,10 @@ interface CardModernProps {
 export function CardModern({ post }: CardModernProps) {
   const formattedDate = post.published_at
     ? new Date(post.published_at).toLocaleDateString("en-US", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    })
     : "";
 
   const categoryName = post.category?.name || "Uncategorized";
@@ -27,6 +27,7 @@ export function CardModern({ post }: CardModernProps) {
               src={post.cover_image}
               alt={post.title}
               fill
+              quality={70}
               className="object-cover transition-all duration-700 group-hover:scale-110"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
@@ -60,7 +61,7 @@ export function CardModern({ post }: CardModernProps) {
             {post.excerpt}
           </p>
 
-          <div className="flex items-center gap-1 text-xs text-muted-foreground pt-1">
+          <div className="flex items-center gap-1 text-sm text-muted-foreground pt-1">
             <Clock className="w-3.5 h-3.5" />
             <span>{post.reading_time} min read</span>
           </div>

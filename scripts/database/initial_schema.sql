@@ -1,8 +1,8 @@
 /*
-  # GeckoraPress Initial Database Schema
+  # GeckoPress Initial Database Schema
 
   ## Overview
-  Complete database schema for GeckoraPress - A modern blog platform with GeckoAuthority integration.
+  Complete database schema for GeckoPress - A modern blog platform with GeckoAuthority integration.
   This is the consolidated migration file for auto-deploy systems.
 
   IMPORTANT: This file contains ALL database objects needed for a fresh installation.

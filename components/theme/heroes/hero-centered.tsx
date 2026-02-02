@@ -40,7 +40,7 @@ export function HeroCentered({ settings = defaultSettings }: Props) {
       <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 sm:pt-20 pb-20 text-center">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 sm:pt-20 pb-20 text-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-8 animate-fade-in border border-primary/20">
           <BadgeIcon className="w-4 h-4" />
           <span>{config.badge}</span>
@@ -90,8 +90,8 @@ export function HeroCentered({ settings = defaultSettings }: Props) {
                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                   <FeatureIcon className="w-5 h-5 text-primary" />
                 </div>
-                <h3 className="font-semibold text-sm">{feature.title}</h3>
-                <p className="text-xs text-muted-foreground text-center">
+                <h2 className="font-semibold text-sm">{feature.title}</h2>
+                <p className="text-sm text-muted-foreground text-center">
                   {feature.description}
                 </p>
               </div>

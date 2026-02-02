@@ -69,8 +69,8 @@ export function Hero() {
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
               <Zap className="w-5 h-5 text-primary" />
             </div>
-            <h3 className="font-semibold text-sm">Lightning Fast</h3>
-            <p className="text-xs text-muted-foreground text-center">
+            <h2 className="font-semibold text-sm">Lightning Fast</h2>
+            <p className="text-sm text-muted-foreground text-center">
               Maximum performance with Next.js 13
             </p>
           </div>
@@ -79,8 +79,8 @@ export function Hero() {
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
               <Globe className="w-5 h-5 text-primary" />
             </div>
-            <h3 className="font-semibold text-sm">SEO Optimized</h3>
-            <p className="text-xs text-muted-foreground text-center">
+            <h2 className="font-semibold text-sm">SEO Optimized</h2>
+            <p className="text-sm text-muted-foreground text-center">
               Rank higher in search engines
             </p>
           </div>
@@ -89,8 +89,8 @@ export function Hero() {
             <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
               <Shield className="w-5 h-5 text-primary" />
             </div>
-            <h3 className="font-semibold text-sm">Open Source</h3>
-            <p className="text-xs text-muted-foreground text-center">
+            <h2 className="font-semibold text-sm">Open Source</h2>
+            <p className="text-sm text-muted-foreground text-center">
               Completely free under MIT license
             </p>
           </div>

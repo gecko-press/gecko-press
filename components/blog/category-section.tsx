@@ -20,7 +20,7 @@ export function CategorySection({ category, posts }: CategorySectionProps) {
           <h2 className="text-xl sm:text-2xl font-bold">{category.name}</h2>
           <Link
             href={`/categories/${category.slug}`}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 group"
+            className="text-sm text-foreground hover:text-primary underline underline-offset-4 transition-colors flex items-center gap-1 group"
           >
             View All
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
@@ -44,7 +44,7 @@ export function CategorySection({ category, posts }: CategorySectionProps) {
               <span className="text-foreground font-medium">{category.name}</span>{" "}
               category. Check back soon!
             </p>
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <Pencil className="w-3.5 h-3.5" />
               Articles in progress
             </div>

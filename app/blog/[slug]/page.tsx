@@ -30,10 +30,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
 
-  const siteUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckorapress.com";
+  const siteUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.com";
   const postUrl = `${siteUrl}/blog/${post.slug}`;
 
-  const description = post.meta_description || post.excerpt || `Read ${post.title} on GeckoraPress`;
+  const description = post.meta_description || post.excerpt || `Read ${post.title} on GeckoPress`;
 
   const authorName = settings?.author_name || "GeckoAuthority";
 
@@ -78,7 +78,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     ? await getRelatedPosts(post.category_id, post.id, 3)
     : [];
 
-  const siteUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckorapress.com";
+  const siteUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.com";
   const shareUrl = `${siteUrl}/blog/${post.slug}`;
   const authorName = settings?.author_name || "GeckoAuthority";
   const authorBio = settings?.author_bio || "";
@@ -100,7 +100,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     },
     publisher: {
       "@type": "Organization",
-      name: settings?.site_name || "GeckoraPress",
+      name: settings?.site_name || "GeckoPress",
     },
     mainEntityOfPage: {
       "@type": "WebPage",

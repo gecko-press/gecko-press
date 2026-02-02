@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useState, useRef } from "react";
 import { Moon, Sun, Menu, X, Home, LayoutGrid, ChevronDown, ExternalLink, Rss } from "lucide-react";
@@ -101,8 +102,8 @@ export function Header() {
     >
       <nav className="mx-auto max-w-7xl px-4 py-8">
         <div className="flex h-14 items-center justify-between">
-          <Link href="/" className="gap-2 group">
-            <img src={logoUrl} alt="Logo" className="h-12" />
+          <Link href="/" className="gap-2 group relative h-12 w-36">
+            <Image src={logoUrl} alt="Logo" fill className="object-contain object-left" priority />
           </Link>
 
           <div className="flex items-center gap-2">

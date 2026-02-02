@@ -16,7 +16,7 @@ const defaultSettings: HeroSplitSettings = {
   subtitle: "Future of Tech",
   description: "In-depth reviews, guides, and insights on the latest technology trends. Stay ahead with expert analysis and recommendations.",
   searchPlaceholder: "What are you looking for?",
-  imageUrl: "https://images.pexels.com/photos/35414673/pexels-photo-35414673.jpeg?auto=compress&cs=tinysrgb&w=1200",
+  imageUrl: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200",
   metrics: [
     { icon: "BookOpen", value: "500+", label: "Articles" },
     { icon: "Users", value: "50K+", label: "Readers" },
@@ -45,7 +45,9 @@ export function HeroSplit({ settings = defaultSettings }: Props) {
           src={config.imageUrl}
           alt="Hero background"
           fill
+          quality={75}
           className="object-cover"
+          sizes="50vw"
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />

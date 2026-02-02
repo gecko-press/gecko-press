@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Github, Twitter, Linkedin, Globe, ExternalLink } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
@@ -89,8 +90,8 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <Link href="/" className="flex items-center gap-2">
-              <img src={logoUrl} alt="Logo" className="h-8" />
+            <Link href="/" className="relative h-8 w-24">
+              <Image src={logoUrl} alt="Logo" fill className="object-contain object-left" />
             </Link>
 
             <div className="flex items-center gap-4 flex-wrap justify-center">
