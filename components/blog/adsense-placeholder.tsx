@@ -22,7 +22,7 @@ export function AdSensePlaceholder({ format = "horizontal", className }: AdSense
     >
       <div className="text-center text-muted-foreground text-sm">
         <div className="font-semibold mb-1">Ad Space</div>
-        <div className="text-xs opacity-70">AdSense Placeholder</div>
+        <div className="text-xs text-muted-foreground/80">AdSense Placeholder</div>
       </div>
     </div>
   );

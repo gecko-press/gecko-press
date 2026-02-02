@@ -155,7 +155,7 @@ export function Footer() {
               href="https://geckopress.org"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:underline"
+              className="text-primary underline underline-offset-2 hover:text-primary/80"
             >
               GeckoPress
             </a>
