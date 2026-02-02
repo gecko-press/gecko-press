@@ -5,9 +5,12 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { LayoutWrapper } from "@/components/layout-wrapper";
 import { AuthProvider } from "@/lib/auth/context";
 import { DialogProvider } from "@/lib/dialogs";
-import { Toaster } from "sonner";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.com"),
@@ -143,7 +146,6 @@ export default function RootLayout({
           <AuthProvider>
             <DialogProvider>
               <LayoutWrapper>{children}</LayoutWrapper>
-              <Toaster position="top-right" richColors closeButton />
             </DialogProvider>
           </AuthProvider>
         </ThemeProvider>

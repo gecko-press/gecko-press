@@ -1,8 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { Code, Type } from "lucide-react";
-import { WysiwygEditor } from "./wysiwyg-editor";
+
+const WysiwygEditor = dynamic(() => import("./wysiwyg-editor").then(mod => mod.WysiwygEditor), {
+  loading: () => (
+    <div className="flex items-center justify-center min-h-[300px] rounded-md border border-input bg-background">
+      <div className="text-sm text-muted-foreground">Loading editor...</div>
+    </div>
+  ),
+  ssr: false,
+});
 
 interface ContentEditorProps {
   content: string;
