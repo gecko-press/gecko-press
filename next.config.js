@@ -23,6 +23,7 @@ const nextConfig = {
     workerThreads: false,
     cpus: 1,
   },
+  turbopack: {},
   webpack: (config) => {
     config.watchOptions = {
       ...config.watchOptions,
