@@ -65,6 +65,10 @@
 
 ## Getting Started
 
+### Don't want to deal with manual setup?
+
+Use GeckoDeploy to launch this on your Vercel/Supabase in 1-click.
+
 ### Prerequisites
 
 - Node.js 18+
@@ -220,6 +224,10 @@ If you deploy manually through the Supabase Dashboard:
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Star for Support
+
+If you find this project useful, please consider giving it a ⭐ to help others discover it!
 
 ## License
 
