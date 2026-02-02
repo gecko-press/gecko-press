@@ -1,5 +1,8 @@
+import { unstable_cache } from "next/cache";
 import { supabase } from "./client";
 import type { Category, Post, ThemeSettings } from "./types";
+
+const CACHE_REVALIDATE = 60;
 
 export async function getCategories(): Promise<Category[]> {
   try {
@@ -19,7 +22,7 @@ export async function getCategories(): Promise<Category[]> {
   }
 }
 
-export async function getHomepageCategories(): Promise<Category[]> {
+async function fetchHomepageCategories(): Promise<Category[]> {
   try {
     const { data, error } = await supabase
       .from("categories")
@@ -37,6 +40,12 @@ export async function getHomepageCategories(): Promise<Category[]> {
     return [];
   }
 }
+
+export const getHomepageCategories = unstable_cache(
+  fetchHomepageCategories,
+  ["homepage-categories"],
+  { revalidate: CACHE_REVALIDATE }
+);
 
 export async function getCategoryBySlug(slug: string): Promise<Category | null> {
   try {
@@ -80,7 +89,7 @@ export async function getPosts(publishedOnly = true): Promise<Post[]> {
   }
 }
 
-export async function getPostsByCategory(categorySlug: string): Promise<Post[]> {
+async function fetchPostsByCategory(categorySlug: string): Promise<Post[]> {
   try {
     const { data, error } = await supabase
       .from("posts")
@@ -100,7 +109,14 @@ export async function getPostsByCategory(categorySlug: string): Promise<Post[]> 
   }
 }
 
-export async function getPostBySlug(slug: string): Promise<Post | null> {
+export const getPostsByCategory = (categorySlug: string) =>
+  unstable_cache(
+    () => fetchPostsByCategory(categorySlug),
+    [`posts-by-category-${categorySlug}`],
+    { revalidate: CACHE_REVALIDATE }
+  )();
+
+async function fetchPostBySlug(slug: string): Promise<Post | null> {
   try {
     const { data, error } = await supabase
       .from("posts")
@@ -119,7 +135,14 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   }
 }
 
-export async function getThemeSettings(): Promise<ThemeSettings | null> {
+export const getPostBySlug = (slug: string) =>
+  unstable_cache(
+    () => fetchPostBySlug(slug),
+    [`post-${slug}`],
+    { revalidate: CACHE_REVALIDATE }
+  )();
+
+async function fetchThemeSettings(): Promise<ThemeSettings | null> {
   try {
     const { data, error } = await supabase
       .from("theme_settings")
@@ -137,6 +160,12 @@ export async function getThemeSettings(): Promise<ThemeSettings | null> {
     return null;
   }
 }
+
+export const getThemeSettings = unstable_cache(
+  fetchThemeSettings,
+  ["theme-settings"],
+  { revalidate: CACHE_REVALIDATE }
+);
 
 export async function updateThemeSettings(
   settings: Partial<Omit<ThemeSettings, "id" | "key" | "updated_at">>
@@ -218,7 +247,7 @@ export async function deleteCategory(id: string): Promise<void> {
   if (error) throw error;
 }
 
-export async function getSiteSettings() {
+async function fetchSiteSettings() {
   try {
     const { data, error } = await supabase
       .from("site_settings")
@@ -235,6 +264,12 @@ export async function getSiteSettings() {
     return null;
   }
 }
+
+export const getSiteSettings = unstable_cache(
+  fetchSiteSettings,
+  ["site-settings"],
+  { revalidate: CACHE_REVALIDATE }
+);
 
 export async function getPostViewCount(postId: string): Promise<number> {
   try {

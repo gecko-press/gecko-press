@@ -29,7 +29,7 @@ export function CardModern({ post }: CardModernProps) {
               fill
               quality={70}
               className="object-cover transition-all duration-700 group-hover:scale-110"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) calc(50vw - 24px), 400px"
             />
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
