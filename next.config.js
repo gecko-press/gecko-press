@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  poweredByHeader: false,
+  compress: true,
   images: {
     remotePatterns: [
       {
@@ -22,6 +25,10 @@ const nextConfig = {
   experimental: {
     workerThreads: false,
     cpus: 1,
+    optimizeCss: true,
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
   },
   turbopack: {},
   webpack: (config) => {
