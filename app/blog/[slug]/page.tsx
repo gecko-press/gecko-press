@@ -1,29 +1,19 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { Metadata } from "next";
 import { Calendar, Clock, User, Eye } from "lucide-react";
 import { ShareButtons } from "@/components/blog/share-buttons";
+import { CommentsSection } from "@/components/blog/comments-section";
 import { getPostBySlug, getPostViewCount, getRelatedPosts, getSiteSettings } from "@/lib/supabase/queries";
 import { BlogCard } from "@/components/blog/blog-card";
 import { AdSensePlaceholder } from "@/components/blog/adsense-placeholder";
 import { ViewTracker } from "@/components/blog/view-tracker";
 import { ReadingProgress } from "@/components/blog/reading-progress";
 import { ReactionButtons } from "@/components/blog/reaction-buttons";
+import { CodeBlockEnhancer } from "@/components/blog/code-block-enhancer";
 import { calculateReadingTime } from "@/lib/utils/reading-time";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-
-const CodeBlockEnhancer = dynamic(
-  () => import("@/components/blog/code-block-enhancer").then(mod => mod.CodeBlockEnhancer),
-  { ssr: false }
-);
-
-const CommentsSection = dynamic(
-  () => import("@/components/blog/comments-section").then(mod => mod.CommentsSection),
-  { ssr: false, loading: () => <div className="mt-12 pt-8 border-t text-center py-8 text-muted-foreground">Loading comments...</div> }
-);
 
 export const revalidate = 60;
 export const dynamicParams = true;
