@@ -67,7 +67,7 @@
 
 ### Don't want to deal with manual setup?
 
-Use GeckoDeploy to launch this on your Vercel/Supabase in 1-click.
+Use <a href="https://geckodeploy.com">GeckoDeploy</a> to launch this on your Vercel/Supabase in 1-click.
 
 ### Prerequisites
 
