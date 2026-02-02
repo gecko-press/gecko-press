@@ -64,7 +64,6 @@
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.3.0",
-    "eslint": "9.26.0",
     "eslint-config-next": "13.5.1",
     "highlight.js": "^11.11.1",
     "input-otp": "^1.2.4",
@@ -88,7 +87,8 @@
   "devDependencies": {
     "@types/highlight.js": "^9.12.4",
     "@types/node": "^25.2.0",
-    "critters": "^0.0.23"
+    "critters": "^0.0.23",
+    "eslint": "^8.57.1"
   },
   "browserslist": [
     "last 1 Chrome version",
