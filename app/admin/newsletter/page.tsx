@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 import { Pagination } from "@/components/admin/pagination";
+import { useTranslations } from "next-intl";
 
 const ITEMS_PER_PAGE = 15;
 
@@ -28,6 +29,7 @@ type Subscriber = {
 };
 
 export default function NewsletterPage() {
+  const t = useTranslations("admin.newsletter");
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -96,7 +98,7 @@ export default function NewsletterPage() {
 
   function formatDate(dateString: string) {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleDateString(undefined, {
       month: "short",
       day: "numeric",
       year: "numeric",
@@ -129,10 +131,10 @@ export default function NewsletterPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-            Newsletter Subscribers
+            {t("title")}
           </h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-            {activeCount} active, {inactiveCount} inactive
+            {t("stats", { active: activeCount, inactive: inactiveCount })}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -144,11 +146,11 @@ export default function NewsletterPage() {
             disabled={activeCount === 0}
           >
             <Download className="w-4 h-4 mr-1.5" />
-            Export
+            {t("export")}
           </Button>
           <Button variant="outline" size="sm" onClick={fetchSubscribers} className="h-9">
             <RefreshCw className="w-4 h-4 mr-1.5" />
-            Refresh
+            {t("refresh")}
           </Button>
         </div>
       </div>
@@ -157,7 +159,7 @@ export default function NewsletterPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
           <Input
-            placeholder="Search by email..."
+            placeholder={t("search_placeholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10 h-10"
@@ -175,7 +177,7 @@ export default function NewsletterPage() {
                   : "bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800"
               )}
             >
-              {f.charAt(0).toUpperCase() + f.slice(1)}
+              {t(`filter_${f}`)}
             </button>
           ))}
         </div>
@@ -183,13 +185,13 @@ export default function NewsletterPage() {
 
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading subscribers...</p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">{t("loading")}</p>
         </div>
       ) : filteredSubscribers.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 text-center">
           <Users className="w-12 h-12 text-zinc-300 dark:text-zinc-700 mb-4" />
           <p className="text-zinc-500 dark:text-zinc-400">
-            {searchQuery ? "No subscribers match your search" : "No newsletter subscribers yet"}
+            {searchQuery ? t("no_match") : t("no_subscribers")}
           </p>
         </div>
       ) : (
@@ -217,7 +219,7 @@ export default function NewsletterPage() {
                     {subscriber.email}
                   </p>
                   <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                    Subscribed {formatDate(subscriber.subscribed_at)}
+                    {t("subscribed", { date: formatDate(subscriber.subscribed_at) })}
                   </p>
                 </div>
 
@@ -232,7 +234,7 @@ export default function NewsletterPage() {
                         : "text-zinc-400 hover:text-green-500"
                     )}
                     onClick={() => toggleActive(subscriber.id, subscriber.is_active)}
-                    title={subscriber.is_active ? "Deactivate" : "Activate"}
+                    title={subscriber.is_active ? t("deactivate") : t("activate")}
                   >
                     {subscriber.is_active ? (
                       <UserMinus className="w-4 h-4" />
@@ -265,18 +267,18 @@ export default function NewsletterPage() {
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Remove Subscriber</AlertDialogTitle>
+            <AlertDialogTitle>{t("delete_title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to remove this subscriber? This action cannot be undone.
+              {t("delete_description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("delete_cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-red-600 hover:bg-red-700"
             >
-              Remove
+              {t("delete_confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

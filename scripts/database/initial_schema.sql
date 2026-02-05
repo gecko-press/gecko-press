@@ -12,10 +12,13 @@
 
   ### Content Management
   - `categories` - Blog post categories with icons and descriptions
+    - Includes: language_code for multi-language content support
   - `posts` - Blog posts with full GeckoAuthority integration support
     - Includes: content_markdown for storing original markdown from GeckoAuthority
+    - Includes: language_code for multi-language content support
   - `comments` - Threaded comments system with moderation
   - `pages` - Custom pages (About, Privacy Policy, Terms, etc.)
+    - Includes: language_code for multi-language content support
   - `post_views` - View tracking for analytics
   - `post_reactions` - Emoji reaction system (clap, heart, fire, rocket, thinking)
 
@@ -27,6 +30,7 @@
     - Webhook settings (webhook_id, webhook_url, webhook_secret)
     - Logo URL (logo_url)
     - Author bio (author_bio)
+    - Locale settings (default_locale, supported_locales)
   - `menu_items` - Dynamic navigation menu management
 
   ### User Interaction
@@ -66,10 +70,12 @@ CREATE TABLE IF NOT EXISTS categories (
   description text DEFAULT '',
   icon text DEFAULT 'folder',
   show_on_homepage boolean DEFAULT true NOT NULL,
+  language_code text DEFAULT 'en' NOT NULL,
   created_at timestamptz DEFAULT now()
 );
 
 CREATE INDEX IF NOT EXISTS idx_categories_slug ON categories(slug);
+CREATE INDEX IF NOT EXISTS idx_categories_language_code ON categories(language_code);
 
 -- =====================================================
 -- POSTS TABLE (with all GeckoAuthority fields)
@@ -97,7 +103,8 @@ CREATE TABLE IF NOT EXISTS posts (
   tags text[] DEFAULT '{}',
   source text DEFAULT 'manual',
   featured_image text,
-  content_markdown text
+  content_markdown text,
+  language_code text DEFAULT 'en' NOT NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_posts_category ON posts(category_id);
@@ -105,6 +112,7 @@ CREATE INDEX IF NOT EXISTS idx_posts_published ON posts(published);
 CREATE INDEX IF NOT EXISTS idx_posts_slug ON posts(slug);
 CREATE INDEX IF NOT EXISTS idx_posts_source ON posts(source);
 CREATE INDEX IF NOT EXISTS idx_posts_tags ON posts USING GIN(tags);
+CREATE INDEX IF NOT EXISTS idx_posts_language_code ON posts(language_code);
 
 -- =====================================================
 -- THEME SETTINGS TABLE (with hero settings)
@@ -210,6 +218,8 @@ CREATE TABLE IF NOT EXISTS site_settings (
   blog_name text DEFAULT '',
   geckopress_version text DEFAULT '1.0.0',
   geckopress_db_version text DEFAULT '1.0.0',
+  default_locale text DEFAULT 'en' NOT NULL,
+  supported_locales text[] DEFAULT '{en}' NOT NULL,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now(),
   UNIQUE(user_id)
@@ -254,12 +264,14 @@ CREATE TABLE IF NOT EXISTS pages (
   meta_description text DEFAULT '',
   is_published boolean DEFAULT false,
   published boolean DEFAULT false,
+  language_code text DEFAULT 'en' NOT NULL,
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );
 
 CREATE INDEX IF NOT EXISTS idx_pages_slug ON pages(slug);
 CREATE INDEX IF NOT EXISTS idx_pages_is_published ON pages(is_published);
+CREATE INDEX IF NOT EXISTS idx_pages_language_code ON pages(language_code);
 
 CREATE TRIGGER pages_updated_at
   BEFORE UPDATE ON pages

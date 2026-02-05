@@ -1,3 +1,7 @@
+const createNextIntlPlugin = require('next-intl/plugin');
+
+const withNextIntl = createNextIntlPlugin('./i18n.ts');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -26,18 +30,31 @@ const nextConfig = {
     workerThreads: false,
     cpus: 1,
     optimizeCss: true,
+    optimizePackageImports: [
+      "lucide-react",
+      "@radix-ui/react-icons",
+      "date-fns",
+    ],
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
   turbopack: {},
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.watchOptions = {
       ...config.watchOptions,
       ignored: /supabase\/functions/,
     };
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+    }
     return config;
   },
 };
 
-module.exports = nextConfig;
+module.exports = withNextIntl(nextConfig);

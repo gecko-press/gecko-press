@@ -5,6 +5,7 @@ export type Category = {
   description: string;
   icon: string;
   show_on_homepage: boolean;
+  language_code: string;
   created_at: string;
 };
 
@@ -23,6 +24,7 @@ export type Post = {
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  language_code: string;
   category?: Category;
   meta_description?: string | null;
   content_images?: Array<{ url: string; altText: string }>;
@@ -99,4 +101,51 @@ export type Comment = {
   updated_at: string;
   replies?: Comment[];
   post?: Post;
+};
+
+export type Page = {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  meta_description: string;
+  is_published: boolean;
+  published?: boolean;
+  language_code: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type SiteSettings = {
+  id: string;
+  user_id: string | null;
+  author_name: string;
+  site_url: string;
+  blog_name: string;
+  logo_url: string;
+  author_bio: string | null;
+  contact_email: string;
+  contact_address: string;
+  social_links: Record<string, string>;
+  default_locale: string;
+  supported_locales: string[];
+  webhook_id: string;
+  webhook_url: string;
+  webhook_secret: string;
+  adsense_header: string;
+  adsense_article: string;
+  adsense_sidebar: string;
+  adsense_before_content: string;
+  adsense_after_content: string;
+  adsense_footer: string;
+  adsense_category_sidebar: string;
+  adsense_home_after_hero: string;
+  adsense_home_between_categories: string;
+  adsense_home_before_newsletter: string;
+  privacy_policy: string;
+  terms_of_service: string;
+  geckopress_version?: string;
+  geckopress_db_version?: string;
+  created_at: string;
+  updated_at: string;
 };

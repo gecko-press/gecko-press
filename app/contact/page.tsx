@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Mail, MapPin, Send, CheckCircle, Loader2, Twitter, Github, Linkedin, Globe } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,6 +23,7 @@ type ContactInfo = {
 };
 
 export default function ContactPage() {
+  const t = useTranslations("contact");
   const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -75,7 +77,7 @@ export default function ContactPage() {
       setSubmitted(true);
       setFormData({ name: "", email: "", subject: "", message: "" });
     } catch (err) {
-      setError("Failed to send message. Please try again.");
+      setError(t("error_generic"));
       console.error(err);
     } finally {
       setSubmitting(false);
@@ -93,12 +95,11 @@ export default function ContactPage() {
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-950 dark:to-zinc-900">
       <div className="max-w-6xl mx-auto px-4 py-16 sm:py-24">
         <div className="text-center mb-12 mt-12">
-          <h1 className="text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
-            Get in Touch
+          <h1 className="text-3xl sm:text-4xl text-zinc-900 dark:text-zinc-100 mb-4">
+            {t("title")}
           </h1>
           <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-            Have a question or want to work together? We&apos;d love to hear from you.
-            Send us a message and we&apos;ll respond as soon as possible.
+            {t("subtitle")}
           </p>
         </div>
 
@@ -106,7 +107,7 @@ export default function ContactPage() {
           <div className="lg:col-span-2 space-y-8">
             <div className="bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm">
               <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-6">
-                Contact Information
+                {t("info_title")}
               </h2>
 
               {loading ? (
@@ -123,7 +124,7 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-1">
-                          Email
+                          {t("email_label")}
                         </p>
                         <a
                           href={`mailto:${contactInfo.contact_email}`}
@@ -142,7 +143,7 @@ export default function ContactPage() {
                       </div>
                       <div>
                         <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-1">
-                          Address
+                          {t("address_label")}
                         </p>
                         <p className="text-zinc-900 dark:text-zinc-100 whitespace-pre-line">
                           {contactInfo.contact_address}
@@ -156,7 +157,7 @@ export default function ContactPage() {
               {contactInfo?.social_links && Object.keys(contactInfo.social_links).length > 0 && (
                 <div className="mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800">
                   <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-4">
-                    Follow Us
+                    {t("follow_us")}
                   </p>
                   <div className="flex gap-3">
                     {Object.entries(contactInfo.social_links).map(([platform, url]) => {
@@ -189,37 +190,37 @@ export default function ContactPage() {
                     <CheckCircle className="w-8 h-8" />
                   </div>
                   <h3 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100 mb-3">
-                    Message Sent!
+                    {t("success_title")}
                   </h3>
                   <p className="text-zinc-600 dark:text-zinc-400 mb-6">
-                    Thank you for reaching out. We&apos;ll get back to you as soon as possible.
+                    {t("success_message")}
                   </p>
                   <Button onClick={() => setSubmitted(false)} variant="outline">
-                    Send Another Message
+                    {t("send_another")}
                   </Button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="name">Your Name</Label>
+                      <Label htmlFor="name">{t("form_name_label")}</Label>
                       <Input
                         id="name"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="John Doe"
+                        placeholder={t("form_name_placeholder")}
                         required
                         className="h-12"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Your Email</Label>
+                      <Label htmlFor="email">{t("form_email_label")}</Label>
                       <Input
                         id="email"
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="john@example.com"
+                        placeholder={t("form_email_placeholder")}
                         required
                         className="h-12"
                       />
@@ -227,24 +228,24 @@ export default function ContactPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="subject">Subject</Label>
+                    <Label htmlFor="subject">{t("form_subject_label")}</Label>
                     <Input
                       id="subject"
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      placeholder="How can we help you?"
+                      placeholder={t("form_subject_placeholder")}
                       required
                       className="h-12"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
+                    <Label htmlFor="message">{t("form_message_label")}</Label>
                     <Textarea
                       id="message"
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Tell us more about your inquiry..."
+                      placeholder={t("form_message_placeholder")}
                       required
                       className="min-h-[160px] resize-none"
                     />
@@ -260,12 +261,12 @@ export default function ContactPage() {
                     {submitting ? (
                       <>
                         <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                        Sending...
+                        {t("sending")}
                       </>
                     ) : (
                       <>
                         <Send className="w-5 h-5 mr-2" />
-                        Send Message
+                        {t("send_message")}
                       </>
                     )}
                   </Button>

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Github, Twitter, Linkedin, Globe, ExternalLink } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { useThemeConfig } from "@/lib/theme/context";
+import { useTranslations } from "next-intl";
 
 type MenuItem = {
   id: string;
@@ -31,14 +32,15 @@ type SiteSettings = {
   blog_name: string;
 };
 
-const defaultNavigation = [
-  { name: "Home", href: "/" },
-  { name: "Categories", href: "/categories" },
-];
-
 export function Footer() {
+  const t = useTranslations("footer");
   const { config } = useThemeConfig();
   const currentYear = new Date().getFullYear();
+
+  const defaultNavigation = [
+    { name: t("home"), href: "/" },
+    { name: t("categories"), href: "/categories" },
+  ];
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
   const logoUrl = config.siteSettings?.logoUrl || "/geckopress-logo.svg";
@@ -120,7 +122,7 @@ export function Footer() {
                 ))
               )}
               <Link href="/contact" className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground hover:text-foreground transition-colors">Contact</span>
+                <span className="text-xs text-muted-foreground hover:text-foreground transition-colors">{t("contact")}</span>
               </Link>
             </div>
 
@@ -150,7 +152,7 @@ export function Footer() {
 
         <div className="border-t py-4">
           <p className="text-xs text-center text-muted-foreground">
-            {currentYear} {siteSettings?.blog_name || "GeckoPress"}. All rights reserved. Powered by{" "}
+            {currentYear} {siteSettings?.blog_name || "GeckoPress"}. {t("all_rights_reserved")} {t("powered_by")}{" "}
             <a
               href="https://geckopress.org"
               target="_blank"

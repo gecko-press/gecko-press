@@ -35,11 +35,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 import type { Comment } from "@/lib/supabase/types";
 
 const ITEMS_PER_PAGE = 10;
 
 export default function CommentsPage() {
+  const t = useTranslations("admin.comments");
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -132,14 +134,14 @@ export default function CommentsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Comments</h1>
+          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">{t("title")}</h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-            {pendingCount > 0 ? `${pendingCount} pending approval` : "All comments moderated"}
+            {pendingCount > 0 ? t("pending_approval", { count: pendingCount }) : t("all_moderated")}
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={fetchComments} className="h-9">
           <RefreshCw className="w-4 h-4 mr-1.5" />
-          Refresh
+          {t("refresh")}
         </Button>
       </div>
 
@@ -147,7 +149,7 @@ export default function CommentsPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
           <Input
-            placeholder="Search by name, email or content..."
+            placeholder={t("search_placeholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10 h-10"
@@ -156,25 +158,25 @@ export default function CommentsPage() {
         <Select value={filterStatus} onValueChange={(v: "all" | "pending" | "approved") => setFilterStatus(v)}>
           <SelectTrigger className="w-full sm:w-[160px] h-10">
             <Filter className="w-4 h-4 mr-2" />
-            <SelectValue placeholder="Filter" />
+            <SelectValue placeholder={t("filter_all")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Comments</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="approved">Approved</SelectItem>
+            <SelectItem value="all">{t("filter_all")}</SelectItem>
+            <SelectItem value="pending">{t("filter_pending")}</SelectItem>
+            <SelectItem value="approved">{t("filter_approved")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading comments...</p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">{t("loading")}</p>
         </div>
       ) : filteredComments.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 text-center">
           <MessageSquare className="w-12 h-12 text-zinc-300 dark:text-zinc-700 mb-4" />
           <p className="text-zinc-500 dark:text-zinc-400">
-            {searchQuery || filterStatus !== "all" ? "No comments match your criteria" : "No comments yet"}
+            {searchQuery || filterStatus !== "all" ? t("no_match") : t("no_comments")}
           </p>
         </div>
       ) : (
@@ -208,7 +210,7 @@ export default function CommentsPage() {
                       </span>
                       {!comment.is_approved && (
                         <span className="px-1.5 py-0.5 bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400 text-[10px] font-medium rounded">
-                          Pending
+                          {t("pending")}
                         </span>
                       )}
                     </div>
@@ -239,7 +241,7 @@ export default function CommentsPage() {
                         size="icon"
                         className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50 dark:hover:bg-green-950"
                         onClick={() => approveComment(comment.id)}
-                        title="Approve"
+                        title={t("approve")}
                       >
                         <Check className="w-4 h-4" />
                       </Button>
@@ -249,7 +251,7 @@ export default function CommentsPage() {
                         size="icon"
                         className="h-8 w-8 text-amber-600 hover:text-amber-700 hover:bg-amber-50 dark:hover:bg-amber-950"
                         onClick={() => rejectComment(comment.id)}
-                        title="Unapprove"
+                        title={t("unapprove")}
                       >
                         <X className="w-4 h-4" />
                       </Button>
@@ -259,7 +261,7 @@ export default function CommentsPage() {
                       size="icon"
                       className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
                       onClick={() => setDeleteId(comment.id)}
-                      title="Delete"
+                      title={t("delete")}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -281,15 +283,15 @@ export default function CommentsPage() {
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Comment</AlertDialogTitle>
+            <AlertDialogTitle>{t("delete_title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this comment? This action cannot be undone.
+              {t("delete_description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("delete_cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={deleteComment} className="bg-red-600 hover:bg-red-700">
-              Delete
+              {t("delete_confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

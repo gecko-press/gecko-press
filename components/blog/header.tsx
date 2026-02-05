@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useState, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase/client";
@@ -75,12 +76,8 @@ type MenuItem = {
   children?: MenuItem[];
 };
 
-const defaultNavigation = [
-  { name: "Home", href: "/", icon: IconHome },
-  { name: "Categories", href: "/categories", icon: IconGrid },
-];
-
 export function Header() {
+  const t = useTranslations('header');
   const { resolvedTheme, setTheme } = useTheme();
   const { config } = useThemeConfig();
   const [mounted, setMounted] = useState(false);
@@ -91,6 +88,11 @@ export function Header() {
   const [mobileOpenDropdown, setMobileOpenDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const logoUrl = config.siteSettings?.logoUrl || "/geckopress-logo.svg";
+
+  const defaultNavigation = [
+    { name: t('home'), href: "/", icon: IconHome },
+    { name: t('categories'), href: "/categories", icon: IconGrid },
+  ];
 
   useEffect(() => {
     setMounted(true);
@@ -235,7 +237,7 @@ export function Header() {
                 variant="ghost"
                 size="icon"
                 className="rounded-md h-8 w-8"
-                aria-label="RSS Feed"
+                aria-label={t('rss_feed')}
               >
                 <IconRss className="h-4 w-4" />
               </Button>
@@ -247,7 +249,7 @@ export function Header() {
                 size="icon"
                 onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
                 className="rounded-md h-8 w-8"
-                aria-label="Toggle theme"
+                aria-label={t('toggle_theme')}
               >
                 {resolvedTheme === "dark" ? (
                   <IconSun className="h-4 w-4" />
@@ -262,7 +264,7 @@ export function Header() {
               size="icon"
               className="md:hidden rounded-md h-8 w-8"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
+              aria-label={t('toggle_menu')}
             >
               {mobileMenuOpen ? (
                 <IconX className="h-4 w-4" />

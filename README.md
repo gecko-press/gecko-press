@@ -54,13 +54,15 @@
 - **Responsive Design** - Mobile-first approach with Tailwind CSS
 - **GeckoAuthority Integration** - Automatic webhook setup for content distribution
 - **Auto-Deploy Ready** - Built for GeckoDeploy automated deployments
+- **Multi-language Support** - Available in English, Turkish, German, Spanish, Portuguese (BR), Chinese (Simplified), and Japanese
 
 ## Tech Stack
 
-- **Framework**: Next.js 16.1.4 (App Router)
+- **Framework**: Next.js 14.2.21 (App Router)
 - **Database**: Supabase (PostgreSQL)
 - **Styling**: Tailwind CSS
 - **UI Components**: shadcn/ui + Radix UI
+- **Internationalization**: next-intl
 - **Deployment**: Vercel
 
 ## Getting Started
@@ -199,8 +201,10 @@ If you deploy manually through the Supabase Dashboard:
 │   ├── theme/           # Theme components (heroes, cards)
 │   └── ui/              # shadcn/ui components
 ├── lib/                 # Utilities and configurations
+│   ├── i18n/            # Internationalization config
 │   ├── supabase/        # Supabase client and queries
 │   └── theme/           # Theme configuration
+├── messages/            # Translation files (en.json, tr.json, etc.)
 └── supabase/            # Supabase migrations and functions
 ```
 
@@ -224,6 +228,18 @@ If you deploy manually through the Supabase Dashboard:
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+### Adding a New Language
+
+GeckoPress supports internationalization through JSON message files. To add a new language:
+
+1. Create a new file in `messages/` directory (e.g., `messages/fr.json` for French)
+2. Copy the structure from `messages/en.json` and translate the values
+3. Add the locale to the `languages` array in `lib/i18n/config.ts`
+4. Add the import and `messagesMap` entry in `i18n.ts`
+5. Add the import and `messagesMap` entry in `lib/i18n/provider.tsx`
+
+We appreciate translation contributions from native speakers!
 
 ## Star for Support
 

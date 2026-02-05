@@ -44,6 +44,7 @@ hljs.registerLanguage("yml", yaml);
 hljs.registerLanguage("markdown", markdown);
 hljs.registerLanguage("md", markdown);
 import { Check, Copy } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
 interface CodeBlockEnhancerProps {
@@ -52,6 +53,7 @@ interface CodeBlockEnhancerProps {
 }
 
 function CopyButton({ code }: { code: string }) {
+  const t = useTranslations("blogPost");
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -73,7 +75,7 @@ function CopyButton({ code }: { code: string }) {
         "opacity-0 group-hover:opacity-100",
         copied && "bg-green-500/20 text-green-500"
       )}
-      aria-label={copied ? "Copied!" : "Copy code"}
+      aria-label={copied ? t("copied") : t("copy_code")}
     >
       {copied ? (
         <Check className="w-4 h-4" />
@@ -85,6 +87,7 @@ function CopyButton({ code }: { code: string }) {
 }
 
 export function CodeBlockEnhancer({ children, className }: CodeBlockEnhancerProps) {
+  const t = useTranslations("blogPost");
   const containerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -116,7 +119,7 @@ export function CodeBlockEnhancer({ children, className }: CodeBlockEnhancerProp
       copyBtn.className =
         "absolute top-2 right-2 p-1.5 rounded-md transition-all bg-muted/80 hover:bg-muted text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100";
       copyBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
-      copyBtn.setAttribute("aria-label", "Copy code");
+      copyBtn.setAttribute("aria-label", t("copy_code"));
 
       copyBtn.addEventListener("click", async () => {
         const code = block.textContent || "";
@@ -136,7 +139,7 @@ export function CodeBlockEnhancer({ children, className }: CodeBlockEnhancerProp
       wrapper.appendChild(copyBtn);
       pre.appendChild(wrapper);
     });
-  }, [mounted, children]);
+  }, [mounted, children, t]);
 
   return (
     <div ref={containerRef} className={className}>

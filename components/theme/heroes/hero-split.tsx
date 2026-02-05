@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { HeroSplitSettings } from "@/lib/supabase/types";
 
 const IconSearch = ({ className }: { className?: string }) => (
@@ -56,6 +57,7 @@ const defaultSettings: HeroSplitSettings = {
 };
 
 export function HeroSplit({ settings = defaultSettings }: Props) {
+  const t = useTranslations("hero");
   const [searchQuery, setSearchQuery] = useState("");
   const config = { ...defaultSettings, ...settings };
 
@@ -120,7 +122,7 @@ export function HeroSplit({ settings = defaultSettings }: Props) {
                 type="submit"
                 className="px-6 py-4 bg-primary text-primary-foreground font-medium rounded-xl hover:bg-primary/90 transition-colors flex items-center gap-2"
               >
-                <span className="hidden sm:inline">Search</span>
+                <span className="hidden sm:inline">{t("search_button")}</span>
                 <IconArrowRight className="w-5 h-5" />
               </button>
             </div>

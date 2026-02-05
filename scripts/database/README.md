@@ -1,6 +1,6 @@
-# GeckoPress Database Setup
+# GeckoraPress Database Setup
 
-This folder contains GeckoPress's database schema and setup tools.
+This folder contains GeckoraPress's database schema and setup tools.
 
 ## Fresh Installation
 
@@ -15,7 +15,7 @@ For a new installation, run the `initial_schema.sql` file once. This file contai
 **Steps:**
 1. Copy the contents of `initial_schema.sql`
 2. Go to Supabase Dashboard -> SQL Editor
-3. Paste and run the SQL 
+3. Paste and run the SQL
 4. Done! Your database is fully set up.
 
 ---

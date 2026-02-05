@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type MonthlyViews = {
   month: string;
@@ -12,6 +13,7 @@ type ViewsChartProps = {
 };
 
 export default function ViewsChart({ data }: ViewsChartProps) {
+  const t = useTranslations("admin.dashboard.months");
   const containerRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
 
@@ -115,7 +117,7 @@ export default function ViewsChart({ data }: ViewsChartProps) {
         {/* Eksenler */}
         {data.map((d, i) => (
           <text key={i} x={getX(i)} y={height - 5} textAnchor="middle" className="fill-zinc-400 text-[10px] font-bold">
-            {d.month}
+            {t(d.month)}
           </text>
         ))}
 

@@ -18,6 +18,7 @@ import {
 import { ContentEditor } from "@/components/admin/content-editor";
 import { supabase } from "@/lib/supabase/client";
 import { useDialogs } from "@/lib/dialogs";
+import { useTranslations } from "next-intl";
 import type { Category } from "@/lib/supabase/types";
 import { calculateReadingTime } from "@/lib/utils/reading-time";
 
@@ -29,6 +30,7 @@ function generateSlug(title: string): string {
 }
 
 export default function NewPostPage() {
+  const t = useTranslations("admin.posts.new");
   const router = useRouter();
   const { showError, showSuccess } = useDialogs();
   const [categories, setCategories] = useState<Category[]>([]);
@@ -70,11 +72,11 @@ export default function NewPostPage() {
       });
 
       if (error) throw error;
-      showSuccess("Post created successfully");
+      showSuccess(t("create_success"));
       router.push("/admin/posts");
     } catch (error) {
       console.error("Failed to create post:", error);
-      showError("Failed to create post. Please try again.");
+      showError(t("create_error"));
     } finally {
       setSaving(false);
     }
@@ -89,15 +91,15 @@ export default function NewPostPage() {
           </Button>
         </Link>
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">New Post</h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">Create a new blog post</p>
+          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">{t("title")}</h1>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{t("description")}</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-4">
           <div className="space-y-1.5">
-            <Label>Title</Label>
+            <Label>{t("label_title")}</Label>
             <Input
               type="text"
               value={form.title}
@@ -108,30 +110,30 @@ export default function NewPostPage() {
                   slug: generateSlug(e.target.value),
                 });
               }}
-              placeholder="Enter post title"
+              placeholder={t("placeholder_title")}
               required
             />
           </div>
 
           <div className="space-y-1.5">
-            <Label>Slug</Label>
+            <Label>{t("label_slug")}</Label>
             <Input
               type="text"
               value={form.slug}
               onChange={(e) => setForm({ ...form, slug: e.target.value })}
-              placeholder="url-friendly-slug"
+              placeholder={t("placeholder_slug")}
               required
             />
           </div>
 
           <div className="space-y-1.5">
-            <Label>Category</Label>
+            <Label>{t("label_category")}</Label>
             <Select
               value={form.category_id}
               onValueChange={(value) => setForm({ ...form, category_id: value })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select category" />
+                <SelectValue placeholder={t("placeholder_category")} />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
@@ -144,13 +146,13 @@ export default function NewPostPage() {
           </div>
 
           <div className="space-y-1.5">
-            <Label>Cover Image URL</Label>
+            <Label>{t("label_cover_image")}</Label>
             <div className="flex gap-2">
               <Input
                 type="url"
                 value={form.cover_image}
                 onChange={(e) => setForm({ ...form, cover_image: e.target.value })}
-                placeholder="https://example.com/image.jpg"
+                placeholder={t("placeholder_cover_image")}
                 className="flex-1"
               />
               {form.cover_image && (
@@ -162,11 +164,11 @@ export default function NewPostPage() {
           </div>
 
           <div className="space-y-1.5">
-            <Label>Excerpt</Label>
+            <Label>{t("label_excerpt")}</Label>
             <Textarea
               value={form.excerpt}
               onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
-              placeholder="Brief description of the post"
+              placeholder={t("placeholder_excerpt")}
               rows={2}
             />
           </div>
@@ -186,23 +188,23 @@ export default function NewPostPage() {
             {form.published ? (
               <>
                 <Eye className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                <span>Will be published</span>
+                <span>{t("will_be_published")}</span>
               </>
             ) : (
               <>
                 <EyeOff className="w-4 h-4" />
-                <span>Save as draft</span>
+                <span>{t("save_as_draft")}</span>
               </>
             )}
           </button>
 
           <div className="flex gap-2">
             <Link href="/admin/posts">
-              <Button variant="outline" type="button" size="sm" className="h-9">Cancel</Button>
+              <Button variant="outline" type="button" size="sm" className="h-9">{t("cancel")}</Button>
             </Link>
             <Button type="submit" disabled={saving} size="sm" className="h-9">
               <Save className="w-4 h-4 mr-1.5" />
-              {saving ? "Saving..." : "Save Post"}
+              {saving ? t("saving") : t("save_post")}
             </Button>
           </div>
         </div>

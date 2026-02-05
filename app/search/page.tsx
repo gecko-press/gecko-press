@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Search, Loader2, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BlogCard } from "@/components/blog/blog-card";
@@ -12,6 +13,7 @@ import type { Post } from "@/lib/supabase/types";
 function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const t = useTranslations("search");
   const initialQuery = searchParams.get("q") || "";
 
   const [query, setQuery] = useState(initialQuery);
@@ -70,13 +72,23 @@ function SearchContent() {
     router.push("/search");
   };
 
+  const getResultsText = () => {
+    if (results.length === 0) {
+      return t("no_results", { query: initialQuery });
+    }
+    if (results.length === 1) {
+      return t("results_count", { count: results.length, query: initialQuery });
+    }
+    return t("results_count_plural", { count: results.length, query: initialQuery });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto px-4 py-8 pt-32">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Search Articles</h1>
+          <h1 className="text-4xl font-bold mb-4">{t("title")}</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Find articles by title, content, or keywords
+            {t("subtitle")}
           </p>
         </div>
 
@@ -87,7 +99,7 @@ function SearchContent() {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search articles..."
+              placeholder={t("placeholder")}
               className="pl-12 pr-24 h-14 text-lg rounded-full border-2 focus:border-primary"
             />
             {query && (
@@ -104,7 +116,7 @@ function SearchContent() {
               disabled={loading || !query.trim()}
               className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full px-6"
             >
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Search"}
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : t("button")}
             </Button>
           </div>
         </form>
@@ -116,11 +128,7 @@ function SearchContent() {
         ) : searched ? (
           <>
             <div className="mb-6">
-              <p className="text-muted-foreground">
-                {results.length === 0
-                  ? `No results found for "${initialQuery}"`
-                  : `Found ${results.length} result${results.length !== 1 ? "s" : ""} for "${initialQuery}"`}
-              </p>
+              <p className="text-muted-foreground">{getResultsText()}</p>
             </div>
 
             {results.length > 0 ? (
@@ -134,9 +142,9 @@ function SearchContent() {
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
                   <Search className="w-8 h-8 text-muted-foreground" />
                 </div>
-                <h3 className="text-lg font-medium mb-2">No articles found</h3>
+                <h3 className="text-lg font-medium mb-2">{t("no_articles_title")}</h3>
                 <p className="text-muted-foreground mb-4">
-                  Try searching with different keywords
+                  {t("no_articles_hint")}
                 </p>
               </div>
             )}
@@ -146,9 +154,9 @@ function SearchContent() {
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
               <Search className="w-8 h-8 text-primary" />
             </div>
-            <h3 className="text-lg font-medium mb-2">Start searching</h3>
+            <h3 className="text-lg font-medium mb-2">{t("start_title")}</h3>
             <p className="text-muted-foreground">
-              Enter a keyword to find articles
+              {t("start_hint")}
             </p>
           </div>
         )}

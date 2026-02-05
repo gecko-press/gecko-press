@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { HeroCenteredSettings } from "@/lib/supabase/types";
 
 const IconSearch = ({ className }: { className?: string }) => (
@@ -48,6 +49,7 @@ const defaultSettings: HeroCenteredSettings = {
 };
 
 export function HeroCentered({ settings = defaultSettings }: Props) {
+  const t = useTranslations("hero");
   const [searchQuery, setSearchQuery] = useState("");
   const config = { ...defaultSettings, ...settings };
 
@@ -100,7 +102,7 @@ export function HeroCentered({ settings = defaultSettings }: Props) {
                 type="submit"
                 className="absolute right-2 px-6 py-2 bg-primary text-primary-foreground font-medium rounded-3xl hover:bg-primary/90 transition-colors"
               >
-                Search
+                {t("search_button")}
               </button>
             </div>
           </div>

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase/client";
 import { useDialogs } from "@/lib/dialogs";
+import { useTranslations } from "next-intl";
 import type { Post } from "@/lib/supabase/types";
 
 type PostWithViews = Post & { views_count: number };
@@ -23,6 +24,7 @@ import { Pagination } from "@/components/admin/pagination";
 const ITEMS_PER_PAGE = 10;
 
 export default function PostsPage() {
+  const t = useTranslations("admin.posts");
   const { confirm, showSuccess, showError } = useDialogs();
   const [posts, setPosts] = useState<PostWithViews[]>([]);
   const [loading, setLoading] = useState(true);
@@ -85,10 +87,10 @@ export default function PostsPage() {
 
   async function handleDelete(id: string) {
     const confirmed = await confirm({
-      title: "Delete Post",
-      description: "Are you sure you want to delete this post? This action cannot be undone.",
-      confirmText: "Delete",
-      cancelText: "Cancel",
+      title: t("delete_title"),
+      description: t("delete_description"),
+      confirmText: t("delete_confirm"),
+      cancelText: t("delete_cancel"),
       variant: "destructive",
     });
 
@@ -97,11 +99,11 @@ export default function PostsPage() {
     try {
       const { error } = await supabase.from("posts").delete().eq("id", id);
       if (error) throw error;
-      showSuccess("Post deleted successfully");
+      showSuccess(t("delete_success"));
       fetchPosts();
     } catch (error) {
       console.error("Failed to delete post:", error);
-      showError("Failed to delete post. Please try again.");
+      showError(t("delete_error"));
     }
   }
 
@@ -125,13 +127,13 @@ export default function PostsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Posts</h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">Manage your blog posts</p>
+          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">{t("title")}</h1>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{t("description")}</p>
         </div>
         <Link href="/admin/posts/new">
           <Button size="sm" className="h-9">
             <Plus className="w-4 h-4 mr-1.5" />
-            New Post
+            {t("new_post")}
           </Button>
         </Link>
       </div>
@@ -140,7 +142,7 @@ export default function PostsPage() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 z-10" />
         <Input
           type="text"
-          placeholder="Search posts..."
+          placeholder={t("search_placeholder")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
@@ -150,18 +152,18 @@ export default function PostsPage() {
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden">
         {loading ? (
           <div className="p-12 text-center">
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading posts...</p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">{t("loading")}</p>
           </div>
         ) : filteredPosts.length === 0 ? (
           <div className="p-12 text-center">
             <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              {search ? "No posts match your search" : "No posts yet"}
+              {search ? t("no_results") : t("no_posts")}
             </p>
             {!search && (
               <Link href="/admin/posts/new" className="inline-block mt-3">
                 <Button size="sm" variant="outline">
                   <Plus className="w-4 h-4 mr-1.5" />
-                  Create your first post
+                  {t("create_first")}
                 </Button>
               </Link>
             )}
@@ -194,7 +196,7 @@ export default function PostsPage() {
                             ? 'bg-emerald-500'
                             : 'bg-zinc-400 dark:bg-zinc-600'
                           }`}
-                        title={post.published ? 'Published' : 'Draft'}
+                        title={post.published ? t("published") : t("draft")}
                       />
                       <Link href={`/admin/posts/${post.id}`} className="font-medium text-sm text-zinc-900 dark:text-zinc-100 hover:underline truncate">
                         {post.title}
@@ -208,7 +210,7 @@ export default function PostsPage() {
                         </>
                       )}
                       <span>
-                        {new Date(post.created_at).toLocaleDateString("en-US", {
+                        {new Date(post.created_at).toLocaleDateString(undefined, {
                           month: "short",
                           day: "numeric",
                           year: "numeric",
@@ -232,14 +234,14 @@ export default function PostsPage() {
                       <DropdownMenuItem asChild>
                         <Link href={`/admin/posts/${post.id}`} className="cursor-pointer">
                           <Pencil className="w-3.5 h-3.5 mr-2" />
-                          Edit
+                          {t("editPost")}
                         </Link>
                       </DropdownMenuItem>
                       {post.published && (
                         <DropdownMenuItem asChild>
                           <Link href={`/blog/${post.slug}`} target="_blank" className="cursor-pointer">
                             <ExternalLink className="w-3.5 h-3.5 mr-2" />
-                            View
+                            {t("view")}
                           </Link>
                         </DropdownMenuItem>
                       )}
@@ -247,12 +249,12 @@ export default function PostsPage() {
                         {post.published ? (
                           <>
                             <EyeOff className="w-3.5 h-3.5 mr-2" />
-                            Unpublish
+                            {t("unpublish")}
                           </>
                         ) : (
                           <>
                             <Eye className="w-3.5 h-3.5 mr-2" />
-                            Publish
+                            {t("publish")}
                           </>
                         )}
                       </DropdownMenuItem>
@@ -262,7 +264,7 @@ export default function PostsPage() {
                         className="text-red-600 dark:text-red-400 cursor-pointer focus:text-red-600 dark:focus:text-red-400"
                       >
                         <Trash2 className="w-3.5 h-3.5 mr-2" />
-                        Delete
+                        {t("delete")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Mail, MapPin, Twitter, Github, Linkedin, Globe } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +25,8 @@ type ContactTabProps = {
 };
 
 export function ContactTab({ settings, onChange }: ContactTabProps) {
+  const t = useTranslations("admin.settings.contact");
+
   function updateSocialLink(key: keyof SocialLinks, value: string) {
     onChange({
       ...settings,
@@ -42,22 +45,22 @@ export function ContactTab({ settings, onChange }: ContactTabProps) {
             <Mail className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Contact Email</h2>
+            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("email_title")}</h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Public email address for contact inquiries
+              {t("email_description")}
             </p>
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="contact-email" className="text-xs text-zinc-600 dark:text-zinc-400">
-            Email Address
+            {t("email_label")}
           </Label>
           <Input
             id="contact-email"
             type="email"
             value={settings.contact_email}
             onChange={(e) => onChange({ ...settings, contact_email: e.target.value })}
-            placeholder="contact@yoursite.com"
+            placeholder={t("email_placeholder")}
             className="bg-zinc-50 dark:bg-zinc-800/50"
           />
         </div>
@@ -69,21 +72,21 @@ export function ContactTab({ settings, onChange }: ContactTabProps) {
             <MapPin className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Address</h2>
+            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("address_title")}</h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Physical address (optional)
+              {t("address_description")}
             </p>
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="contact-address" className="text-xs text-zinc-600 dark:text-zinc-400">
-            Address
+            {t("address_label")}
           </Label>
           <Textarea
             id="contact-address"
             value={settings.contact_address}
             onChange={(e) => onChange({ ...settings, contact_address: e.target.value })}
-            placeholder="123 Main Street&#10;City, Country 12345"
+            placeholder={t("address_placeholder")}
             className="bg-zinc-50 dark:bg-zinc-800/50 min-h-[80px]"
           />
         </div>
@@ -95,9 +98,9 @@ export function ContactTab({ settings, onChange }: ContactTabProps) {
             <Globe className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Social Links</h2>
+            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("social_title")}</h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Your social media profiles
+              {t("social_description")}
             </p>
           </div>
         </div>
@@ -105,52 +108,52 @@ export function ContactTab({ settings, onChange }: ContactTabProps) {
           <div className="space-y-2">
             <Label htmlFor="social-twitter" className="text-xs text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5">
               <Twitter className="w-3 h-3" />
-              Twitter / X
+              {t("twitter_label")}
             </Label>
             <Input
               id="social-twitter"
               value={settings.social_links?.twitter || ""}
               onChange={(e) => updateSocialLink("twitter", e.target.value)}
-              placeholder="https://twitter.com/username"
+              placeholder={t("twitter_placeholder")}
               className="bg-zinc-50 dark:bg-zinc-800/50"
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="social-github" className="text-xs text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5">
               <Github className="w-3 h-3" />
-              GitHub
+              {t("github_label")}
             </Label>
             <Input
               id="social-github"
               value={settings.social_links?.github || ""}
               onChange={(e) => updateSocialLink("github", e.target.value)}
-              placeholder="https://github.com/username"
+              placeholder={t("github_placeholder")}
               className="bg-zinc-50 dark:bg-zinc-800/50"
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="social-linkedin" className="text-xs text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5">
               <Linkedin className="w-3 h-3" />
-              LinkedIn
+              {t("linkedin_label")}
             </Label>
             <Input
               id="social-linkedin"
               value={settings.social_links?.linkedin || ""}
               onChange={(e) => updateSocialLink("linkedin", e.target.value)}
-              placeholder="https://linkedin.com/in/username"
+              placeholder={t("linkedin_placeholder")}
               className="bg-zinc-50 dark:bg-zinc-800/50"
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="social-website" className="text-xs text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5">
               <Globe className="w-3 h-3" />
-              Website
+              {t("website_label")}
             </Label>
             <Input
               id="social-website"
               value={settings.social_links?.website || ""}
               onChange={(e) => updateSocialLink("website", e.target.value)}
-              placeholder="https://yourwebsite.com"
+              placeholder={t("website_placeholder")}
               className="bg-zinc-50 dark:bg-zinc-800/50"
             />
           </div>

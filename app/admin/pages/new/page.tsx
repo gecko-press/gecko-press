@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/lib/supabase/client";
 import { PageEditor } from "@/components/admin/pages/page-editor";
 import { useDialogs } from "@/lib/dialogs";
+import { useTranslations } from "next-intl";
 
 function slugify(text: string): string {
   return text
@@ -23,6 +24,7 @@ function slugify(text: string): string {
 }
 
 export default function NewPagePage() {
+  const t = useTranslations("admin.pages.new");
   const router = useRouter();
   const { showError, showSuccess } = useDialogs();
   const [saving, setSaving] = useState(false);
@@ -47,7 +49,7 @@ export default function NewPagePage() {
 
   async function handleSave() {
     if (!title.trim() || !slug.trim()) {
-      showError("Title and slug are required");
+      showError(t("required_error"));
       return;
     }
 
@@ -67,14 +69,14 @@ export default function NewPagePage() {
         .single();
 
       if (error) throw error;
-      showSuccess("Page created successfully");
+      showSuccess(t("create_success"));
       router.push("/admin/pages");
     } catch (error: any) {
       console.error("Failed to create page:", error);
       if (error.code === "23505") {
-        showError("A page with this slug already exists. Please choose a different slug.");
+        showError(t("slug_exists_error"));
       } else {
-        showError("Failed to create page. Please try again.");
+        showError(t("create_error"));
       }
     } finally {
       setSaving(false);
@@ -91,15 +93,15 @@ export default function NewPagePage() {
             </Button>
           </Link>
           <div>
-            <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">New Page</h1>
+            <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">{t("title")}</h1>
             <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Create a new page for your site
+              {t("description")}
             </p>
           </div>
         </div>
         <Button size="sm" className="h-9" onClick={handleSave} disabled={saving}>
           <Save className="w-4 h-4 mr-1.5" />
-          {saving ? "Saving..." : "Save Page"}
+          {saving ? t("saving") : t("save_page")}
         </Button>
       </div>
 
@@ -107,24 +109,24 @@ export default function NewPagePage() {
         <div className="lg:col-span-2 space-y-4">
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Page Title</Label>
+              <Label htmlFor="title">{t("label_title")}</Label>
               <Input
                 id="title"
                 value={title}
                 onChange={(e) => handleTitleChange(e.target.value)}
-                placeholder="Enter page title"
+                placeholder={t("placeholder_title")}
                 className="text-lg"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="slug">URL Slug</Label>
+              <Label htmlFor="slug">{t("label_slug")}</Label>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-zinc-500 dark:text-zinc-400">/page/</span>
                 <Input
                   id="slug"
                   value={slug}
                   onChange={(e) => handleSlugChange(e.target.value)}
-                  placeholder="page-url-slug"
+                  placeholder={t("placeholder_slug")}
                   className="flex-1"
                 />
               </div>
@@ -132,36 +134,36 @@ export default function NewPagePage() {
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4">
-            <Label className="mb-3 block">Page Content</Label>
+            <Label className="mb-3 block">{t("label_content")}</Label>
             <PageEditor content={content} onChange={setContent} />
           </div>
         </div>
 
         <div className="space-y-4">
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-4">
-            <h3 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Publish Settings</h3>
+            <h3 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("publish_settings")}</h3>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-zinc-700 dark:text-zinc-300">Published</p>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">Make this page visible to visitors</p>
+                <p className="text-sm text-zinc-700 dark:text-zinc-300">{t("published")}</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">{t("make_visible")}</p>
               </div>
               <Switch checked={isPublished} onCheckedChange={setIsPublished} />
             </div>
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-4">
-            <h3 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">SEO Settings</h3>
+            <h3 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("seo_settings")}</h3>
             <div className="space-y-2">
-              <Label htmlFor="meta-description">Meta Description</Label>
+              <Label htmlFor="meta-description">{t("label_meta")}</Label>
               <Textarea
                 id="meta-description"
                 value={metaDescription}
                 onChange={(e) => setMetaDescription(e.target.value)}
-                placeholder="Brief description for search engines..."
+                placeholder={t("placeholder_meta")}
                 className="min-h-[100px]"
               />
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                {metaDescription.length}/160 characters
+                {metaDescription.length}/160 {t("characters")}
               </p>
             </div>
           </div>

@@ -1,25 +1,12 @@
-import { Metadata } from "next";
-import { getCategories, getPostsByCategory } from "@/lib/supabase/queries";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
-import { Smartphone, Bot, Headphones, Gamepad2, ArrowRight, Tag } from "lucide-react";
-
-export const revalidate = 60;
-
-export const metadata: Metadata = {
-  title: "Categories - GeckoPress",
-  description: "Browse all categories on GeckoPress. Find tech reviews, guides, and articles organized by topic.",
-  openGraph: {
-    type: "website",
-    title: "Categories - GeckoPress",
-    description: "Browse all categories on GeckoPress. Find tech reviews, guides, and articles organized by topic.",
-  },
-  twitter: {
-    card: "summary",
-    title: "Categories - GeckoPress",
-    description: "Browse all categories on GeckoPress. Find tech reviews, guides, and articles organized by topic.",
-  },
-};
+import { Smartphone, Bot, Headphones, Gamepad2, ArrowRight, Tag, Loader2 } from "lucide-react";
+import { supabase } from "@/lib/supabase/client";
+import type { Category, Post } from "@/lib/supabase/types";
 
 const iconMap: Record<string, React.ReactNode> = {
   "smartphone": <Smartphone className="w-8 h-8" />,
@@ -33,32 +20,81 @@ function getCategoryIcon(iconName: string | null | undefined): React.ReactNode {
   return iconMap[iconName.toLowerCase()] || <Tag className="w-8 h-8" />;
 }
 
-export default async function CategoriesPage() {
-  const categories = await getCategories();
+interface CategoryWithPosts {
+  category: Category;
+  posts: Post[];
+  featuredPost: Post | null;
+}
 
-  const categoriesWithPosts = await Promise.all(
-    categories.map(async (category) => {
-      const posts = await getPostsByCategory(category.slug);
-      return { category, posts, featuredPost: posts[0] || null };
-    })
-  );
+export default function CategoriesPage() {
+  const t = useTranslations("categoriesPage");
+  const [categoriesWithPosts, setCategoriesWithPosts] = useState<CategoryWithPosts[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { data: categories } = await supabase
+        .from("categories")
+        .select("*")
+        .order("name");
+
+      if (!categories) {
+        setLoading(false);
+        return;
+      }
+
+      const results = await Promise.all(
+        categories.map(async (category) => {
+          const { data: posts } = await supabase
+            .from("posts")
+            .select("*")
+            .eq("category_id", category.id)
+            .eq("published", true)
+            .order("created_at", { ascending: false });
+
+          return {
+            category,
+            posts: posts || [],
+            featuredPost: posts?.[0] || null,
+          };
+        })
+      );
+
+      setCategoriesWithPosts(results);
+      setLoading(false);
+    }
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <main className="flex-1 pt-24">
+          <div className="max-w-6xl mx-auto px-4 py-12 flex items-center justify-center">
+            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <main className="flex-1 pt-24">
         <div className="max-w-6xl mx-auto px-4 py-12">
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Browse Categories
+            <h1 className="text-3xl md:text-4xl mb-4">
+              {t("title")}
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Explore our comprehensive guides and reviews across different tech categories
+              {t("subtitle")}
             </p>
           </div>
 
           {categoriesWithPosts.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No categories found.</p>
+              <p className="text-muted-foreground">{t("no_categories")}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -88,7 +124,7 @@ export default async function CategoriesPage() {
                         {getCategoryIcon(category.icon)}
                       </div>
                       <span className="text-sm font-medium text-white/80">
-                        {posts.length} {posts.length === 1 ? "Article" : "Articles"}
+                        {posts.length} {posts.length === 1 ? t("article") : t("articles")}
                       </span>
                     </div>
 
@@ -97,11 +133,11 @@ export default async function CategoriesPage() {
                     </h2>
 
                     <p className="text-white/70 text-sm mb-4 line-clamp-2">
-                      {category.description || `Explore articles about ${category.name}`}
+                      {category.description || `${t("explore_articles")} ${category.name}`}
                     </p>
 
                     <div className="flex items-center gap-2 text-sm font-medium text-primary">
-                      <span>View Articles</span>
+                      <span>{t("view_articles")}</span>
                       <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                     </div>
                   </div>

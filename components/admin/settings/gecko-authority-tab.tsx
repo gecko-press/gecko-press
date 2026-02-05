@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Webhook, Key, RefreshCw, Copy, Check, ExternalLink, FolderTree } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +19,7 @@ type GeckoAuthorityTabProps = {
 };
 
 export function GeckoAuthorityTab({ settings, onChange, supabaseUrl }: GeckoAuthorityTabProps) {
+  const t = useTranslations("admin.settings.geckoAuthority");
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [copiedSecret, setCopiedSecret] = useState(false);
   const [copiedCategories, setCopiedCategories] = useState(false);
@@ -64,15 +66,15 @@ export function GeckoAuthorityTab({ settings, onChange, supabaseUrl }: GeckoAuth
             <Webhook className="w-4 h-4" />
           </div>
           <div className="flex-1">
-            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Webhook URL</h2>
+            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("webhook_url_title")}</h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Use this URL when adding your site to Gecko Authority
+              {t("webhook_url_description")}
             </p>
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="webhook-url" className="text-xs text-zinc-600 dark:text-zinc-400">
-            Your Webhook Endpoint
+            {t("webhook_endpoint_label")}
           </Label>
           <div className="flex gap-2">
             <Input
@@ -80,7 +82,7 @@ export function GeckoAuthorityTab({ settings, onChange, supabaseUrl }: GeckoAuth
               value={fullWebhookUrl}
               readOnly
               className="font-mono text-xs bg-zinc-50 dark:bg-zinc-800/50"
-              placeholder="Click 'Generate' to create a webhook URL"
+              placeholder={t("webhook_url_placeholder")}
             />
             <Button
               variant="outline"
@@ -102,7 +104,7 @@ export function GeckoAuthorityTab({ settings, onChange, supabaseUrl }: GeckoAuth
           </div>
           {!settings.webhook_id && (
             <p className="text-xs text-amber-600 dark:text-amber-400">
-              Click the refresh button to generate a unique webhook URL
+              {t("generate_url_hint")}
             </p>
           )}
         </div>
@@ -114,15 +116,15 @@ export function GeckoAuthorityTab({ settings, onChange, supabaseUrl }: GeckoAuth
             <Key className="w-4 h-4" />
           </div>
           <div className="flex-1">
-            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Webhook Secret</h2>
+            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("webhook_secret_title")}</h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              This secret is used to verify webhook requests from Gecko Authority
+              {t("webhook_secret_description")}
             </p>
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="webhook-secret" className="text-xs text-zinc-600 dark:text-zinc-400">
-            Secret Key
+            {t("secret_key_label")}
           </Label>
           <div className="flex gap-2">
             <Input
@@ -131,7 +133,7 @@ export function GeckoAuthorityTab({ settings, onChange, supabaseUrl }: GeckoAuth
               readOnly
               type="password"
               className="font-mono text-xs bg-zinc-50 dark:bg-zinc-800/50"
-              placeholder="Click 'Generate' to create a secret"
+              placeholder={t("secret_placeholder")}
             />
             <Button
               variant="outline"
@@ -153,7 +155,7 @@ export function GeckoAuthorityTab({ settings, onChange, supabaseUrl }: GeckoAuth
           </div>
           {!settings.webhook_secret && (
             <p className="text-xs text-amber-600 dark:text-amber-400">
-              Click the refresh button to generate a webhook secret
+              {t("generate_secret_hint")}
             </p>
           )}
         </div>
@@ -165,15 +167,15 @@ export function GeckoAuthorityTab({ settings, onChange, supabaseUrl }: GeckoAuth
             <FolderTree className="w-4 h-4" />
           </div>
           <div className="flex-1">
-            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Categories URL</h2>
+            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("categories_url_title")}</h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Gecko Authority uses this URL to fetch your site categories
+              {t("categories_url_description")}
             </p>
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="categories-url" className="text-xs text-zinc-600 dark:text-zinc-400">
-            Categories Endpoint
+            {t("categories_endpoint_label")}
           </Label>
           <div className="flex gap-2">
             <Input
@@ -197,21 +199,20 @@ export function GeckoAuthorityTab({ settings, onChange, supabaseUrl }: GeckoAuth
       <div className="bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 rounded-lg p-4 space-y-3">
         <h3 className="font-medium text-sm text-sky-900 dark:text-sky-100 flex items-center gap-2">
           <ExternalLink className="w-4 h-4" />
-          How to Connect
+          {t("how_to_connect_title")}
         </h3>
         <ol className="text-xs text-sky-800 dark:text-sky-200 space-y-2 list-decimal list-inside">
-          <li>Generate both a Webhook URL and Secret above</li>
-          <li>Save these settings by clicking &quot;Save Changes&quot;</li>
-          <li>Go to Gecko Authority and add a new site</li>
-          <li>Paste the Webhook URL, Secret, and Categories URL in the appropriate fields</li>
-          <li>Gecko Authority will verify the connection automatically</li>
+          <li>{t("step_1")}</li>
+          <li>{t("step_2")}</li>
+          <li>{t("step_3")}</li>
+          <li>{t("step_4")}</li>
+          <li>{t("step_5")}</li>
         </ol>
       </div>
 
       <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
         <p className="text-xs text-amber-800 dark:text-amber-200">
-          <strong>Security Note:</strong> The webhook secret ensures that only Gecko Authority can send data to your site.
-          If you regenerate the secret, you must also update it in Gecko Authority.
+          <strong>{t("security_note_title")}</strong> {t("security_note")}
         </p>
       </div>
     </div>

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * GeckoPress Admin User Setup Script
+ * GeckoraPress Admin User Setup Script
  *
  * This script creates the initial admin user during setup.
  *
@@ -13,7 +13,7 @@
  *   - SUPABASE_SERVICE_ROLE_KEY (admin privileges required)
  *
  * Optional:
- *   - ADMIN_EMAIL (default: admin@geckopress.com)
+ *   - ADMIN_EMAIL (default: admin@geckorapress.com)
  *   - ADMIN_PASSWORD (default: randomly generated)
  */
 
@@ -24,7 +24,7 @@ const crypto = require('crypto');
 // Configuration
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@geckopress.com';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@geckorapress.com';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || crypto.randomBytes(16).toString('hex');
 
 // Validation
@@ -87,7 +87,7 @@ function makeRequest(url, options, data) {
  * Create Admin User
  */
 async function createAdminUser() {
-  console.log('🚀 GeckoPress Admin User Setup');
+  console.log('🚀 GeckoraPress Admin User Setup');
   console.log('================================');
   console.log('');
   console.log(`📧 Email: ${ADMIN_EMAIL}`);

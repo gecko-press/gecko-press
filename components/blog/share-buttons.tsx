@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Facebook, Twitter, Linkedin, Link2, Check, MessageCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -12,6 +13,8 @@ interface ShareButtonsProps {
 }
 
 export function ShareButtons({ url, title, className }: ShareButtonsProps) {
+  const t = useTranslations("blogPost");
+  const tCategory = useTranslations("categorySection");
   const [copied, setCopied] = useState(false);
 
   const encodedUrl = encodeURIComponent(url);
@@ -56,7 +59,7 @@ export function ShareButtons({ url, title, className }: ShareButtonsProps) {
 
   return (
     <div className={cn("flex items-center gap-2 mb-8", className)}>
-      <span className="text-sm font-medium">Share:</span>
+      <span className="text-sm font-medium">{t("share")}</span>
       {shareLinks.map((link) => {
         const Icon = link.icon;
         return (
@@ -71,7 +74,7 @@ export function ShareButtons({ url, title, className }: ShareButtonsProps) {
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Share on ${link.name}`}
+              aria-label={tCategory("share_on", { platform: link.name })}
             >
               <Icon className="w-4 h-4" />
             </a>
@@ -86,7 +89,7 @@ export function ShareButtons({ url, title, className }: ShareButtonsProps) {
           copied ? "bg-green-500 text-white border-green-500" : "hover:bg-muted"
         )}
         onClick={handleCopy}
-        aria-label="Copy link"
+        aria-label={t("copy_link")}
       >
         {copied ? <Check className="w-4 h-4" /> : <Link2 className="w-4 h-4" />}
       </Button>

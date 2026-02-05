@@ -30,6 +30,7 @@
   },
   "include": [
     "next-env.d.ts",
+    "i18n.ts",
     "app/**/*.ts",
     "app/**/*.tsx",
     "components/**/*.ts",
@@ -37,7 +38,8 @@
     "lib/**/*.ts",
     "lib/**/*.tsx",
     "hooks/**/*.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

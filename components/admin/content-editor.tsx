@@ -2,14 +2,19 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { Code, Type } from "lucide-react";
 
-const WysiwygEditor = dynamic(() => import("./wysiwyg-editor").then(mod => mod.WysiwygEditor), {
-  loading: () => (
+function EditorLoading() {
+  return (
     <div className="flex items-center justify-center min-h-[300px] rounded-md border border-input bg-background">
-      <div className="text-sm text-muted-foreground">Loading editor...</div>
+      <div className="text-sm text-muted-foreground">Loading...</div>
     </div>
-  ),
+  );
+}
+
+const WysiwygEditor = dynamic(() => import("./wysiwyg-editor").then(mod => mod.WysiwygEditor), {
+  loading: () => <EditorLoading />,
   ssr: false,
 });
 
@@ -111,6 +116,7 @@ function formatHtml(html: string): string {
 }
 
 export function ContentEditor({ content, onContentChange }: ContentEditorProps) {
+  const t = useTranslations("contentEditor");
   const [activeTab, setActiveTab] = useState<"visual" | "html">("visual");
   const [htmlSource, setHtmlSource] = useState(() => formatHtml(content));
 
@@ -130,7 +136,7 @@ export function ContentEditor({ content, onContentChange }: ContentEditorProps) 
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          Content
+          {t("content_label")}
         </label>
         <div className="flex bg-zinc-100 dark:bg-zinc-800 rounded-lg p-0.5">
           <button
@@ -143,7 +149,7 @@ export function ContentEditor({ content, onContentChange }: ContentEditorProps) 
             }`}
           >
             <Type className="w-3.5 h-3.5" />
-            Visual
+            {t("visual_tab")}
           </button>
           <button
             type="button"
@@ -155,7 +161,7 @@ export function ContentEditor({ content, onContentChange }: ContentEditorProps) 
             }`}
           >
             <Code className="w-3.5 h-3.5" />
-            HTML
+            {t("html_tab")}
           </button>
         </div>
       </div>
@@ -165,10 +171,10 @@ export function ContentEditor({ content, onContentChange }: ContentEditorProps) 
           <WysiwygEditor
             content={content}
             onChange={onContentChange}
-            placeholder="Start writing your content..."
+            placeholder={t("visual_placeholder")}
           />
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            Use the toolbar to format text, add images, and more
+            {t("visual_hint")}
           </p>
         </div>
       )}
@@ -178,12 +184,12 @@ export function ContentEditor({ content, onContentChange }: ContentEditorProps) 
           <textarea
             value={htmlSource}
             onChange={(e) => handleHtmlChange(e.target.value)}
-            placeholder="<p>Your post content here...</p>"
+            placeholder={t("html_placeholder")}
             rows={16}
             className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-y min-h-[300px]"
           />
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            Edit raw HTML directly. Switch to Visual tab to see changes.
+            {t("html_hint")}
           </p>
         </div>
       )}

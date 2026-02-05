@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/lib/supabase/client";
 import { useDialogs } from "@/lib/dialogs";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -62,6 +63,7 @@ const defaultEditingItem: EditingItem = {
 };
 
 export function MenuManager({ pages }: MenuManagerProps) {
+  const t = useTranslations("menuManager");
   const { confirm, showError, showSuccess } = useDialogs();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -140,17 +142,17 @@ export function MenuManager({ pages }: MenuManagerProps) {
 
   async function handleSave() {
     if (!editingItem.label.trim()) {
-      showError("Label is required");
+      showError(t("label_required"));
       return;
     }
 
     if (editingItem.linkType === "page" && !editingItem.pageId) {
-      showError("Please select a page");
+      showError(t("page_required"));
       return;
     }
 
     if (editingItem.linkType === "external" && !editingItem.url.trim()) {
-      showError("URL is required");
+      showError(t("url_required"));
       return;
     }
 
@@ -190,10 +192,10 @@ export function MenuManager({ pages }: MenuManagerProps) {
       await fetchMenuItems();
       setShowDialog(false);
       setEditingItem(defaultEditingItem);
-      showSuccess("Menu item saved successfully");
+      showSuccess(t("save_success"));
     } catch (error) {
       console.error("Failed to save menu item:", error);
-      showError("Failed to save menu item. Please try again.");
+      showError(t("save_error"));
     } finally {
       setSaving(false);
     }
@@ -201,10 +203,10 @@ export function MenuManager({ pages }: MenuManagerProps) {
 
   async function handleDelete(itemId: string) {
     const confirmed = await confirm({
-      title: "Delete Menu Item",
-      description: "Are you sure you want to delete this menu item? This action cannot be undone.",
-      confirmText: "Delete",
-      cancelText: "Cancel",
+      title: t("delete_title"),
+      description: t("delete_description"),
+      confirmText: t("delete_confirm"),
+      cancelText: t("delete_cancel"),
       variant: "destructive",
     });
 
@@ -218,10 +220,10 @@ export function MenuManager({ pages }: MenuManagerProps) {
 
       if (error) throw error;
       await fetchMenuItems();
-      showSuccess("Menu item deleted successfully");
+      showSuccess(t("delete_success"));
     } catch (error) {
       console.error("Failed to delete menu item:", error);
-      showError("Failed to delete menu item. Please try again.");
+      showError(t("delete_error"));
     }
   }
 
@@ -264,7 +266,7 @@ export function MenuManager({ pages }: MenuManagerProps) {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[200px]">
-        <p className="text-sm text-zinc-500">Loading menu...</p>
+        <p className="text-sm text-zinc-500">{t("loading")}</p>
       </div>
     );
   }
@@ -273,7 +275,7 @@ export function MenuManager({ pages }: MenuManagerProps) {
     <div className="space-y-6">
       <div className="grid gap-6 lg:grid-cols-2">
         <MenuSection
-          title="Header Menu"
+          title={t("header_menu")}
           location="header"
           items={getHeaderItems()}
           expandedItems={expandedItems}
@@ -283,10 +285,11 @@ export function MenuManager({ pages }: MenuManagerProps) {
           onEdit={openEditDialog}
           onDelete={handleDelete}
           onMove={moveItem}
+          t={t}
         />
 
         <MenuSection
-          title="Footer Menu"
+          title={t("footer_menu")}
           location="footer"
           items={getFooterItems()}
           expandedItems={expandedItems}
@@ -296,27 +299,28 @@ export function MenuManager({ pages }: MenuManagerProps) {
           onEdit={openEditDialog}
           onDelete={handleDelete}
           onMove={moveItem}
+          t={t}
         />
       </div>
 
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editingItem.id ? "Edit Menu Item" : "Add Menu Item"}</DialogTitle>
+            <DialogTitle>{editingItem.id ? t("edit_menu_item") : t("add_menu_item")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="label">Label</Label>
+              <Label htmlFor="label">{t("label")}</Label>
               <Input
                 id="label"
                 value={editingItem.label}
                 onChange={(e) => setEditingItem({ ...editingItem, label: e.target.value })}
-                placeholder="Menu item label"
+                placeholder={t("label_placeholder")}
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Link Type</Label>
+              <Label>{t("link_type")}</Label>
               <Select
                 value={editingItem.linkType}
                 onValueChange={(value: "page" | "external" | "dropdown") =>
@@ -327,27 +331,27 @@ export function MenuManager({ pages }: MenuManagerProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="page">Link to Page</SelectItem>
-                  <SelectItem value="external">External URL</SelectItem>
-                  {!editingItem.parentId && <SelectItem value="dropdown">Dropdown Menu</SelectItem>}
+                  <SelectItem value="page">{t("link_to_page")}</SelectItem>
+                  <SelectItem value="external">{t("external_url")}</SelectItem>
+                  {!editingItem.parentId && <SelectItem value="dropdown">{t("dropdown_menu")}</SelectItem>}
                 </SelectContent>
               </Select>
             </div>
 
             {editingItem.linkType === "page" && (
               <div className="space-y-2">
-                <Label>Select Page</Label>
+                <Label>{t("select_page")}</Label>
                 <Select
                   value={editingItem.pageId}
                   onValueChange={(value) => setEditingItem({ ...editingItem, pageId: value })}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Choose a page" />
+                    <SelectValue placeholder={t("choose_page")} />
                   </SelectTrigger>
                   <SelectContent>
                     {pages.map((page) => (
                       <SelectItem key={page.id} value={page.id}>
-                        {page.title} {!page.is_published && "(Draft)"}
+                        {page.title} {!page.is_published && `(${t("draft")})`}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -357,12 +361,12 @@ export function MenuManager({ pages }: MenuManagerProps) {
 
             {editingItem.linkType === "external" && (
               <div className="space-y-2">
-                <Label htmlFor="url">URL</Label>
+                <Label htmlFor="url">{t("url")}</Label>
                 <Input
                   id="url"
                   value={editingItem.url}
                   onChange={(e) => setEditingItem({ ...editingItem, url: e.target.value })}
-                  placeholder="https://example.com"
+                  placeholder={t("url_placeholder")}
                 />
               </div>
             )}
@@ -370,13 +374,13 @@ export function MenuManager({ pages }: MenuManagerProps) {
             {editingItem.linkType === "dropdown" && (
               <div className="bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-800 rounded-lg p-3">
                 <p className="text-xs text-sky-800 dark:text-sky-200">
-                  This will create a dropdown menu. Add child items after saving.
+                  {t("dropdown_hint")}
                 </p>
               </div>
             )}
 
             <div className="space-y-2">
-              <Label>Display Location</Label>
+              <Label>{t("display_location")}</Label>
               <Select
                 value={editingItem.location}
                 onValueChange={(value: "header" | "footer" | "both") =>
@@ -387,9 +391,9 @@ export function MenuManager({ pages }: MenuManagerProps) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="header">Header Only</SelectItem>
-                  <SelectItem value="footer">Footer Only</SelectItem>
-                  <SelectItem value="both">Both Header & Footer</SelectItem>
+                  <SelectItem value="header">{t("header_only")}</SelectItem>
+                  <SelectItem value="footer">{t("footer_only")}</SelectItem>
+                  <SelectItem value="both">{t("both_header_footer")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -397,8 +401,8 @@ export function MenuManager({ pages }: MenuManagerProps) {
             {editingItem.linkType !== "dropdown" && (
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-zinc-700 dark:text-zinc-300">Open in New Tab</p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">Link opens in a new browser tab</p>
+                  <p className="text-sm text-zinc-700 dark:text-zinc-300">{t("open_in_new_tab")}</p>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400">{t("new_tab_description")}</p>
                 </div>
                 <Switch
                   checked={editingItem.openInNewTab}
@@ -409,10 +413,10 @@ export function MenuManager({ pages }: MenuManagerProps) {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowDialog(false)}>
-              Cancel
+              {t("cancel")}
             </Button>
             <Button onClick={handleSave} disabled={saving}>
-              {saving ? "Saving..." : "Save"}
+              {saving ? t("saving") : t("save")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -432,6 +436,7 @@ function MenuSection({
   onEdit,
   onDelete,
   onMove,
+  t,
 }: {
   title: string;
   location: "header" | "footer";
@@ -443,6 +448,7 @@ function MenuSection({
   onEdit: (item: MenuItem) => void;
   onDelete: (id: string) => void;
   onMove: (id: string, direction: "up" | "down") => void;
+  t: (key: string) => string;
 }) {
   return (
     <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-hidden">
@@ -450,14 +456,14 @@ function MenuSection({
         <h3 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{title}</h3>
         <Button size="sm" variant="outline" className="h-8" onClick={onAdd}>
           <Plus className="w-4 h-4 mr-1" />
-          Add Item
+          {t("add_item")}
         </Button>
       </div>
 
       <div className="p-2">
         {items.length === 0 ? (
           <div className="text-center py-8 text-sm text-zinc-500 dark:text-zinc-400">
-            No menu items yet. Click &quot;Add Item&quot; to get started.
+            {t("no_items")}
           </div>
         ) : (
           <div className="space-y-1">
@@ -474,6 +480,7 @@ function MenuSection({
                 onEdit={onEdit}
                 onDelete={onDelete}
                 onMove={onMove}
+                t={t}
               />
             ))}
           </div>
@@ -494,6 +501,7 @@ function MenuItemRow({
   onEdit,
   onDelete,
   onMove,
+  t,
 }: {
   item: MenuItem;
   depth: number;
@@ -505,6 +513,7 @@ function MenuItemRow({
   onEdit: (item: MenuItem) => void;
   onDelete: (id: string) => void;
   onMove: (id: string, direction: "up" | "down") => void;
+  t: (key: string) => string;
 }) {
   const isDropdown = !item.page_id && !item.url;
   const hasChildren = item.children && item.children.length > 0;
@@ -547,8 +556,8 @@ function MenuItemRow({
             {item.label}
           </p>
           <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">
-            {isDropdown ? "Dropdown" : item.url || "No link"}
-            {item.open_in_new_tab && " (new tab)"}
+            {isDropdown ? t("dropdown") : item.url || t("no_link")}
+            {item.open_in_new_tab && ` (${t("new_tab")})`}
           </p>
         </div>
 
@@ -559,7 +568,7 @@ function MenuItemRow({
               size="sm"
               className="h-7 w-7 p-0"
               onClick={() => onAddChild(item.id)}
-              title="Add child item"
+              title={t("add_child_item")}
             >
               <FolderPlus className="w-4 h-4 text-zinc-500" />
             </Button>
@@ -598,6 +607,7 @@ function MenuItemRow({
               onEdit={onEdit}
               onDelete={onDelete}
               onMove={onMove}
+              t={t}
             />
           ))}
         </div>

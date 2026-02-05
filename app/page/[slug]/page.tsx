@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const baseUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.com";
+  const baseUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckorapress.com";
   const pageUrl = `${baseUrl}/page/${page.slug}`;
 
   return {
@@ -82,11 +82,11 @@ export default async function PageView({ params }: Props) {
       <main className="flex-1 pt-32 pb-16">
         <article className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <header className="mb-8">
-            <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 mt-5">
-                {page.title}
-              </h1>
-            </div>
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 mt-5">
+              {page.title}
+            </h1>
+          </div>
           </header>
 
           <div

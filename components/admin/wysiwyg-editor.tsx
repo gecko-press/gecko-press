@@ -11,6 +11,7 @@ import Highlight from "@tiptap/extension-highlight";
 import { Table, TableRow, TableCell, TableHeader } from "@tiptap/extension-table";
 import Youtube from "@tiptap/extension-youtube";
 import { Node, mergeAttributes } from "@tiptap/core";
+import { useTranslations } from "next-intl";
 
 const Iframe = Node.create({
   name: "iframe",
@@ -128,7 +129,8 @@ function ToolbarDivider() {
   return <div className="w-px h-6 bg-zinc-200 dark:bg-zinc-700 mx-1" />;
 }
 
-export function WysiwygEditor({ content, onChange, placeholder = "Start writing..." }: WysiwygEditorProps) {
+export function WysiwygEditor({ content, onChange, placeholder }: WysiwygEditorProps) {
+  const t = useTranslations("wysiwygEditor");
   const [linkUrl, setLinkUrl] = useState("");
   const [showLinkInput, setShowLinkInput] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
@@ -156,7 +158,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
         },
       }),
       Placeholder.configure({
-        placeholder,
+        placeholder: placeholder || t("default_placeholder"),
       }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
@@ -246,14 +248,14 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
         <ToolbarButton
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().undo()}
-          title="Undo"
+          title={t("undo")}
         >
           <Undo className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().redo().run()}
           disabled={!editor.can().redo()}
-          title="Redo"
+          title={t("redo")}
         >
           <Redo className="w-4 h-4" />
         </ToolbarButton>
@@ -263,21 +265,21 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           active={editor.isActive("heading", { level: 1 })}
-          title="Heading 1"
+          title={t("heading1")}
         >
           <Heading1 className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           active={editor.isActive("heading", { level: 2 })}
-          title="Heading 2"
+          title={t("heading2")}
         >
           <Heading2 className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           active={editor.isActive("heading", { level: 3 })}
-          title="Heading 3"
+          title={t("heading3")}
         >
           <Heading3 className="w-4 h-4" />
         </ToolbarButton>
@@ -287,42 +289,42 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
           active={editor.isActive("bold")}
-          title="Bold"
+          title={t("bold")}
         >
           <Bold className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleItalic().run()}
           active={editor.isActive("italic")}
-          title="Italic"
+          title={t("italic")}
         >
           <Italic className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           active={editor.isActive("underline")}
-          title="Underline"
+          title={t("underline")}
         >
           <UnderlineIcon className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleStrike().run()}
           active={editor.isActive("strike")}
-          title="Strikethrough"
+          title={t("strikethrough")}
         >
           <Strikethrough className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHighlight().run()}
           active={editor.isActive("highlight")}
-          title="Highlight"
+          title={t("highlight")}
         >
           <Highlighter className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleCode().run()}
           active={editor.isActive("code")}
-          title="Inline Code"
+          title={t("inline_code")}
         >
           <Code className="w-4 h-4" />
         </ToolbarButton>
@@ -332,21 +334,21 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
         <ToolbarButton
           onClick={() => editor.chain().focus().setTextAlign("left").run()}
           active={editor.isActive({ textAlign: "left" })}
-          title="Align Left"
+          title={t("align_left")}
         >
           <AlignLeft className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().setTextAlign("center").run()}
           active={editor.isActive({ textAlign: "center" })}
-          title="Align Center"
+          title={t("align_center")}
         >
           <AlignCenter className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().setTextAlign("right").run()}
           active={editor.isActive({ textAlign: "right" })}
-          title="Align Right"
+          title={t("align_right")}
         >
           <AlignRight className="w-4 h-4" />
         </ToolbarButton>
@@ -356,27 +358,27 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           active={editor.isActive("bulletList")}
-          title="Bullet List"
+          title={t("bullet_list")}
         >
           <List className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           active={editor.isActive("orderedList")}
-          title="Numbered List"
+          title={t("numbered_list")}
         >
           <ListOrdered className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           active={editor.isActive("blockquote")}
-          title="Quote"
+          title={t("quote")}
         >
           <Quote className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          title="Horizontal Rule"
+          title={t("horizontal_rule")}
         >
           <Minus className="w-4 h-4" />
         </ToolbarButton>
@@ -394,7 +396,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
               }
             }}
             active={editor.isActive("link")}
-            title="Link"
+            title={t("link")}
           >
             <LinkIcon className="w-4 h-4" />
           </ToolbarButton>
@@ -404,7 +406,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
                 type="url"
                 value={linkUrl}
                 onChange={(e) => setLinkUrl(e.target.value)}
-                placeholder="https://..."
+                placeholder={t("link_placeholder")}
                 className="w-48 h-7 px-2 text-sm bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded focus:outline-none focus:ring-1 focus:ring-zinc-400"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -423,7 +425,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
                 onClick={addLink}
                 className="px-2 h-7 text-xs bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded hover:bg-zinc-700 dark:hover:bg-zinc-300"
               >
-                Add
+                {t("add")}
               </button>
             </div>
           )}
@@ -435,7 +437,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
               setShowImageInput(!showImageInput);
               setShowLinkInput(false);
             }}
-            title="Image"
+            title={t("image")}
           >
             <ImageIcon className="w-4 h-4" />
           </ToolbarButton>
@@ -445,7 +447,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
                 type="url"
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="Image URL..."
+                placeholder={t("image_placeholder")}
                 className="w-48 h-7 px-2 text-sm bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded focus:outline-none focus:ring-1 focus:ring-zinc-400"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -464,7 +466,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
                 onClick={addImage}
                 className="px-2 h-7 text-xs bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded hover:bg-zinc-700 dark:hover:bg-zinc-300"
               >
-                Add
+                {t("add")}
               </button>
             </div>
           )}
@@ -478,7 +480,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
               setShowImageInput(false);
               setShowTableMenu(false);
             }}
-            title="YouTube Video"
+            title={t("youtube")}
           >
             <YoutubeIcon className="w-4 h-4" />
           </ToolbarButton>
@@ -488,7 +490,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
                 type="url"
                 value={youtubeUrl}
                 onChange={(e) => setYoutubeUrl(e.target.value)}
-                placeholder="YouTube URL..."
+                placeholder={t("youtube_placeholder")}
                 className="w-56 h-7 px-2 text-sm bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded focus:outline-none focus:ring-1 focus:ring-zinc-400"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -507,7 +509,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
                 onClick={addYoutube}
                 className="px-2 h-7 text-xs bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded hover:bg-zinc-700 dark:hover:bg-zinc-300"
               >
-                Add
+                {t("add")}
               </button>
             </div>
           )}
@@ -524,7 +526,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
               setShowYoutubeInput(false);
             }}
             active={editor.isActive("table")}
-            title="Table"
+            title={t("table")}
           >
             <TableIcon className="w-4 h-4" />
           </ToolbarButton>
@@ -536,7 +538,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
                 className="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-left hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded"
               >
                 <Plus className="w-3 h-3" />
-                Insert Table (3x3)
+                {t("insert_table")}
               </button>
               {editor.isActive("table") && (
                 <>
@@ -549,7 +551,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
                     }}
                     className="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-left hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded"
                   >
-                    Add Column
+                    {t("add_column")}
                   </button>
                   <button
                     type="button"
@@ -559,7 +561,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
                     }}
                     className="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-left hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded"
                   >
-                    Add Row
+                    {t("add_row")}
                   </button>
                   <button
                     type="button"
@@ -569,7 +571,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
                     }}
                     className="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-left hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded text-red-600 dark:text-red-400"
                   >
-                    Delete Column
+                    {t("delete_column")}
                   </button>
                   <button
                     type="button"
@@ -579,7 +581,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
                     }}
                     className="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-left hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded text-red-600 dark:text-red-400"
                   >
-                    Delete Row
+                    {t("delete_row")}
                   </button>
                   <button
                     type="button"
@@ -590,7 +592,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
                     className="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-left hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded text-red-600 dark:text-red-400"
                   >
                     <Trash2 className="w-3 h-3" />
-                    Delete Table
+                    {t("delete_table")}
                   </button>
                 </>
               )}
@@ -602,7 +604,7 @@ export function WysiwygEditor({ content, onChange, placeholder = "Start writing.
 
         <ToolbarButton
           onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
-          title="Clear Formatting"
+          title={t("clear_formatting")}
         >
           <RemoveFormatting className="w-4 h-4" />
         </ToolbarButton>

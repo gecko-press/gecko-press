@@ -69,6 +69,7 @@
     "input-otp": "^1.2.4",
     "lucide-react": "^0.446.0",
     "next": "^16.1.6",
+    "next-intl": "^4.8.2",
     "next-themes": "^0.3.0",
     "postcss": "^8.5.6",
     "react": "18.2.0",
@@ -89,11 +90,5 @@
     "@types/node": "^25.2.0",
     "critters": "^0.0.23",
     "eslint": "^8.57.1"
-  },
-  "browserslist": [
-    "last 1 Chrome version",
-    "last 1 Firefox version",
-    "last 1 Safari version",
-    "last 1 Edge version"
-  ]
+  }
 }

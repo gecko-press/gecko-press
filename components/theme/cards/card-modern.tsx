@@ -1,22 +1,32 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, Clock } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import type { Post } from "@/lib/supabase/types";
 
 interface CardModernProps {
   post: Post;
 }
 
+const localeMap: Record<string, string> = {
+  tr: "tr-TR",
+  en: "en-US",
+};
+
 export function CardModern({ post }: CardModernProps) {
+  const locale = useLocale();
+  const t = useTranslations("card");
   const formattedDate = post.published_at
-    ? new Date(post.published_at).toLocaleDateString("en-US", {
+    ? new Date(post.published_at).toLocaleDateString(localeMap[locale] || "en-US", {
         day: "numeric",
         month: "short",
         year: "numeric",
       })
     : "";
 
-  const categoryName = post.category?.name || "Uncategorized";
+  const categoryName = post.category?.name || t("uncategorized");
 
   return (
     <article className="group relative">
@@ -63,7 +73,7 @@ export function CardModern({ post }: CardModernProps) {
 
           <div className="flex items-center gap-1 text-sm text-muted-foreground pt-1">
             <Clock className="w-3.5 h-3.5" />
-            <span>{post.reading_time} min read</span>
+            <span>{post.reading_time} {t("min_read")}</span>
           </div>
         </div>
       </Link>

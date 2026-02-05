@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Clock } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import type { Post } from "@/lib/supabase/types";
 
@@ -8,9 +11,16 @@ interface BlogCardProps {
   post: Post;
 }
 
+const localeMap: Record<string, string> = {
+  tr: "tr-TR",
+  en: "en-US",
+};
+
 export function BlogCard({ post }: BlogCardProps) {
+  const locale = useLocale();
+  const t = useTranslations("card");
   const publishedAt = post.published_at || post.created_at;
-  const formattedDate = new Date(publishedAt).toLocaleDateString("en-US", {
+  const formattedDate = new Date(publishedAt).toLocaleDateString(localeMap[locale] || "en-US", {
     day: "numeric",
     month: "short",
   });
@@ -62,7 +72,7 @@ export function BlogCard({ post }: BlogCardProps) {
           </div>
           <div className="flex items-center gap-1">
             <Clock className="w-3.5 h-3.5" />
-            <span>{post.reading_time} min</span>
+            <span>{post.reading_time} {t("min")}</span>
           </div>
         </div>
       </div>

@@ -15,7 +15,7 @@ export type SiteSettings = {
 };
 
 const defaultSiteSettings: SiteSettings = {
-  siteName: "GeckoPress",
+  siteName: "GeckoraPress",
   siteDescription: "Modern Blog Platform",
   logoUrl: "/geckopress-logo.svg",
 };
@@ -39,7 +39,7 @@ const defaultHeroSettings: HeroSettings = {
     subtitle: "Future of Tech",
     description: "In-depth reviews, guides, and insights on the latest technology trends. Stay ahead with expert analysis and recommendations.",
     searchPlaceholder: "What are you looking for?",
-    imageUrl: "https://images.pexels.com/photos/35414673/pexels-photo-35414673.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    imageUrl: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200",
     metrics: [
       { icon: "BookOpen", value: "500+", label: "Articles" },
       { icon: "Users", value: "50K+", label: "Readers" },
@@ -76,7 +76,7 @@ const defaultConfig: ThemeConfig = {
   siteSettings: defaultSiteSettings,
 };
 
-const THEME_CACHE_KEY = "geckopress-theme-cache";
+const THEME_CACHE_KEY = "geckorapress-theme-cache";
 
 function getCachedTheme(): ThemeConfig | null {
   if (typeof window === "undefined") return null;

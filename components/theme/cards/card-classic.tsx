@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Clock } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import type { Post } from "@/lib/supabase/types";
 
@@ -8,15 +11,22 @@ interface CardClassicProps {
   post: Post;
 }
 
+const localeMap: Record<string, string> = {
+  tr: "tr-TR",
+  en: "en-US",
+};
+
 export function CardClassic({ post }: CardClassicProps) {
+  const locale = useLocale();
+  const t = useTranslations("card");
   const formattedDate = post.published_at
-    ? new Date(post.published_at).toLocaleDateString("en-US", {
+    ? new Date(post.published_at).toLocaleDateString(localeMap[locale] || "en-US", {
         day: "numeric",
         month: "short",
       })
     : "";
 
-  const categoryName = post.category?.name || "Uncategorized";
+  const categoryName = post.category?.name || t("uncategorized");
 
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-lg bg-card border transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
@@ -63,7 +73,7 @@ export function CardClassic({ post }: CardClassicProps) {
           )}
           <div className="flex items-center gap-1">
             <Clock className="w-3.5 h-3.5" />
-            <span>{post.reading_time} min</span>
+            <span>{post.reading_time} {t("min")}</span>
           </div>
         </div>
       </div>

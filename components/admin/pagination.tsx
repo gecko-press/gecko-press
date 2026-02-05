@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 
 type PaginationProps = {
@@ -18,6 +19,8 @@ export function Pagination({
   totalItems,
   itemsPerPage = 10,
 }: PaginationProps) {
+  const t = useTranslations("admin.pagination");
+
   if (totalPages <= 1) return null;
 
   const startItem = (currentPage - 1) * itemsPerPage + 1;
@@ -64,7 +67,7 @@ export function Pagination({
     <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 py-3 border-t border-zinc-200 dark:border-zinc-800">
       {totalItems !== undefined && (
         <p className="text-xs text-zinc-500 dark:text-zinc-400">
-          Showing {startItem}-{endItem} of {totalItems}
+          {t("showing", { start: startItem, end: endItem, total: totalItems })}
         </p>
       )}
 

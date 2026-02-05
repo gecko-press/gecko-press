@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +20,7 @@ type ProfileTabProps = {
 };
 
 export function ProfileTab({ settings, onChange, onPasswordChange }: ProfileTabProps) {
+  const t = useTranslations("admin.settings.profile");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -34,12 +36,12 @@ export function ProfileTab({ settings, onChange, onPasswordChange }: ProfileTabP
     setPasswordSuccess(false);
 
     if (newPassword.length < 8) {
-      setPasswordError("New password must be at least 8 characters");
+      setPasswordError(t("password_min_length_error"));
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setPasswordError("Passwords do not match");
+      setPasswordError(t("password_mismatch_error"));
       return;
     }
 
@@ -51,7 +53,7 @@ export function ProfileTab({ settings, onChange, onPasswordChange }: ProfileTabP
       setNewPassword("");
       setConfirmPassword("");
     } catch (error) {
-      setPasswordError(error instanceof Error ? error.message : "Failed to change password");
+      setPasswordError(error instanceof Error ? error.message : t("password_change_failed"));
     } finally {
       setChangingPassword(false);
     }
@@ -65,37 +67,37 @@ export function ProfileTab({ settings, onChange, onPasswordChange }: ProfileTabP
             <User className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Author Name</h2>
+            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("author_title")}</h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              This name will be displayed on your blog posts
+              {t("author_description")}
             </p>
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="author-name" className="text-xs text-zinc-600 dark:text-zinc-400">
-            Display Name
+            {t("display_name_label")}
           </Label>
           <Input
             id="author-name"
             value={settings.author_name}
             onChange={(e) => onChange({ ...settings, author_name: e.target.value })}
-            placeholder="John Doe"
+            placeholder={t("display_name_placeholder")}
             className="bg-zinc-50 dark:bg-zinc-800/50"
           />
         </div>
         <div className="space-y-2">
           <Label htmlFor="author-bio" className="text-xs text-zinc-600 dark:text-zinc-400">
-            About Author
+            {t("bio_label")}
           </Label>
           <Textarea
             id="author-bio"
             value={settings.author_bio || ""}
             onChange={(e) => onChange({ ...settings, author_bio: e.target.value })}
-            placeholder="Write a short bio about yourself..."
+            placeholder={t("bio_placeholder")}
             className="bg-zinc-50 dark:bg-zinc-800/50 min-h-[100px] resize-none"
           />
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            This will be displayed at the bottom of your blog posts
+            {t("bio_hint")}
           </p>
         </div>
       </div>
@@ -106,16 +108,16 @@ export function ProfileTab({ settings, onChange, onPasswordChange }: ProfileTabP
             <Lock className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Change Password</h2>
+            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("password_title")}</h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Update your account password
+              {t("password_description")}
             </p>
           </div>
         </div>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="current-password" className="text-xs text-zinc-600 dark:text-zinc-400">
-              Current Password
+              {t("current_password_label")}
             </Label>
             <div className="relative">
               <Input
@@ -136,7 +138,7 @@ export function ProfileTab({ settings, onChange, onPasswordChange }: ProfileTabP
           </div>
           <div className="space-y-2">
             <Label htmlFor="new-password" className="text-xs text-zinc-600 dark:text-zinc-400">
-              New Password
+              {t("new_password_label")}
             </Label>
             <div className="relative">
               <Input
@@ -157,7 +159,7 @@ export function ProfileTab({ settings, onChange, onPasswordChange }: ProfileTabP
           </div>
           <div className="space-y-2">
             <Label htmlFor="confirm-password" className="text-xs text-zinc-600 dark:text-zinc-400">
-              Confirm New Password
+              {t("confirm_password_label")}
             </Label>
             <div className="relative">
               <Input
@@ -181,7 +183,7 @@ export function ProfileTab({ settings, onChange, onPasswordChange }: ProfileTabP
             <p className="text-xs text-red-600 dark:text-red-400">{passwordError}</p>
           )}
           {passwordSuccess && (
-            <p className="text-xs text-green-600 dark:text-green-400">Password changed successfully</p>
+            <p className="text-xs text-green-600 dark:text-green-400">{t("password_change_success")}</p>
           )}
 
           <Button
@@ -189,7 +191,7 @@ export function ProfileTab({ settings, onChange, onPasswordChange }: ProfileTabP
             disabled={!currentPassword || !newPassword || !confirmPassword || changingPassword}
             className="w-full sm:w-auto"
           >
-            {changingPassword ? "Changing..." : "Change Password"}
+            {changingPassword ? t("changing_password_button") : t("change_password_button")}
           </Button>
         </div>
       </div>

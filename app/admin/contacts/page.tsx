@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 import { Pagination } from "@/components/admin/pagination";
+import { useTranslations } from "next-intl";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -38,6 +39,7 @@ type ContactSubmission = {
 };
 
 export default function ContactRequestsPage() {
+  const t = useTranslations("admin.contacts");
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -109,12 +111,12 @@ export default function ContactRequestsPage() {
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return "Just now";
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    if (diffDays < 7) return `${diffDays}d ago`;
+    if (diffMins < 1) return t("just_now");
+    if (diffMins < 60) return t("minutes_ago", { count: diffMins });
+    if (diffHours < 24) return t("hours_ago", { count: diffHours });
+    if (diffDays < 7) return t("days_ago", { count: diffDays });
 
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleDateString(undefined, {
       month: "short",
       day: "numeric",
       year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
@@ -144,22 +146,24 @@ export default function ContactRequestsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-            Contact Requests
+            {t("title")}
           </h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-            {unreadCount > 0 ? `${unreadCount} unread message${unreadCount > 1 ? "s" : ""}` : "All messages read"}
+            {unreadCount > 0
+              ? (unreadCount > 1 ? t("unread_messages_plural", { count: unreadCount }) : t("unread_messages", { count: unreadCount }))
+              : t("all_read")}
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={fetchSubmissions} className="h-9">
           <RefreshCw className="w-4 h-4 mr-1.5" />
-          Refresh
+          {t("refresh")}
         </Button>
       </div>
 
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
         <Input
-          placeholder="Search by name, email or subject..."
+          placeholder={t("search_placeholder")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10 h-10"
@@ -168,13 +172,13 @@ export default function ContactRequestsPage() {
 
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading messages...</p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">{t("loading")}</p>
         </div>
       ) : filteredSubmissions.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 text-center">
           <MessageSquare className="w-12 h-12 text-zinc-300 dark:text-zinc-700 mb-4" />
           <p className="text-zinc-500 dark:text-zinc-400">
-            {searchQuery ? "No messages match your search" : "No contact requests yet"}
+            {searchQuery ? t("no_match") : t("no_messages")}
           </p>
         </div>
       ) : (
@@ -266,7 +270,7 @@ export default function ContactRequestsPage() {
               {selectedSubmission?.subject}
             </DialogTitle>
             <DialogDescription>
-              From {selectedSubmission?.name}
+              {t("from")} {selectedSubmission?.name}
             </DialogDescription>
           </DialogHeader>
 
@@ -291,7 +295,7 @@ export default function ContactRequestsPage() {
               <div className="flex items-center gap-2 text-xs text-zinc-400 dark:text-zinc-500">
                 <Clock className="w-3.5 h-3.5" />
                 <span>
-                  {new Date(selectedSubmission.created_at).toLocaleString("en-US", {
+                  {new Date(selectedSubmission.created_at).toLocaleString(undefined, {
                     dateStyle: "medium",
                     timeStyle: "short",
                   })}
@@ -315,7 +319,7 @@ export default function ContactRequestsPage() {
                   className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
                 >
                   <Trash2 className="w-4 h-4 mr-1.5" />
-                  Delete
+                  {t("delete")}
                 </Button>
               </div>
             </div>
@@ -326,18 +330,18 @@ export default function ContactRequestsPage() {
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Message</AlertDialogTitle>
+            <AlertDialogTitle>{t("delete_title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this message? This action cannot be undone.
+              {t("delete_description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("delete_cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-red-600 hover:bg-red-700"
             >
-              Delete
+              {t("delete_confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

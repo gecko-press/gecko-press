@@ -9,6 +9,7 @@ import type { HeroSettings, HeroCenteredSettings, HeroSplitSettings, HeroMinimal
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { useTranslations } from "next-intl";
 import {
   Select,
   SelectContent,
@@ -68,6 +69,7 @@ type ThemeTabProps = {
 };
 
 export function ThemeTab({ settings, onChange }: ThemeTabProps) {
+  const t = useTranslations("admin.settings.theme");
   const centeredSettings = settings.hero_settings?.centered || {};
   const splitSettings = settings.hero_settings?.split || {};
   const minimalSettings = settings.hero_settings?.minimal || {};
@@ -101,21 +103,21 @@ export function ThemeTab({ settings, onChange }: ThemeTabProps) {
 
   return (
     <div className="space-y-4">
-      <Section icon={<Layout className="w-4 h-4" />} title="Hero Layout" description="Choose how your homepage hero section appears">
+      <Section icon={<Layout className="w-4 h-4" />} title={t("hero_layout_title")} description={t("hero_layout_description")}>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {Object.values(heroVariants).map((variant) => (
             <SelectableCard
               key={variant.id}
               selected={settings.hero_variant === variant.id}
               onClick={() => onChange({ ...settings, hero_variant: variant.id })}
-              title={variant.name}
-              description={variant.description}
+              title={t(`hero_${variant.id}_name`)}
+              description={t(`hero_${variant.id}_description`)}
             />
           ))}
         </div>
       </Section>
 
-      <Section icon={<Settings2 className="w-4 h-4" />} title="Hero Content" description="Customize the content displayed in your hero section">
+      <Section icon={<Settings2 className="w-4 h-4" />} title={t("hero_content_title")} description={t("hero_content_description")}>
         {settings.hero_variant === "centered" && (
           <CenteredHeroFields
             settings={heroSettings.centered}
@@ -136,21 +138,21 @@ export function ThemeTab({ settings, onChange }: ThemeTabProps) {
         )}
       </Section>
 
-      <Section icon={<Square className="w-4 h-4" />} title="Card Style" description="Choose how blog post cards look">
+      <Section icon={<Square className="w-4 h-4" />} title={t("card_style_title")} description={t("card_style_description")}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {Object.values(cardVariants).map((variant) => (
             <SelectableCard
               key={variant.id}
               selected={settings.card_variant === variant.id}
               onClick={() => onChange({ ...settings, card_variant: variant.id })}
-              title={variant.name}
-              description={variant.description}
+              title={t(`card_${variant.id}_name`)}
+              description={t(`card_${variant.id}_description`)}
             />
           ))}
         </div>
       </Section>
 
-      <Section icon={<Palette className="w-4 h-4" />} title="Color Palette" description="Set your brand colors">
+      <Section icon={<Palette className="w-4 h-4" />} title={t("color_palette_title")} description={t("color_palette_description")}>
         <div className="flex flex-wrap gap-2">
           {colorPalettes.map((palette) => (
             <button
@@ -168,25 +170,25 @@ export function ThemeTab({ settings, onChange }: ThemeTabProps) {
           ))}
         </div>
         <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-2">
-          Selected: {colorPalettes.find((p) => p.id === settings.color_palette)?.name}
+          {t("color_selected", { name: colorPalettes.find((p) => p.id === settings.color_palette)?.name ?? "" })}
         </p>
       </Section>
 
-      <Section icon={<Type className="w-4 h-4" />} title="Typography" description="Choose your font style">
+      <Section icon={<Type className="w-4 h-4" />} title={t("typography_title")} description={t("typography_description")}>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {fontSets.map((font) => (
             <SelectableCard
               key={font.id}
               selected={settings.font_set === font.id}
               onClick={() => onChange({ ...settings, font_set: font.id })}
-              title={font.name}
-              description={font.description}
+              title={t(`font_${font.id}_name`)}
+              description={t(`font_${font.id}_description`)}
             />
           ))}
         </div>
       </Section>
 
-      <Section icon={<Square className="w-4 h-4" />} title="Border Radius" description="Set the roundness of elements">
+      <Section icon={<Square className="w-4 h-4" />} title={t("border_radius_title")} description={t("border_radius_description")}>
         <div className="flex flex-wrap gap-2">
           {(Object.keys(radiusScales) as RadiusScale[]).map((key) => (
             <button
@@ -197,26 +199,26 @@ export function ThemeTab({ settings, onChange }: ThemeTabProps) {
                 : "border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:border-zinc-300 dark:hover:border-zinc-600"
                 }`}
             >
-              {radiusScales[key].label}
+              {t(`radius_${key}`)}
             </button>
           ))}
         </div>
       </Section>
 
-      <Section icon={<Mail className="w-4 h-4" />} title="Newsletter Section" description="Customize the newsletter subscription area">
+      <Section icon={<Mail className="w-4 h-4" />} title={t("newsletter_title")} description={t("newsletter_description")}>
         <div className="space-y-4">
-          <FieldGroup label="Title">
+          <FieldGroup label={t("newsletter_field_title")}>
             <Input
               value={settings.newsletter_title ?? ""}
               onChange={(e) => onChange({ ...settings, newsletter_title: e.target.value })}
-              placeholder="Stay Updated"
+              placeholder={t("newsletter_placeholder_title")}
             />
           </FieldGroup>
-          <FieldGroup label="Description">
+          <FieldGroup label={t("newsletter_field_description")}>
             <Textarea
               value={settings.newsletter_description ?? ""}
               onChange={(e) => onChange({ ...settings, newsletter_description: e.target.value })}
-              placeholder="Join our newsletter for the latest updates..."
+              placeholder={t("newsletter_placeholder_description")}
               rows={2}
             />
           </FieldGroup>
@@ -233,6 +235,7 @@ function CenteredHeroFields({
   settings: HeroCenteredSettings;
   onChange: (updates: Partial<HeroCenteredSettings>) => void;
 }) {
+  const t = useTranslations("admin.settings.theme");
   const updateFeature = (index: number, updates: Partial<{ icon: string; title: string; description: string }>) => {
     const newFeatures = [...settings.features];
     newFeatures[index] = { ...newFeatures[index], ...updates };
@@ -242,55 +245,55 @@ function CenteredHeroFields({
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FieldGroup label="Badge Text">
+        <FieldGroup label={t("badge_text")}>
           <Input
             value={settings.badge}
             onChange={(e) => onChange({ badge: e.target.value })}
-            placeholder="Powered by GeckoAuthority"
+            placeholder={t("placeholder_badge")}
           />
         </FieldGroup>
-        <FieldGroup label="Search Placeholder">
+        <FieldGroup label={t("search_placeholder")}>
           <Input
             value={settings.searchPlaceholder}
             onChange={(e) => onChange({ searchPlaceholder: e.target.value })}
-            placeholder="Search articles..."
+            placeholder={t("placeholder_search")}
           />
         </FieldGroup>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FieldGroup label="Main Title">
+        <FieldGroup label={t("main_title")}>
           <Input
             value={settings.title}
             onChange={(e) => onChange({ title: e.target.value })}
-            placeholder="Modern Blog"
+            placeholder={t("placeholder_title_main")}
           />
         </FieldGroup>
-        <FieldGroup label="Colored Subtitle">
+        <FieldGroup label={t("colored_subtitle")}>
           <Input
             value={settings.subtitle}
             onChange={(e) => onChange({ subtitle: e.target.value })}
-            placeholder="Ultra Fast & SEO Focused"
+            placeholder={t("placeholder_subtitle")}
           />
         </FieldGroup>
       </div>
 
-      <FieldGroup label="Description">
+      <FieldGroup label={t("description")}>
         <Textarea
           value={settings.description}
           onChange={(e) => onChange({ description: e.target.value })}
-          placeholder="Showcase your content..."
+          placeholder={t("placeholder_description")}
           rows={2}
         />
       </FieldGroup>
 
       <div className="border-t border-zinc-200 dark:border-zinc-700 pt-4 mt-4">
-        <Label className="text-sm font-medium mb-3 block">Feature Cards</Label>
+        <Label className="text-sm font-medium mb-3 block">{t("feature_cards")}</Label>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {settings.features.map((feature, index) => (
             <div key={index} className="p-3 rounded-lg border border-zinc-200 dark:border-zinc-700 space-y-3">
               <div className="flex items-center gap-2">
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">Feature {index + 1}</span>
+                <span className="text-xs text-zinc-500 dark:text-zinc-400">{t("feature", { index: index + 1 })}</span>
               </div>
               <IconSelect
                 value={feature.icon}
@@ -299,13 +302,13 @@ function CenteredHeroFields({
               <Input
                 value={feature.title}
                 onChange={(e) => updateFeature(index, { title: e.target.value })}
-                placeholder="Title"
+                placeholder={t("feature_title_placeholder")}
                 className="text-sm"
               />
               <Input
                 value={feature.description}
                 onChange={(e) => updateFeature(index, { description: e.target.value })}
-                placeholder="Description"
+                placeholder={t("feature_description_placeholder")}
                 className="text-sm"
               />
             </div>
@@ -323,6 +326,7 @@ function SplitHeroFields({
   settings: HeroSplitSettings;
   onChange: (updates: Partial<HeroSplitSettings>) => void;
 }) {
+  const t = useTranslations("admin.settings.theme");
   const updateMetric = (index: number, updates: Partial<{ icon: string; value: string; label: string }>) => {
     const newMetrics = [...settings.metrics];
     newMetrics[index] = { ...newMetrics[index], ...updates };
@@ -332,68 +336,68 @@ function SplitHeroFields({
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FieldGroup label="Badge Text">
+        <FieldGroup label={t("badge_text")}>
           <Input
             value={settings.badge}
             onChange={(e) => onChange({ badge: e.target.value })}
-            placeholder="Top Technology Blog"
+            placeholder={t("placeholder_badge_split")}
           />
         </FieldGroup>
-        <FieldGroup label="Search Placeholder">
+        <FieldGroup label={t("search_placeholder")}>
           <Input
             value={settings.searchPlaceholder}
             onChange={(e) => onChange({ searchPlaceholder: e.target.value })}
-            placeholder="What are you looking for?"
+            placeholder={t("placeholder_search_split")}
           />
         </FieldGroup>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FieldGroup label="Main Title">
+        <FieldGroup label={t("main_title")}>
           <Input
             value={settings.title}
             onChange={(e) => onChange({ title: e.target.value })}
-            placeholder="Discover the"
+            placeholder={t("placeholder_title_split")}
           />
         </FieldGroup>
-        <FieldGroup label="Colored Subtitle">
+        <FieldGroup label={t("colored_subtitle")}>
           <Input
             value={settings.subtitle}
             onChange={(e) => onChange({ subtitle: e.target.value })}
-            placeholder="Future of Tech"
+            placeholder={t("placeholder_subtitle_split")}
           />
         </FieldGroup>
       </div>
 
-      <FieldGroup label="Description">
+      <FieldGroup label={t("description")}>
         <Textarea
           value={settings.description}
           onChange={(e) => onChange({ description: e.target.value })}
-          placeholder="In-depth reviews..."
+          placeholder={t("placeholder_description_split")}
           rows={2}
         />
       </FieldGroup>
 
-      <FieldGroup label="Background Image URL">
+      <FieldGroup label={t("background_image_url")}>
         <div className="flex items-center gap-2">
           <Image className="w-4 h-4 text-zinc-400" />
           <Input
             value={settings.imageUrl}
             onChange={(e) => onChange({ imageUrl: e.target.value })}
-            placeholder="https://images.pexels.com/..."
+            placeholder={t("placeholder_image_url")}
             className="flex-1"
           />
         </div>
       </FieldGroup>
 
       <div className="border-t border-zinc-200 dark:border-zinc-700 pt-4 mt-4">
-        <Label className="text-sm font-medium mb-3 block">Metrics</Label>
+        <Label className="text-sm font-medium mb-3 block">{t("metrics")}</Label>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {settings.metrics.map((metric, index) => (
             <div key={index} className="p-3 rounded-lg border border-zinc-200 dark:border-zinc-700 space-y-3">
               <div className="flex items-center gap-2">
                 <Hash className="w-3 h-3 text-zinc-400" />
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">Metric {index + 1}</span>
+                <span className="text-xs text-zinc-500 dark:text-zinc-400">{t("metric", { index: index + 1 })}</span>
               </div>
               <IconSelect
                 value={metric.icon}
@@ -402,13 +406,13 @@ function SplitHeroFields({
               <Input
                 value={metric.value}
                 onChange={(e) => updateMetric(index, { value: e.target.value })}
-                placeholder="500+"
+                placeholder={t("metric_value_placeholder")}
                 className="text-sm"
               />
               <Input
                 value={metric.label}
                 onChange={(e) => updateMetric(index, { label: e.target.value })}
-                placeholder="Articles"
+                placeholder={t("metric_label_placeholder")}
                 className="text-sm"
               />
             </div>
@@ -426,39 +430,40 @@ function MinimalHeroFields({
   settings: HeroMinimalSettings;
   onChange: (updates: Partial<HeroMinimalSettings>) => void;
 }) {
+  const t = useTranslations("admin.settings.theme");
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FieldGroup label="Main Title">
+        <FieldGroup label={t("main_title")}>
           <Input
             value={settings.title}
             onChange={(e) => onChange({ title: e.target.value })}
-            placeholder="Tech insights,"
+            placeholder={t("placeholder_title_minimal")}
           />
         </FieldGroup>
-        <FieldGroup label="Colored Subtitle">
+        <FieldGroup label={t("colored_subtitle")}>
           <Input
             value={settings.subtitle}
             onChange={(e) => onChange({ subtitle: e.target.value })}
-            placeholder="simplified."
+            placeholder={t("placeholder_subtitle_minimal")}
           />
         </FieldGroup>
       </div>
 
-      <FieldGroup label="Description">
+      <FieldGroup label={t("description")}>
         <Textarea
           value={settings.description}
           onChange={(e) => onChange({ description: e.target.value })}
-          placeholder="Expert reviews and buying guides..."
+          placeholder={t("placeholder_description_minimal")}
           rows={2}
         />
       </FieldGroup>
 
-      <FieldGroup label="Search Placeholder">
+      <FieldGroup label={t("search_placeholder")}>
         <Input
           value={settings.searchPlaceholder}
           onChange={(e) => onChange({ searchPlaceholder: e.target.value })}
-          placeholder="Search articles..."
+          placeholder={t("placeholder_search")}
         />
       </FieldGroup>
     </div>

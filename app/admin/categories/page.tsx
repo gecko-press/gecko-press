@@ -44,6 +44,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/lib/supabase/client";
 import { useDialogs } from "@/lib/dialogs";
+import { useTranslations } from "next-intl";
 import type { Category } from "@/lib/supabase/types";
 import { Pagination } from "@/components/admin/pagination";
 
@@ -98,9 +99,10 @@ interface CategoryFormProps {
   isNew?: boolean;
   onCancel: () => void;
   onSave: () => void;
+  t: (key: string) => string;
 }
 
-function CategoryForm({ form, setForm, isNew, onCancel, onSave }: CategoryFormProps) {
+function CategoryForm({ form, setForm, isNew, onCancel, onSave, t }: CategoryFormProps) {
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -108,20 +110,20 @@ function CategoryForm({ form, setForm, isNew, onCancel, onSave }: CategoryFormPr
           type="text"
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value, ...(isNew ? { slug: generateSlug(e.target.value) } : {}) })}
-          placeholder="Category name"
+          placeholder={t("placeholder_name")}
           autoFocus={isNew}
         />
         <Input
           type="text"
           value={form.slug}
           onChange={(e) => setForm({ ...form, slug: e.target.value })}
-          placeholder="url-slug"
+          placeholder={t("placeholder_slug")}
         />
       </div>
       <Textarea
         value={form.description}
         onChange={(e) => setForm({ ...form, description: e.target.value })}
-        placeholder="Description (optional)"
+        placeholder={t("placeholder_description")}
         rows={2}
       />
       <div className="flex items-center justify-between">
@@ -134,10 +136,11 @@ function CategoryForm({ form, setForm, isNew, onCancel, onSave }: CategoryFormPr
                 type="button"
                 onClick={() => setForm({ ...form, icon })}
                 title={icon}
-                className={`w-8 h-8 rounded-md flex items-center justify-center transition-colors ${form.icon === icon
+                className={`w-8 h-8 rounded-md flex items-center justify-center transition-colors ${
+                  form.icon === icon
                     ? "bg-primary text-primary-foreground"
                     : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700"
-                  }`}
+                }`}
               >
                 <IconComponent className="w-4 h-4" />
               </button>
@@ -150,7 +153,7 @@ function CategoryForm({ form, setForm, isNew, onCancel, onSave }: CategoryFormPr
               checked={form.show_on_homepage}
               onCheckedChange={(checked) => setForm({ ...form, show_on_homepage: checked })}
             />
-            Show on homepage
+            {t("show_on_homepage")}
           </label>
           <div className="flex gap-2">
             <Button variant="ghost" size="sm" className="h-8" onClick={onCancel}>
@@ -167,6 +170,7 @@ function CategoryForm({ form, setForm, isNew, onCancel, onSave }: CategoryFormPr
 }
 
 export default function CategoriesPage() {
+  const t = useTranslations("admin.categories");
   const { confirm, showError, showSuccess } = useDialogs();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -212,11 +216,11 @@ export default function CategoriesPage() {
       if (error) throw error;
       setShowNew(false);
       setForm({ name: "", slug: "", description: "", icon: "folder", show_on_homepage: true });
-      showSuccess("Category created successfully");
+      showSuccess(t("create_success"));
       fetchCategories();
     } catch (error) {
       console.error("Failed to create category:", error);
-      showError("Failed to create category. It may already exist.");
+      showError(t("create_error"));
     }
   }
 
@@ -238,11 +242,11 @@ export default function CategoriesPage() {
       if (error) throw error;
       setEditingId(null);
       setForm({ name: "", slug: "", description: "", icon: "folder", show_on_homepage: true });
-      showSuccess("Category updated successfully");
+      showSuccess(t("update_success"));
       fetchCategories();
     } catch (error) {
       console.error("Failed to update category:", error);
-      showError("Failed to update category.");
+      showError(t("update_error"));
     }
   }
 
@@ -257,16 +261,16 @@ export default function CategoriesPage() {
       fetchCategories();
     } catch (error) {
       console.error("Failed to update category:", error);
-      showError("Failed to update visibility.");
+      showError(t("visibility_error"));
     }
   }
 
   async function handleDelete(id: string) {
     const confirmed = await confirm({
-      title: "Delete Category",
-      description: "Are you sure? Posts in this category will become uncategorized.",
-      confirmText: "Delete",
-      cancelText: "Cancel",
+      title: t("delete_title"),
+      description: t("delete_description"),
+      confirmText: t("delete_confirm"),
+      cancelText: t("delete_cancel"),
       variant: "warning",
     });
 
@@ -275,11 +279,11 @@ export default function CategoriesPage() {
     try {
       const { error } = await supabase.from("categories").delete().eq("id", id);
       if (error) throw error;
-      showSuccess("Category deleted successfully");
+      showSuccess(t("delete_success"));
       fetchCategories();
     } catch (error) {
       console.error("Failed to delete category:", error);
-      showError("Failed to delete category.");
+      showError(t("delete_error"));
     }
   }
 
@@ -305,8 +309,8 @@ export default function CategoriesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Categories</h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">Organize your blog posts</p>
+          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">{t("title")}</h1>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{t("description")}</p>
         </div>
         <Button
           size="sm"
@@ -318,7 +322,7 @@ export default function CategoriesPage() {
           }}
         >
           <Plus className="w-4 h-4 mr-1.5" />
-          New Category
+          {t("new_category")}
         </Button>
       </div>
 
@@ -331,17 +335,18 @@ export default function CategoriesPage() {
               isNew
               onCancel={cancelEdit}
               onSave={handleCreate}
+              t={t}
             />
           </div>
         )}
 
         {loading ? (
           <div className="p-12 text-center">
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading categories...</p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">{t("loading")}</p>
           </div>
         ) : categories.length === 0 && !showNew ? (
           <div className="p-12 text-center">
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">No categories yet</p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">{t("no_categories")}</p>
             <Button
               size="sm"
               variant="outline"
@@ -349,84 +354,86 @@ export default function CategoriesPage() {
               onClick={() => setShowNew(true)}
             >
               <Plus className="w-4 h-4 mr-1.5" />
-              Create your first category
+              {t("create_first")}
             </Button>
           </div>
         ) : (
           <>
-            <div className="divide-y divide-zinc-200 dark:divide-zinc-800">
-              {paginatedCategories.map((category) => (
-                <div key={category.id}>
-                  {editingId === category.id ? (
-                    <div className="p-4 bg-zinc-50 dark:bg-zinc-800/50">
-                      <CategoryForm
-                        form={form}
-                        setForm={setForm}
-                        onCancel={cancelEdit}
-                        onSave={() => handleUpdate(editingId)}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-4 p-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
-                      {(() => {
-                        const CategoryIcon = iconMap[category.icon] || FolderOpen;
-                        return (
-                          <div className="w-9 h-9 rounded-md bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0">
-                            <CategoryIcon className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
-                          </div>
-                        );
-                      })()}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{category.name}</h3>
-                          {!category.show_on_homepage && (
-                            <span className="flex items-center gap-1 text-xs text-zinc-400 dark:text-zinc-500">
-                              <EyeOff className="w-3 h-3" />
-                              Hidden
-                            </span>
-                          )}
+          <div className="divide-y divide-zinc-200 dark:divide-zinc-800">
+            {paginatedCategories.map((category) => (
+              <div key={category.id}>
+                {editingId === category.id ? (
+                  <div className="p-4 bg-zinc-50 dark:bg-zinc-800/50">
+                    <CategoryForm
+                      form={form}
+                      setForm={setForm}
+                      onCancel={cancelEdit}
+                      onSave={() => handleUpdate(editingId)}
+                      t={t}
+                    />
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-4 p-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+                    {(() => {
+                      const CategoryIcon = iconMap[category.icon] || FolderOpen;
+                      return (
+                        <div className="w-9 h-9 rounded-md bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0">
+                          <CategoryIcon className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
                         </div>
-                        <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate mt-0.5">
-                          {category.description || `/${category.slug}`}
-                        </p>
+                      );
+                    })()}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{category.name}</h3>
+                        {!category.show_on_homepage && (
+                          <span className="flex items-center gap-1 text-xs text-zinc-400 dark:text-zinc-500">
+                            <EyeOff className="w-3 h-3" />
+                            {t("hidden")}
+                          </span>
+                        )}
                       </div>
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => toggleHomepageVisibility(category)}
-                          className={`p-1.5 rounded-md transition-colors ${category.show_on_homepage
-                              ? "text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950"
-                              : "text-zinc-400 dark:text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                            }`}
-                          title={category.show_on_homepage ? "Visible on homepage" : "Hidden from homepage"}
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate mt-0.5">
+                        {category.description || `/${category.slug}`}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => toggleHomepageVisibility(category)}
+                        className={`p-1.5 rounded-md transition-colors ${
+                          category.show_on_homepage
+                            ? "text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950"
+                            : "text-zinc-400 dark:text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                        }`}
+                        title={category.show_on_homepage ? t("visible_on_homepage") : t("hidden_from_homepage")}
+                      >
+                        {category.show_on_homepage ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                      </button>
+                      <div className="flex gap-1">
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => startEdit(category)}>
+                          <Pencil className="w-3.5 h-3.5" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-red-600 dark:text-red-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950"
+                          onClick={() => handleDelete(category.id)}
                         >
-                          {category.show_on_homepage ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                        </button>
-                        <div className="flex gap-1">
-                          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => startEdit(category)}>
-                            <Pencil className="w-3.5 h-3.5" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-red-600 dark:text-red-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950"
-                            onClick={() => handleDelete(category.id)}
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </Button>
-                        </div>
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </Button>
                       </div>
                     </div>
-                  )}
-                </div>
-              ))}
-            </div>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-              totalItems={categories.length}
-              itemsPerPage={ITEMS_PER_PAGE}
-            />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            totalItems={categories.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+          />
           </>
         )}
       </div>

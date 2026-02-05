@@ -12,7 +12,7 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
     .select("site_url")
     .maybeSingle();
 
-  const baseUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.com";
+  const baseUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckorapress.com";
 
   return {
     rules: [

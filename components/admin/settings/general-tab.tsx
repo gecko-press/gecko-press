@@ -1,16 +1,20 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Globe, ImageIcon, Upload, X, Loader2, Type } from "lucide-react";
+import { Globe, ImageIcon, Upload, X, Loader2, Type, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useDialogs } from "@/lib/dialogs";
+import { useTranslations } from "next-intl";
+import { languages } from "@/lib/i18n/config";
 
 type GeneralSettings = {
   blog_name: string;
   site_url: string;
   logo_url: string;
+  default_locale: string;
 };
 
 type GeneralTabProps = {
@@ -19,6 +23,7 @@ type GeneralTabProps = {
 };
 
 export function GeneralTab({ settings, onChange }: GeneralTabProps) {
+  const t = useTranslations("admin.settings.general");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const { showError } = useDialogs();
@@ -28,12 +33,12 @@ export function GeneralTab({ settings, onChange }: GeneralTabProps) {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      showError("Please select an image file");
+      showError(t("image_error"));
       return;
     }
 
     if (file.size > 2 * 1024 * 1024) {
-      showError("File size must be less than 2MB");
+      showError(t("size_error"));
       return;
     }
 
@@ -46,12 +51,12 @@ export function GeneralTab({ settings, onChange }: GeneralTabProps) {
         setUploading(false);
       };
       reader.onerror = () => {
-        showError("Failed to read file");
+        showError(t("read_error"));
         setUploading(false);
       };
       reader.readAsDataURL(file);
     } catch {
-      showError("Failed to upload logo");
+      showError(t("upload_error"));
       setUploading(false);
     }
   }
@@ -73,9 +78,9 @@ export function GeneralTab({ settings, onChange }: GeneralTabProps) {
             <ImageIcon className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Site Logo</h2>
+            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("logo_title")}</h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Upload your custom logo (max 2MB, recommended size: 200x50px)
+              {t("logo_description")}
             </p>
           </div>
         </div>
@@ -84,7 +89,7 @@ export function GeneralTab({ settings, onChange }: GeneralTabProps) {
             <div className="relative w-48 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-lg flex items-center justify-center overflow-hidden border border-zinc-200 dark:border-zinc-700">
               <img
                 src={logoSrc}
-                alt="Site Logo"
+                alt={t("logo_title")}
                 className="max-w-full max-h-full object-contain p-2"
               />
             </div>
@@ -106,12 +111,12 @@ export function GeneralTab({ settings, onChange }: GeneralTabProps) {
                 {uploading ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
-                    Uploading...
+                    {t("uploading")}
                   </>
                 ) : (
                   <>
                     <Upload className="w-4 h-4 mr-1.5" />
-                    Upload Logo
+                    {t("upload_logo")}
                   </>
                 )}
               </Button>
@@ -124,13 +129,13 @@ export function GeneralTab({ settings, onChange }: GeneralTabProps) {
                   className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20"
                 >
                   <X className="w-4 h-4 mr-1.5" />
-                  Remove
+                  {t("remove")}
                 </Button>
               )}
             </div>
           </div>
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            Supported formats: PNG, JPG, SVG, WebP
+            {t("supported_formats")}
           </p>
         </div>
       </div>
@@ -141,21 +146,21 @@ export function GeneralTab({ settings, onChange }: GeneralTabProps) {
             <Type className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Blog Name</h2>
+            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("blog_name_title")}</h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Your blog&apos;s name (displayed in footer and other areas)
+              {t("blog_name_description")}
             </p>
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="blog-name" className="text-xs text-zinc-600 dark:text-zinc-400">
-            Name
+            {t("blog_name_label")}
           </Label>
           <Input
             id="blog-name"
             value={settings.blog_name}
             onChange={(e) => onChange({ ...settings, blog_name: e.target.value })}
-            placeholder="My Awesome Blog"
+            placeholder={t("blog_name_placeholder")}
             className="bg-zinc-50 dark:bg-zinc-800/50"
           />
         </div>
@@ -167,23 +172,57 @@ export function GeneralTab({ settings, onChange }: GeneralTabProps) {
             <Globe className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">Site URL</h2>
+            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("site_url_title")}</h2>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-              Your blog&apos;s public URL (used in RSS feed, sitemap, etc.)
+              {t("site_url_description")}
             </p>
           </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="site-url" className="text-xs text-zinc-600 dark:text-zinc-400">
-            URL
+            {t("site_url_label")}
           </Label>
           <Input
             id="site-url"
             value={settings.site_url}
             onChange={(e) => onChange({ ...settings, site_url: e.target.value })}
-            placeholder="https://yourdomain.com"
+            placeholder={t("site_url_placeholder")}
             className="bg-zinc-50 dark:bg-zinc-800/50"
           />
+        </div>
+      </div>
+
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-4">
+        <div className="flex items-start gap-3">
+          <div className="p-2 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+            <Languages className="w-4 h-4" />
+          </div>
+          <div>
+            <h2 className="font-medium text-sm text-zinc-900 dark:text-zinc-100">{t("language_title")}</h2>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+              {t("language_description")}
+            </p>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="default-locale" className="text-xs text-zinc-600 dark:text-zinc-400">
+            {t("language_label")}
+          </Label>
+          <Select
+            value={settings.default_locale}
+            onValueChange={(value) => onChange({ ...settings, default_locale: value })}
+          >
+            <SelectTrigger className="bg-zinc-50 dark:bg-zinc-800/50">
+              <SelectValue placeholder={t("language_placeholder")} />
+            </SelectTrigger>
+            <SelectContent>
+              {languages.map((lang) => (
+                <SelectItem key={lang.code} value={lang.code}>
+                  {lang.nativeName} ({lang.name})
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
     </div>

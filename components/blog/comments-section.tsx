@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { MessageSquare } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { supabase } from "@/lib/supabase/client";
 import { CommentForm } from "./comment-form";
 import { CommentList } from "./comment-list";
@@ -12,6 +13,7 @@ type CommentsSectionProps = {
 };
 
 export function CommentsSection({ postId }: CommentsSectionProps) {
+  const t = useTranslations("comments");
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -77,7 +79,7 @@ export function CommentsSection({ postId }: CommentsSectionProps) {
       <div className="flex items-center gap-2 mb-6">
         <MessageSquare className="w-5 h-5" />
         <h2 className="text-xl font-bold">
-          Comments {commentCount > 0 && <span className="text-muted-foreground font-normal">({commentCount})</span>}
+          {t("section_title")} {commentCount > 0 && <span className="text-muted-foreground font-normal">({commentCount})</span>}
         </h2>
       </div>
 
@@ -86,7 +88,7 @@ export function CommentsSection({ postId }: CommentsSectionProps) {
 
         {loading ? (
           <div className="text-center py-8">
-            <p className="text-sm text-muted-foreground">Loading comments...</p>
+            <p className="text-sm text-muted-foreground">{t("loading")}</p>
           </div>
         ) : (
           <CommentList comments={comments} postId={postId} onReplySubmit={fetchComments} />

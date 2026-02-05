@@ -18,11 +18,14 @@ import {
 import { ContentEditor } from "@/components/admin/content-editor";
 import { supabase } from "@/lib/supabase/client";
 import { useDialogs } from "@/lib/dialogs";
+import { useTranslations } from "next-intl";
 import type { Category } from "@/lib/supabase/types";
 import { calculateReadingTime } from "@/lib/utils/reading-time";
 
 export default function EditPostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
+  const t = useTranslations("admin.posts.edit");
+  const tPosts = useTranslations("admin.posts");
   const router = useRouter();
   const { confirm, showError, showSuccess } = useDialogs();
   const [categories, setCategories] = useState<Category[]>([]);
@@ -92,11 +95,11 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
         .eq("id", id);
 
       if (error) throw error;
-      showSuccess("Post updated successfully");
+      showSuccess(t("update_success"));
       router.push("/admin/posts");
     } catch (error) {
       console.error("Failed to update post:", error);
-      showError("Failed to update post. Please try again.");
+      showError(t("update_error"));
     } finally {
       setSaving(false);
     }
@@ -104,10 +107,10 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
 
   async function handleDelete() {
     const confirmed = await confirm({
-      title: "Delete Post",
-      description: "Are you sure you want to delete this post? This action cannot be undone.",
-      confirmText: "Delete",
-      cancelText: "Cancel",
+      title: tPosts("delete_title"),
+      description: tPosts("delete_description"),
+      confirmText: tPosts("delete_confirm"),
+      cancelText: tPosts("delete_cancel"),
       variant: "destructive",
     });
 
@@ -116,18 +119,18 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
     try {
       const { error } = await supabase.from("posts").delete().eq("id", id);
       if (error) throw error;
-      showSuccess("Post deleted successfully");
+      showSuccess(tPosts("delete_success"));
       router.push("/admin/posts");
     } catch (error) {
       console.error("Failed to delete post:", error);
-      showError("Failed to delete post. Please try again.");
+      showError(tPosts("delete_error"));
     }
   }
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading post...</p>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">{t("loading")}</p>
       </div>
     );
   }
@@ -142,8 +145,8 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
             </Button>
           </Link>
           <div>
-            <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Edit Post</h1>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">Update your blog post</p>
+            <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">{t("title")}</h1>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{t("description")}</p>
           </div>
         </div>
         <Button
@@ -153,42 +156,42 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
           onClick={handleDelete}
         >
           <Trash2 className="w-4 h-4 mr-1.5" />
-          Delete
+          {t("delete")}
         </Button>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 space-y-4">
           <div className="space-y-1.5">
-            <Label>Title</Label>
+            <Label>{t("label_title")}</Label>
             <Input
               type="text"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              placeholder="Enter post title"
+              placeholder={t("placeholder_title")}
               required
             />
           </div>
 
           <div className="space-y-1.5">
-            <Label>Slug</Label>
+            <Label>{t("label_slug")}</Label>
             <Input
               type="text"
               value={form.slug}
               onChange={(e) => setForm({ ...form, slug: e.target.value })}
-              placeholder="url-friendly-slug"
+              placeholder={t("placeholder_slug")}
               required
             />
           </div>
 
           <div className="space-y-1.5">
-            <Label>Category</Label>
+            <Label>{t("label_category")}</Label>
             <Select
               value={form.category_id}
               onValueChange={(value) => setForm({ ...form, category_id: value })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select category" />
+                <SelectValue placeholder={t("placeholder_category")} />
               </SelectTrigger>
               <SelectContent>
                 {categories.map((cat) => (
@@ -201,13 +204,13 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
           </div>
 
           <div className="space-y-1.5">
-            <Label>Cover Image URL</Label>
+            <Label>{t("label_cover_image")}</Label>
             <div className="flex gap-2">
               <Input
                 type="url"
                 value={form.cover_image}
                 onChange={(e) => setForm({ ...form, cover_image: e.target.value })}
-                placeholder="https://example.com/image.jpg"
+                placeholder={t("placeholder_cover_image")}
                 className="flex-1"
               />
               {form.cover_image && (
@@ -219,11 +222,11 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
           </div>
 
           <div className="space-y-1.5">
-            <Label>Excerpt</Label>
+            <Label>{t("label_excerpt")}</Label>
             <Textarea
               value={form.excerpt}
               onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
-              placeholder="Brief description of the post"
+              placeholder={t("placeholder_excerpt")}
               rows={2}
             />
           </div>
@@ -243,23 +246,23 @@ export default function EditPostPage({ params }: { params: Promise<{ id: string 
             {form.published ? (
               <>
                 <Eye className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                <span>Published</span>
+                <span>{t("status_published")}</span>
               </>
             ) : (
               <>
                 <EyeOff className="w-4 h-4" />
-                <span>Draft</span>
+                <span>{t("status_draft")}</span>
               </>
             )}
           </button>
 
           <div className="flex gap-2">
             <Link href="/admin/posts">
-              <Button variant="outline" type="button" size="sm" className="h-9">Cancel</Button>
+              <Button variant="outline" type="button" size="sm" className="h-9">{t("cancel")}</Button>
             </Link>
             <Button type="submit" disabled={saving} size="sm" className="h-9">
               <Save className="w-4 h-4 mr-1.5" />
-              {saving ? "Saving..." : "Save Changes"}
+              {saving ? t("saving") : t("save_changes")}
             </Button>
           </div>
         </div>

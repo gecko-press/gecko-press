@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { MenuManager } from "@/components/admin/pages/menu-manager";
 import { Pagination } from "@/components/admin/pagination";
+import { useTranslations } from "next-intl";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -31,6 +32,7 @@ type Page = {
 };
 
 export default function PagesPage() {
+  const t = useTranslations("admin.pages");
   const [pages, setPages] = useState<Page[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -99,16 +101,16 @@ export default function PagesPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Pages & Menu</h1>
+          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">{t("title")}</h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-            Manage your site pages and navigation menu
+            {t("description")}
           </p>
         </div>
         {activeTab === "pages" && (
           <Link href="/admin/pages/new">
             <Button size="sm" className="h-9">
               <Plus className="w-4 h-4 mr-1.5" />
-              New Page
+              {t("new_page")}
             </Button>
           </Link>
         )}
@@ -118,30 +120,30 @@ export default function PagesPage() {
         <TabsList className="bg-zinc-100 dark:bg-zinc-800">
           <TabsTrigger value="pages" className="gap-1.5">
             <FileText className="w-4 h-4" />
-            Pages
+            {t("tab_pages")}
           </TabsTrigger>
           <TabsTrigger value="menu" className="gap-1.5">
             <MenuIcon className="w-4 h-4" />
-            Menu
+            {t("tab_menu")}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="pages" className="mt-4">
           {loading ? (
             <div className="flex items-center justify-center min-h-[200px]">
-              <p className="text-sm text-zinc-500">Loading pages...</p>
+              <p className="text-sm text-zinc-500">{t("loading")}</p>
             </div>
           ) : pages.length === 0 ? (
             <div className="flex flex-col items-center justify-center min-h-[300px] bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg">
               <FileText className="w-12 h-12 text-zinc-300 dark:text-zinc-700 mb-4" />
-              <h3 className="font-medium text-zinc-900 dark:text-zinc-100 mb-1">No pages yet</h3>
+              <h3 className="font-medium text-zinc-900 dark:text-zinc-100 mb-1">{t("no_pages")}</h3>
               <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-4">
-                Create your first page to get started
+                {t("create_first")}
               </p>
               <Link href="/admin/pages/new">
                 <Button size="sm">
                   <Plus className="w-4 h-4 mr-1.5" />
-                  Create Page
+                  {t("create_page")}
                 </Button>
               </Link>
             </div>
@@ -151,10 +153,10 @@ export default function PagesPage() {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-zinc-200 dark:border-zinc-800">
-                      <th className="text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 px-4 py-3">Title</th>
-                      <th className="text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 px-4 py-3">Slug</th>
-                      <th className="text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 px-4 py-3">Status</th>
-                      <th className="text-right text-xs font-medium text-zinc-500 dark:text-zinc-400 px-4 py-3">Actions</th>
+                      <th className="text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 px-4 py-3">{t("table_title")}</th>
+                      <th className="text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 px-4 py-3">{t("table_slug")}</th>
+                      <th className="text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 px-4 py-3">{t("table_status")}</th>
+                      <th className="text-right text-xs font-medium text-zinc-500 dark:text-zinc-400 px-4 py-3">{t("table_actions")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -177,7 +179,7 @@ export default function PagesPage() {
                             }`}
                           >
                             {page.is_published ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-                            {page.is_published ? "Published" : "Draft"}
+                            {page.is_published ? t("published") : t("draft")}
                           </span>
                         </td>
                         <td className="px-4 py-3">
@@ -187,7 +189,7 @@ export default function PagesPage() {
                               size="sm"
                               className="h-8 w-8 p-0"
                               onClick={() => togglePublish(page)}
-                              title={page.is_published ? "Unpublish" : "Publish"}
+                              title={page.is_published ? t("unpublish") : t("publish")}
                             >
                               {page.is_published ? (
                                 <EyeOff className="w-4 h-4 text-zinc-500" />
@@ -234,16 +236,15 @@ export default function PagesPage() {
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Page</AlertDialogTitle>
+            <AlertDialogTitle>{t("delete_title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this page? This action cannot be undone.
-              Any menu items linking to this page will be updated.
+              {t("delete_description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("delete_cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={deletePage} className="bg-red-600 hover:bg-red-700">
-              Delete
+              {t("delete_confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

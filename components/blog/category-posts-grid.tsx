@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { DynamicCard } from "@/components/theme/dynamic-card";
 import { BlogPagination } from "@/components/blog/pagination";
 import type { Post } from "@/lib/supabase/types";
@@ -12,13 +13,14 @@ interface CategoryPostsGridProps {
 }
 
 export function CategoryPostsGrid({ posts }: CategoryPostsGridProps) {
+  const t = useTranslations("categorySection");
   const [currentPage, setCurrentPage] = useState(1);
 
   if (posts.length === 0) {
     return (
       <div className="text-center py-16">
         <p className="text-muted-foreground">
-          No articles found in this category yet.
+          {t("no_articles")}
         </p>
       </div>
     );

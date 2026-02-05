@@ -16,6 +16,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase/client";
 import ViewsChart from "@/components/admin/views-chart";
 import { formatDistanceToNow } from "date-fns";
+import { useTranslations } from "next-intl";
 
 const VERSION_URL = "https://raw.githubusercontent.com/gecko-press/gecko-press/main/version.txt";
 const RELEASES_URL = "https://github.com/gecko-press/gecko-press/releases";
@@ -71,6 +72,7 @@ function compareVersions(v1: string, v2: string): number {
 }
 
 export default function AdminDashboard() {
+  const t = useTranslations("admin.dashboard");
   const [stats, setStats] = useState<Stats>({
     totalPosts: 0,
     publishedPosts: 0,
@@ -145,7 +147,7 @@ export default function AdminDashboard() {
         const views = viewsRes.data || [];
         setTotalViews(views.length);
 
-        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const monthKeys = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
         const now = new Date();
         const monthlyData: MonthlyViews[] = [];
 
@@ -157,7 +159,7 @@ export default function AdminDashboard() {
           }).length;
 
           monthlyData.push({
-            month: monthNames[date.getMonth()],
+            month: monthKeys[date.getMonth()],
             views: monthViews,
           });
         }
@@ -175,7 +177,7 @@ export default function AdminDashboard() {
 
   const statCards = [
     {
-      label: "Total Posts",
+      label: t("total_posts"),
       value: stats.totalPosts,
       icon: FileText,
       href: "/admin/posts",
@@ -183,7 +185,7 @@ export default function AdminDashboard() {
       iconBg: "bg-primary/10",
     },
     {
-      label: "Published",
+      label: t("published"),
       value: stats.publishedPosts,
       icon: Eye,
       href: "/admin/posts?status=published",
@@ -191,7 +193,7 @@ export default function AdminDashboard() {
       iconBg: "bg-primary/10",
     },
     {
-      label: "Drafts",
+      label: t("drafts"),
       value: stats.draftPosts,
       icon: PenLine,
       href: "/admin/posts?status=draft",
@@ -205,11 +207,9 @@ export default function AdminDashboard() {
 
       {updateInfo?.hasUpdate && showUpdateBanner && (
         <div className="relative bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl p-4 shadow-lg mx-2 md:mx-0">
-          {/* Kapatma Butonu */}
           <button
             onClick={() => setShowUpdateBanner(false)}
             className="absolute top-2 right-2 p-1.5 hover:bg-white/20 rounded-lg transition-colors"
-            aria-label="Kapat"
           >
             <X className="w-4 h-4" />
           </button>
@@ -219,37 +219,25 @@ export default function AdminDashboard() {
               <ArrowDownToLine className="w-5 h-5" />
             </div>
 
-            {/* Metin İçeriği */}
             <div className="flex-1 pr-6 sm:pr-0">
               <h3 className="font-semibold text-sm sm:text-base">
-                GeckoPress {updateInfo.latestVersion} is available!
+                GeckoPress {updateInfo.latestVersion} {t("update_available")}
               </h3>
               <p className="text-white/80 text-xs mt-0.5 leading-relaxed">
-                You are running version {currentVersion}. Update to get the latest features.
+                {t("running_version")} {currentVersion}. {t("update_message")}
               </p>
             </div>
-
-            {/* Aksiyon Butonu - Mobilde tam genişlik */}
-            <a
-              href={updateInfo.releaseUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-4 py-2.5 bg-white text-emerald-600 text-sm font-bold rounded-lg hover:bg-emerald-50 transition-colors flex items-center justify-center gap-2 shadow-md"
-            >
-              View Release
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
           </div>
         </div>
       )}
 
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6">
         <div className="flex items-center gap-3 mb-1">
-          <span className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">Welcome back</span>
+          <span className="text-zinc-500 dark:text-zinc-400 text-sm font-medium">{t("welcome_back")}</span>
         </div>
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-1">Dashboard</h1>
+        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-1">{t("title")}</h1>
         <p className="text-zinc-500 dark:text-zinc-400 text-sm">
-          Track your content performance and engagement.
+          {t("description")}
         </p>
       </div>
 
@@ -288,15 +276,15 @@ export default function AdminDashboard() {
                 <BarChart3 className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Analytics Overview</h2>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">Last 12 months performance</p>
+                <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{t("analytics_overview")}</h2>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">{t("last_12_months")}</p>
               </div>
             </div>
             <div className="text-right">
               <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
                 {loading ? "-" : totalViews.toLocaleString()}
               </p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">Total views</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">{t("total_views")}</p>
             </div>
           </div>
           <div className="p-6">
@@ -304,7 +292,7 @@ export default function AdminDashboard() {
               <div className="h-64 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-3">
                   <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading analytics...</p>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">{t("loading_analytics")}</p>
                 </div>
               </div>
             ) : (
@@ -322,17 +310,17 @@ export default function AdminDashboard() {
                 <MessageSquare className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Recent Comments</h2>
+                <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{t("recent_comments")}</h2>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
                   {stats.pendingComments > 0 && (
-                    <span className="text-amber-600 dark:text-amber-400">{stats.pendingComments} pending</span>
+                    <span className="text-amber-600 dark:text-amber-400">{stats.pendingComments} {t("pending")}</span>
                   )}
-                  {stats.pendingComments === 0 && "All caught up"}
+                  {stats.pendingComments === 0 && t("all_caught_up")}
                 </p>
               </div>
             </div>
             <Link href="/admin/comments" className="text-xs text-primary hover:underline font-medium">
-              View all
+              {t("view_all")}
             </Link>
           </div>
           <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -351,7 +339,7 @@ export default function AdminDashboard() {
             ) : recentComments.length === 0 ? (
               <div className="p-8 text-center">
                 <MessageSquare className="w-8 h-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-2" />
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">No comments yet</p>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">{t("no_comments")}</p>
               </div>
             ) : (
               recentComments.slice(0, 4).map((comment) => (
@@ -366,8 +354,8 @@ export default function AdminDashboard() {
                           {comment.author_name}
                         </span>
                         {!comment.is_approved && (
-                          <span className="px-1.5 py-0.5 text-[10px] font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded">
-                            Pending
+                          <span className="px-1.5 py-0.5 text-[10px] font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded capitalize">
+                            {t("pending")}
                           </span>
                         )}
                       </div>
@@ -393,12 +381,12 @@ export default function AdminDashboard() {
               <Clock className="w-4 h-4 text-primary" />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Recent Posts</h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">Your latest content</p>
+              <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{t("recent_posts")}</h2>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">{t("your_latest_content")}</p>
             </div>
           </div>
           <Link href="/admin/posts" className="text-xs text-primary hover:underline font-medium">
-            View all
+            {t("view_all")}
           </Link>
         </div>
         <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -417,9 +405,9 @@ export default function AdminDashboard() {
           ) : recentPosts.length === 0 ? (
             <div className="p-8 text-center">
               <FileText className="w-8 h-8 text-zinc-300 dark:text-zinc-600 mx-auto mb-2" />
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">No posts yet</p>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">{t("no_posts")}</p>
               <Link href="/admin/posts/new" className="text-sm text-primary hover:underline mt-2 inline-block">
-                Create your first post
+                {t("create_first_post")}
               </Link>
             </div>
           ) : (
@@ -447,7 +435,7 @@ export default function AdminDashboard() {
                   ? "bg-primary/10 text-primary"
                   : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
                   }`}>
-                  {post.published ? "Published" : "Draft"}
+                  {post.published ? t("published") : t("draft")}
                 </span>
               </Link>
             ))

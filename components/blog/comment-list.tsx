@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { MessageSquare, Reply, User } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { CommentForm } from "./comment-form";
 import type { Comment } from "@/lib/supabase/types";
@@ -15,6 +16,7 @@ type CommentItemProps = {
 };
 
 function CommentItem({ comment, postId, onReplySubmit, depth = 0 }: CommentItemProps) {
+  const t = useTranslations("comments");
   const [showReplyForm, setShowReplyForm] = useState(false);
   const maxDepth = 2;
 
@@ -50,7 +52,7 @@ function CommentItem({ comment, postId, onReplySubmit, depth = 0 }: CommentItemP
               onClick={() => setShowReplyForm(!showReplyForm)}
             >
               <Reply className="w-3.5 h-3.5 mr-1" />
-              Reply
+              {t("reply")}
             </Button>
           )}
         </div>
@@ -93,11 +95,13 @@ type CommentListProps = {
 };
 
 export function CommentList({ comments, postId, onReplySubmit }: CommentListProps) {
+  const t = useTranslations("comments");
+
   if (comments.length === 0) {
     return (
       <div className="text-center py-8 bg-muted/30 rounded-lg">
         <MessageSquare className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-        <p className="text-muted-foreground text-sm">No comments yet. Be the first to comment!</p>
+        <p className="text-muted-foreground text-sm">{t("no_comments")}</p>
       </div>
     );
   }

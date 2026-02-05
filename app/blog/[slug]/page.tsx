@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import { Calendar, Clock, User, Eye } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { ShareButtons } from "@/components/blog/share-buttons";
 import { CommentsSection } from "@/components/blog/comments-section";
 import { getPostBySlug, getPostViewCount, getRelatedPosts, getSiteSettings } from "@/lib/supabase/queries";
@@ -22,10 +23,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   const settings = await getSiteSettings();
+  const t = await getTranslations("blogPost");
 
   if (!post) {
     return {
-      title: "Post Not Found",
+      title: t("post_not_found"),
     };
   }
 
@@ -67,6 +69,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   const settings = await getSiteSettings();
+  const t = await getTranslations("blogPost");
 
   if (!post) {
     notFound();
@@ -84,6 +87,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const readingTime = post.content ? calculateReadingTime(post.content) : (post.reading_time || 1);
   const wordCount = post.content ? post.content.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length : 0;
+
+  const locale = settings?.site_language || "en";
+  const dateLocale = locale === "tr" ? "tr-TR" : "en-US";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -142,15 +148,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  <span>{post.published_at ? new Date(post.published_at).toLocaleDateString("en-US") : "Draft"}</span>
+                  <span>{post.published_at ? new Date(post.published_at).toLocaleDateString(dateLocale) : t("draft")}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
-                  <span>{readingTime} min read</span>
+                  <span>{t("min_read", { time: readingTime })}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Eye className="w-4 h-4" />
-                  <span>{viewCount.toLocaleString()} views</span>
+                  <span>{t("views", { count: viewCount.toLocaleString(dateLocale) })}</span>
                 </div>
               </div>
 
@@ -221,7 +227,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {relatedPosts.length > 0 && (
           <section className="max-w-6xl mx-auto px-4 py-12">
-            <h2 className="text-2xl font-semibold mb-6">Related Articles</h2>
+            <h2 className="text-2xl font-semibold mb-6">{t("related_articles")}</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedPosts.map((relatedPost) => (
                 <BlogCard key={relatedPost.id} post={relatedPost} />

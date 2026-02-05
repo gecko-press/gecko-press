@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Send, CheckCircle, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@supabase/supabase-js";
@@ -14,10 +15,11 @@ const supabase = createClient(
 type Status = "idle" | "loading" | "success" | "error";
 
 export function Newsletter() {
+  const t = useTranslations("newsletter");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
-  const [title, setTitle] = useState("Stay Updated");
-  const [description, setDescription] = useState("Join our newsletter for the latest updates delivered straight to your inbox.");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     async function fetchSettings() {
@@ -27,13 +29,11 @@ export function Newsletter() {
         .eq("key", "global")
         .maybeSingle();
 
-      if (data) {
-        if (data.newsletter_title) setTitle(data.newsletter_title);
-        if (data.newsletter_description) setDescription(data.newsletter_description);
-      }
+      setTitle(data?.newsletter_title || t("default_title"));
+      setDescription(data?.newsletter_description || t("default_description"));
     }
     fetchSettings();
-  }, []);
+  }, [t]);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,9 +50,9 @@ export function Newsletter() {
 
       if (error) {
         if (error.code === "23505") {
-          setErrorMessage("This email is already subscribed!");
+          setErrorMessage(t("error_duplicate"));
         } else {
-          setErrorMessage("Something went wrong. Please try again.");
+          setErrorMessage(t("error_generic"));
         }
         setStatus("error");
         return;
@@ -61,7 +61,7 @@ export function Newsletter() {
       setStatus("success");
       setEmail("");
     } catch {
-      setErrorMessage("Something went wrong. Please try again.");
+      setErrorMessage(t("error_generic"));
       setStatus("error");
     }
   };
@@ -76,7 +76,7 @@ export function Newsletter() {
         <div className="mx-auto max-w-2xl text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
             <Send className="w-3.5 h-3.5" />
-            Stay Updated
+            {t("badge")}
           </div>
 
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-3">
@@ -89,14 +89,14 @@ export function Newsletter() {
           {status === "success" ? (
             <div className="flex items-center justify-center gap-3 p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400">
               <CheckCircle className="w-5 h-5" />
-              <span className="font-medium">Thanks for subscribing! Check your inbox soon.</span>
+              <span className="font-medium">{t("success")}</span>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <div className="flex-1">
                 <Input
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t("email_placeholder")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -116,11 +116,11 @@ export function Newsletter() {
                 {status === "loading" ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Subscribing...
+                    {t("subscribing")}
                   </>
                 ) : (
                   <>
-                    Subscribe
+                    {t("subscribe")}
                     <Send className="w-4 h-4 ml-2" />
                   </>
                 )}
@@ -129,7 +129,7 @@ export function Newsletter() {
           )}
 
           <p className="text-xs text-muted-foreground mt-4">
-            No spam, unsubscribe anytime. We respect your privacy.
+            {t("privacy_note")}
           </p>
         </div>
       </div>

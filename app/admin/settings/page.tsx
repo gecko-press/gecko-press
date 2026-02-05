@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { Save, RotateCcw, Palette, Code, Webhook, Mail, User, Settings2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/lib/supabase/client";
@@ -42,7 +43,7 @@ const defaultHeroSettings: HeroSettings = {
     subtitle: "Future of Tech",
     description: "In-depth reviews, guides, and insights on the latest technology trends. Stay ahead with expert analysis and recommendations.",
     searchPlaceholder: "What are you looking for?",
-    imageUrl: "https://images.pexels.com/photos/35414673/pexels-photo-35414673.jpeg?auto=compress&cs=tinysrgb&w=1200",
+    imageUrl: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=1200",
     metrics: [
       { icon: "BookOpen", value: "500+", label: "Articles" },
       { icon: "Users", value: "50K+", label: "Readers" },
@@ -86,6 +87,7 @@ type Settings = {
   blog_name: string;
   site_url: string;
   logo_url: string;
+  default_locale: string;
 };
 
 const defaultSettings: Settings = {
@@ -117,10 +119,12 @@ const defaultSettings: Settings = {
   blog_name: "",
   site_url: "",
   logo_url: "",
+  default_locale: "tr",
 };
 
 export default function SettingsPage() {
   const { showError, showSuccess } = useDialogs();
+  const t = useTranslations("admin.settings");
   const [settings, setSettings] = useState<Settings>(defaultSettings);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -171,6 +175,7 @@ export default function SettingsPage() {
           loadedSettings.blog_name = siteResult.data.blog_name || "";
           loadedSettings.site_url = siteResult.data.site_url || "";
           loadedSettings.logo_url = siteResult.data.logo_url || "";
+          loadedSettings.default_locale = siteResult.data.default_locale || "tr";
         }
 
         setSettings(loadedSettings);
@@ -238,6 +243,7 @@ export default function SettingsPage() {
             blog_name: settings.blog_name,
             site_url: settings.site_url,
             logo_url: settings.logo_url,
+            default_locale: settings.default_locale,
           })
           .eq("id", existingSiteSettings.id);
       } else {
@@ -264,6 +270,7 @@ export default function SettingsPage() {
           blog_name: settings.blog_name,
           site_url: settings.site_url,
           logo_url: settings.logo_url,
+          default_locale: settings.default_locale,
         });
       }
 
@@ -275,11 +282,18 @@ export default function SettingsPage() {
       if (themeError) throw themeError;
       if (siteError) throw siteError;
 
+      const localeChanged = originalSettings.default_locale !== settings.default_locale;
       setOriginalSettings(settings);
-      showSuccess("Settings saved successfully");
+      showSuccess(t("save_success"));
+
+      if (localeChanged) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      }
     } catch (error) {
       console.error("Failed to save settings:", error);
-      showError("Failed to save settings. Please try again.");
+      showError(t("save_error"));
     } finally {
       setSaving(false);
     }
@@ -318,7 +332,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">Loading settings...</p>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">{t("loading")}</p>
       </div>
     );
   }
@@ -327,9 +341,9 @@ export default function SettingsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">Settings</h1>
+          <h1 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">{t("title")}</h1>
           <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">
-            Manage your site configuration
+            {t("description")}
           </p>
         </div>
         <div className="flex gap-2">
@@ -341,11 +355,11 @@ export default function SettingsPage() {
             disabled={!hasChanges}
           >
             <RotateCcw className="w-4 h-4 mr-1.5" />
-            Reset
+            {t("reset")}
           </Button>
           <Button size="sm" className="h-9" onClick={handleSave} disabled={!hasChanges || saving}>
             <Save className="w-4 h-4 mr-1.5" />
-            {saving ? "Saving..." : "Save Changes"}
+            {saving ? t("saving") : t("save_changes")}
           </Button>
         </div>
       </div>
@@ -354,27 +368,27 @@ export default function SettingsPage() {
         <TabsList className="w-full justify-start overflow-x-auto flex-nowrap h-auto p-1 bg-zinc-100 dark:bg-zinc-800">
           <TabsTrigger value="general" className="gap-1.5 text-xs sm:text-sm">
             <Settings2 className="w-4 h-4" />
-            <span className="hidden sm:inline">General</span>
+            <span className="hidden sm:inline">{t("tab_general")}</span>
           </TabsTrigger>
           <TabsTrigger value="theme" className="gap-1.5 text-xs sm:text-sm">
             <Palette className="w-4 h-4" />
-            <span className="hidden sm:inline">Theme</span>
+            <span className="hidden sm:inline">{t("tab_theme")}</span>
           </TabsTrigger>
           <TabsTrigger value="adsense" className="gap-1.5 text-xs sm:text-sm">
             <Code className="w-4 h-4" />
-            <span className="hidden sm:inline">AdSense</span>
+            <span className="hidden sm:inline">{t("tab_adsense")}</span>
           </TabsTrigger>
           <TabsTrigger value="gecko" className="gap-1.5 text-xs sm:text-sm">
             <Webhook className="w-4 h-4" />
-            <span className="hidden sm:inline">Gecko Authority</span>
+            <span className="hidden sm:inline">{t("tab_gecko")}</span>
           </TabsTrigger>
           <TabsTrigger value="contact" className="gap-1.5 text-xs sm:text-sm">
             <Mail className="w-4 h-4" />
-            <span className="hidden sm:inline">Contact</span>
+            <span className="hidden sm:inline">{t("tab_contact")}</span>
           </TabsTrigger>
           <TabsTrigger value="profile" className="gap-1.5 text-xs sm:text-sm">
             <User className="w-4 h-4" />
-            <span className="hidden sm:inline">Profile</span>
+            <span className="hidden sm:inline">{t("tab_profile")}</span>
           </TabsTrigger>
         </TabsList>
 
@@ -384,6 +398,7 @@ export default function SettingsPage() {
               blog_name: settings.blog_name,
               site_url: settings.site_url,
               logo_url: settings.logo_url,
+              default_locale: settings.default_locale,
             }}
             onChange={(generalSettings) => setSettings({ ...settings, ...generalSettings })}
           />
@@ -459,9 +474,9 @@ export default function SettingsPage() {
 
       {hasChanges && (
         <div className="fixed bottom-4 right-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-lg p-3 flex items-center gap-3 z-50">
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">Unsaved changes</p>
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">{t("unsaved_changes")}</p>
           <Button onClick={handleSave} disabled={saving} size="sm" className="h-8">
-            {saving ? "Saving.." : "Save"}
+            {saving ? t("saving") : t("save")}
           </Button>
         </div>
       )}

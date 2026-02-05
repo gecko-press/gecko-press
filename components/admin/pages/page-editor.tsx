@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useCallback } from "react";
 import { Bold, Italic, Underline, List, ListOrdered, Link as LinkIcon, Heading1, Heading2, Heading3, AlignLeft, AlignCenter, AlignRight, Undo, Redo, Code } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -11,6 +12,7 @@ type PageEditorProps = {
 };
 
 export function PageEditor({ content, onChange }: PageEditorProps) {
+  const t = useTranslations("admin.pages.editor");
   const editorRef = useRef<HTMLDivElement>(null);
   const isInitialMount = useRef(true);
 
@@ -34,7 +36,7 @@ export function PageEditor({ content, onChange }: PageEditorProps) {
   }
 
   function insertLink() {
-    const url = prompt("Enter URL:");
+    const url = prompt(t("enter_url"));
     if (url) {
       execCommand("createLink", url);
     }
@@ -47,67 +49,67 @@ export function PageEditor({ content, onChange }: PageEditorProps) {
   return (
     <div className="border border-zinc-200 dark:border-zinc-700 rounded-lg overflow-hidden">
       <div className="flex flex-wrap items-center gap-0.5 p-2 bg-zinc-50 dark:bg-zinc-800/50 border-b border-zinc-200 dark:border-zinc-700">
-        <ToolbarButton onClick={() => execCommand("undo")} title="Undo">
+        <ToolbarButton onClick={() => execCommand("undo")} title={t("undo")}>
           <Undo className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => execCommand("redo")} title="Redo">
+        <ToolbarButton onClick={() => execCommand("redo")} title={t("redo")}>
           <Redo className="w-4 h-4" />
         </ToolbarButton>
 
         <Separator orientation="vertical" className="h-6 mx-1" />
 
-        <ToolbarButton onClick={() => formatBlock("h1")} title="Heading 1">
+        <ToolbarButton onClick={() => formatBlock("h1")} title={t("heading1")}>
           <Heading1 className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => formatBlock("h2")} title="Heading 2">
+        <ToolbarButton onClick={() => formatBlock("h2")} title={t("heading2")}>
           <Heading2 className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => formatBlock("h3")} title="Heading 3">
+        <ToolbarButton onClick={() => formatBlock("h3")} title={t("heading3")}>
           <Heading3 className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => formatBlock("p")} title="Paragraph">
+        <ToolbarButton onClick={() => formatBlock("p")} title={t("paragraph")}>
           <span className="text-xs font-medium">P</span>
         </ToolbarButton>
 
         <Separator orientation="vertical" className="h-6 mx-1" />
 
-        <ToolbarButton onClick={() => execCommand("bold")} title="Bold">
+        <ToolbarButton onClick={() => execCommand("bold")} title={t("bold")}>
           <Bold className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => execCommand("italic")} title="Italic">
+        <ToolbarButton onClick={() => execCommand("italic")} title={t("italic")}>
           <Italic className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => execCommand("underline")} title="Underline">
+        <ToolbarButton onClick={() => execCommand("underline")} title={t("underline")}>
           <Underline className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => formatBlock("pre")} title="Code Block">
+        <ToolbarButton onClick={() => formatBlock("pre")} title={t("code_block")}>
           <Code className="w-4 h-4" />
         </ToolbarButton>
 
         <Separator orientation="vertical" className="h-6 mx-1" />
 
-        <ToolbarButton onClick={() => execCommand("insertUnorderedList")} title="Bullet List">
+        <ToolbarButton onClick={() => execCommand("insertUnorderedList")} title={t("bullet_list")}>
           <List className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => execCommand("insertOrderedList")} title="Numbered List">
+        <ToolbarButton onClick={() => execCommand("insertOrderedList")} title={t("numbered_list")}>
           <ListOrdered className="w-4 h-4" />
         </ToolbarButton>
 
         <Separator orientation="vertical" className="h-6 mx-1" />
 
-        <ToolbarButton onClick={() => execCommand("justifyLeft")} title="Align Left">
+        <ToolbarButton onClick={() => execCommand("justifyLeft")} title={t("align_left")}>
           <AlignLeft className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => execCommand("justifyCenter")} title="Align Center">
+        <ToolbarButton onClick={() => execCommand("justifyCenter")} title={t("align_center")}>
           <AlignCenter className="w-4 h-4" />
         </ToolbarButton>
-        <ToolbarButton onClick={() => execCommand("justifyRight")} title="Align Right">
+        <ToolbarButton onClick={() => execCommand("justifyRight")} title={t("align_right")}>
           <AlignRight className="w-4 h-4" />
         </ToolbarButton>
 
         <Separator orientation="vertical" className="h-6 mx-1" />
 
-        <ToolbarButton onClick={insertLink} title="Insert Link">
+        <ToolbarButton onClick={insertLink} title={t("insert_link")}>
           <LinkIcon className="w-4 h-4" />
         </ToolbarButton>
       </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Clock } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ReadingProgressProps {
   title: string;
@@ -9,6 +10,7 @@ interface ReadingProgressProps {
 }
 
 export function ReadingProgress({ title, readingTime }: ReadingProgressProps) {
+  const t = useTranslations("blogPost");
   const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -46,7 +48,7 @@ export function ReadingProgress({ title, readingTime }: ReadingProgressProps) {
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5" />
-              <span>{readingTime} min read</span>
+              <span>{t("min_read", { time: readingTime })}</span>
             </div>
             <span className="font-medium text-foreground">{Math.round(progress)}%</span>
           </div>

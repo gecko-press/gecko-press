@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,6 +17,7 @@ type CommentFormProps = {
 };
 
 export function CommentForm({ postId, parentId = null, onSuccess, onCancel, isReply = false }: CommentFormProps) {
+  const t = useTranslations("comments");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [content, setContent] = useState("");
@@ -45,7 +47,7 @@ export function CommentForm({ postId, parentId = null, onSuccess, onCancel, isRe
       setContent("");
       onSuccess?.();
     } catch (err) {
-      setError("Failed to submit comment. Please try again.");
+      setError(t("error_generic"));
       console.error(err);
     } finally {
       setLoading(false);
@@ -56,7 +58,7 @@ export function CommentForm({ postId, parentId = null, onSuccess, onCancel, isRe
     return (
       <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4">
         <p className="text-sm text-green-700 dark:text-green-400">
-          Thank you for your comment! It will appear after moderation.
+          {t("success")}
         </p>
         <Button
           variant="ghost"
@@ -64,7 +66,7 @@ export function CommentForm({ postId, parentId = null, onSuccess, onCancel, isRe
           className="mt-2"
           onClick={() => setSuccess(false)}
         >
-          Write another comment
+          {t("write_another")}
         </Button>
       </div>
     );
@@ -76,13 +78,13 @@ export function CommentForm({ postId, parentId = null, onSuccess, onCancel, isRe
         {!isReply && (
           <div className="flex items-center gap-2 mb-4">
             <MessageSquare className="w-5 h-5 text-muted-foreground" />
-            <h3 className="font-semibold">Leave a Comment</h3>
+            <h3 className="font-semibold">{t("title")}</h3>
           </div>
         )}
 
         {isReply && (
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium text-muted-foreground">Write a reply</span>
+            <span className="text-sm font-medium text-muted-foreground">{t("reply_title")}</span>
             {onCancel && (
               <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
                 <X className="w-4 h-4" />
@@ -94,7 +96,7 @@ export function CommentForm({ postId, parentId = null, onSuccess, onCancel, isRe
         <div className="space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Input
-              placeholder="Your name"
+              placeholder={t("name_placeholder")}
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -102,7 +104,7 @@ export function CommentForm({ postId, parentId = null, onSuccess, onCancel, isRe
             />
             <Input
               type="email"
-              placeholder="Your email"
+              placeholder={t("email_placeholder")}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -110,7 +112,7 @@ export function CommentForm({ postId, parentId = null, onSuccess, onCancel, isRe
             />
           </div>
           <Textarea
-            placeholder="Write your comment..."
+            placeholder={t("content_placeholder")}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
@@ -125,19 +127,19 @@ export function CommentForm({ postId, parentId = null, onSuccess, onCancel, isRe
           <div className="flex justify-end gap-2">
             {isReply && onCancel && (
               <Button type="button" variant="outline" size="sm" onClick={onCancel}>
-                Cancel
+                {t("cancel")}
               </Button>
             )}
             <Button type="submit" size="sm" disabled={loading || !name || !email || !content}>
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-1.5 animate-spin" />
-                  Submitting...
+                  {t("submitting")}
                 </>
               ) : (
                 <>
                   <Send className="w-4 h-4 mr-1.5" />
-                  {isReply ? "Reply" : "Submit Comment"}
+                  {isReply ? t("reply") : t("submit")}
                 </>
               )}
             </Button>
