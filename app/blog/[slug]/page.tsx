@@ -8,12 +8,12 @@ import { ShareButtons } from "@/components/blog/share-buttons";
 import { CommentsSection } from "@/components/blog/comments-section";
 import { getPostBySlug, getPostViewCount, getRelatedPosts, getSiteSettings } from "@/lib/supabase/queries";
 import { BlogCard } from "@/components/blog/blog-card";
-import { AdSensePlaceholder } from "@/components/blog/adsense-placeholder";
 import { ViewTracker } from "@/components/blog/view-tracker";
 import { ReadingProgress } from "@/components/blog/reading-progress";
 import { ReactionButtons } from "@/components/blog/reaction-buttons";
 import { CodeBlockEnhancer } from "@/components/blog/code-block-enhancer";
 import { calculateReadingTime } from "@/lib/utils/reading-time";
+import { sanitizeHtml } from "@/lib/utils/sanitize";
 import { Separator } from "@/components/ui/separator";
 
 export const revalidate = 60;
@@ -31,12 +31,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
 
-  const siteUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.com";
+  const siteUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.org";
   const postUrl = `${siteUrl}/blog/${post.slug}`;
 
   const description = post.meta_description || post.excerpt || `Read ${post.title} on GeckoPress`;
 
-  const authorName = settings?.author_name || "GeckoAuthority";
+  const authorName = settings?.author_name || "GeckoPress";
 
   return {
     title: post.title,
@@ -80,9 +80,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     ? await getRelatedPosts(post.category_id, post.id, 3)
     : [];
 
-  const siteUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.com";
+  const siteUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.org";
   const shareUrl = `${siteUrl}/blog/${post.slug}`;
-  const authorName = settings?.author_name || "GeckoAuthority";
+  const authorName = settings?.author_name || "GeckoPress";
   const authorBio = settings?.author_bio || "";
 
   const readingTime = post.content ? calculateReadingTime(post.content) : (post.reading_time || 1);
@@ -105,7 +105,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     },
     publisher: {
       "@type": "Organization",
-      name: settings?.site_name || "GeckoPress",
+      name: settings?.blog_name || "GeckoPress",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
@@ -181,18 +181,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
               <Separator className="mb-8" />
 
-              <AdSensePlaceholder format="horizontal" className="mb-8" />
-
               <CodeBlockEnhancer>
                 <div
                   className="prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
                 />
               </CodeBlockEnhancer>
-
-              <div className="my-12">
-                <AdSensePlaceholder format="rectangle" />
-              </div>
 
               <Separator className="my-8" />
 
@@ -217,9 +211,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <CommentsSection postId={post.id} />
             </div>
 
-            <aside className="space-y-6">
+            <aside className="hidden lg:block">
               <div className="sticky top-[110px] space-y-6">
-                <AdSensePlaceholder format="vertical" />
               </div>
             </aside>
           </div>
@@ -236,7 +229,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </section>
         )}
 
-        <AdSensePlaceholder format="horizontal" className="max-w-6xl mx-auto" />
       </main>
     </div>
   );

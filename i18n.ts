@@ -70,7 +70,7 @@ async function getLocaleFromDB(): Promise<string> {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
     const { data } = await supabase
-      .from('site_settings')
+      .from('public_site_settings')
       .select('default_locale')
       .maybeSingle();
 

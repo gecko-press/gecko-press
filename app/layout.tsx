@@ -8,7 +8,7 @@ import { DialogProvider } from "@/lib/dialogs";
 const systemFontClass = "font-sans";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.org"),
   title: {
     default: "GeckoPress - Modern Blog Platform",
     template: "%s | GeckoPress",
@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   keywords: [
     "blog",
     "seo",
-    "samples",
     "nextjs",
     "react",
     "open source",

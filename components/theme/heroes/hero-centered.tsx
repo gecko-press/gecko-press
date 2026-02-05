@@ -42,7 +42,7 @@ const defaultSettings: HeroCenteredSettings = {
   description: "Showcase your content created with GeckoAuthority. Meet the world's fastest autonomous blog platform.",
   searchPlaceholder: "Search articles...",
   features: [
-    { icon: "Zap", title: "Lightning Fast", description: "Maximum performance with Next.js 13" },
+    { icon: "Zap", title: "Lightning Fast", description: "Maximum performance with Next.js 14" },
     { icon: "Globe", title: "SEO Optimized", description: "Rank higher in search engines" },
     { icon: "Shield", title: "Open Source", description: "Completely free under MIT license" },
   ],

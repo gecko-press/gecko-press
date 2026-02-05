@@ -1,6 +1,6 @@
-# GeckoraPress Database Setup
+# GeckoPress Database Setup
 
-This folder contains GeckoraPress's database schema and setup tools.
+This folder contains GeckoPress's database schema and setup tools.
 
 ## Fresh Installation
 

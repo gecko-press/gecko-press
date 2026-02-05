@@ -23,16 +23,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
+  function syncAuthCookie(s: Session | null) {
+    if (typeof document === "undefined") return;
+    if (s) {
+      document.cookie = "geckopress-auth=1; path=/; max-age=604800; SameSite=Lax";
+    } else {
+      document.cookie = "geckopress-auth=; path=/; max-age=0";
+    }
+  }
+
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+    supabase.auth.getSession().then(({ data: { session: s } }) => {
+      setSession(s);
+      setUser(s?.user ?? null);
+      syncAuthCookie(s);
       setLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
+      setSession(s);
+      setUser(s?.user ?? null);
+      syncAuthCookie(s);
       setLoading(false);
     });
 

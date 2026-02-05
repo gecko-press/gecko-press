@@ -20,11 +20,11 @@ export async function GET() {
   );
 
   const { data: siteSettings } = await supabase
-    .from("site_settings")
-    .select("*")
+    .from("public_site_settings")
+    .select("site_url, author_name")
     .maybeSingle();
 
-  const baseUrl = siteSettings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://example.com";
+  const baseUrl = siteSettings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.org";
 
   const { data: posts } = await supabase
     .from("posts")

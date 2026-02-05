@@ -5,12 +5,7 @@ import { Send, CheckCircle, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { supabase } from "@/lib/supabase/client";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -44,16 +39,28 @@ export function Newsletter() {
     setErrorMessage("");
 
     try {
-      const { error } = await supabase
-        .from("newsletter_subscribers")
-        .insert({ email: email.toLowerCase().trim() });
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.toLowerCase().trim() }),
+      });
 
-      if (error) {
-        if (error.code === "23505") {
-          setErrorMessage(t("error_duplicate"));
-        } else {
-          setErrorMessage(t("error_generic"));
-        }
+      if (res.status === 429) {
+        setErrorMessage(t("error_rate_limited"));
+        setStatus("error");
+        return;
+      }
+
+      const data = await res.json();
+
+      if (res.status === 409) {
+        setErrorMessage(t("error_duplicate"));
+        setStatus("error");
+        return;
+      }
+
+      if (!res.ok) {
+        setErrorMessage(t("error_generic"));
         setStatus("error");
         return;
       }

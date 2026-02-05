@@ -227,6 +227,16 @@ export default function AdminDashboard() {
                 {t("running_version")} {currentVersion}. {t("update_message")}
               </p>
             </div>
+
+            <a
+              href={updateInfo.releaseUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto px-4 py-2.5 bg-white text-emerald-600 text-sm font-bold rounded-lg hover:bg-emerald-50 transition-colors flex items-center justify-center gap-2 shadow-md"
+            >
+              {t("view_release")}
+              <ArrowUpRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
       )}

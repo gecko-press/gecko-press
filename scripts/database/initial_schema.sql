@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS posts (
   content text DEFAULT '',
   cover_image text,
   category_id uuid REFERENCES categories(id) ON DELETE SET NULL,
-  author_name text DEFAULT 'GeckoAuthority',
+  author_name text DEFAULT 'GeckoPress',
   author_avatar text,
   reading_time integer DEFAULT 5,
   published boolean DEFAULT false,
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS theme_settings (
         {
           "icon": "Zap",
           "title": "Lightning Fast",
-          "description": "Maximum performance with Next.js 13"
+          "description": "Maximum performance with Next.js 14"
         },
         {
           "icon": "Globe",
@@ -420,14 +420,8 @@ CREATE POLICY "Authenticated users can update theme settings"
   USING (true)
   WITH CHECK (true);
 
--- Site Settings
+-- Site Settings (no anon access - use public_site_settings view instead)
 ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Public can view site settings"
-  ON site_settings
-  FOR SELECT
-  TO anon
-  USING (true);
 
 CREATE POLICY "Users can view own settings"
   ON site_settings
@@ -757,7 +751,7 @@ BEGIN
       current_webhook_id,
       clean_project_url || '/functions/v1/gecko-webhook/' || current_webhook_id,
       'whsec_' || encode(gen_random_bytes(32), 'hex'),
-      'GeckoAuthority',
+      'GeckoPress',
       ''
     );
   ELSE
@@ -793,10 +787,50 @@ END;
 $$;
 
 GRANT EXECUTE ON FUNCTION setup_webhook_url(TEXT) TO authenticated;
-GRANT EXECUTE ON FUNCTION setup_webhook_url(TEXT) TO anon;
+GRANT EXECUTE ON FUNCTION setup_webhook_url(TEXT) TO service_role;
 
 COMMENT ON FUNCTION setup_webhook_url(TEXT) IS
 'Sets up webhook URL for GeckoDeploy integration. Returns complete webhook config including categories endpoint URL.';
+
+-- =====================================================
+-- PUBLIC SITE SETTINGS VIEW
+-- Exposes only safe columns for anonymous/public access
+-- Excludes: user_id, webhook_id, webhook_url, webhook_secret
+-- =====================================================
+CREATE OR REPLACE VIEW public_site_settings AS
+SELECT
+  id,
+  author_name,
+  author_bio,
+  blog_name,
+  logo_url,
+  site_url,
+  contact_email,
+  contact_address,
+  social_links,
+  privacy_policy,
+  terms_of_service,
+  adsense_header,
+  adsense_article,
+  adsense_sidebar,
+  adsense_before_content,
+  adsense_after_content,
+  adsense_footer,
+  adsense_category_sidebar,
+  adsense_home_after_hero,
+  adsense_home_between_categories,
+  adsense_home_before_newsletter,
+  geckopress_db_version,
+  default_locale,
+  supported_locales,
+  created_at,
+  updated_at
+FROM site_settings;
+
+REVOKE ALL ON public_site_settings FROM anon;
+REVOKE ALL ON public_site_settings FROM authenticated;
+GRANT SELECT ON public_site_settings TO anon;
+GRANT SELECT ON public_site_settings TO authenticated;
 
 -- Notify PostgREST to reload schema cache
 NOTIFY pgrst, 'reload schema';

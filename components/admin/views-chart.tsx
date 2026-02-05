@@ -22,7 +22,6 @@ export default function ViewsChart({ data }: ViewsChartProps) {
   const [pathLength, setPathLength] = useState(0);
   const [isAnimate, setIsAnimate] = useState(false);
 
-  // 1. Boyut ve Renk Yönetimi
   useEffect(() => {
     const update = () => {
       if (containerRef.current) {
@@ -39,13 +38,11 @@ export default function ViewsChart({ data }: ViewsChartProps) {
     return () => ro.disconnect();
   }, []);
 
-  // 2. Animasyon Tetikleyici (Kritik Bölge)
   useEffect(() => {
     if (pathRef.current && dimensions.width > 0) {
       const length = pathRef.current.getTotalLength();
       setPathLength(length);
 
-      // Önceki animasyon kalıntılarını temizlemek için küçük bir delay
       const timer = setTimeout(() => {
         setIsAnimate(true);
       }, 50);
@@ -90,14 +87,12 @@ export default function ViewsChart({ data }: ViewsChartProps) {
           </linearGradient>
         </defs>
 
-        {/* Tül Efekti */}
         <path
           d={areaPath}
           fill="url(#areaGrad)"
           className={`transition-opacity duration-1000 delay-500 ${isAnimate ? 'opacity-100' : 'opacity-0'}`}
         />
 
-        {/* Ana Çizgi */}
         <path
           ref={pathRef}
           d={dPath}
@@ -110,18 +105,16 @@ export default function ViewsChart({ data }: ViewsChartProps) {
             strokeDasharray: pathLength,
             strokeDashoffset: isAnimate ? 0 : pathLength,
             transition: isAnimate ? "stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1)" : "none",
-            opacity: pathLength > 0 ? 1 : 0 // Uzunluk hesaplanana kadar gizle
+            opacity: pathLength > 0 ? 1 : 0
           }}
         />
 
-        {/* Eksenler */}
         {data.map((d, i) => (
           <text key={i} x={getX(i)} y={height - 5} textAnchor="middle" className="fill-zinc-400 text-[10px] font-bold">
             {t(d.month)}
           </text>
         ))}
 
-        {/* Etkileşim ve Tooltip */}
         {data.map((d, i) => {
           const x = getX(i);
           const y = getY(d.views);

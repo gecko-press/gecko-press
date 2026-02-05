@@ -22,7 +22,7 @@ export const locales = languages.map(l => l.code) as [string, ...string[]];
 export type Locale = (typeof locales)[number];
 
 export const baseLocale = languages.find(l => l.isBase)?.code || 'en';
-export const defaultLocale: Locale = 'en';
+export const defaultLocale: Locale = 'tr';
 
 export function getFallbackChain(locale: string): string[] {
   const lang = languages.find(l => l.code === locale);
@@ -47,7 +47,7 @@ export function getLanguageByCode(code: string): LanguageConfig | undefined {
 export async function getLocale(): Promise<Locale> {
   try {
     const { data } = await supabase
-      .from('site_settings')
+      .from('public_site_settings')
       .select('default_locale')
       .maybeSingle();
 

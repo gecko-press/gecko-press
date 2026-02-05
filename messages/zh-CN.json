@@ -51,6 +51,7 @@
     "success": "感谢订阅！请检查您的收件箱。",
     "error_duplicate": "此邮箱已订阅！",
     "error_generic": "出了点问题，请重试。",
+    "error_rate_limited": "请求过多，请稍后再试。",
     "privacy_note": "无垃圾邮件，随时退订。我们尊重您的隐私。"
   },
   "categorySection": {
@@ -117,7 +118,8 @@
     "cancel": "取消",
     "success": "感谢您的评论！审核通过后将会显示。",
     "write_another": "再写一条评论",
-    "error_generic": "评论提交失败，请重试。"
+    "error_generic": "评论提交失败，请重试。",
+    "error_rate_limited": "评论过多，请稍后再试。"
   },
   "contact": {
     "title": "联系我们",
@@ -139,7 +141,21 @@
     "success_title": "消息已发送！",
     "success_message": "感谢您的联系，我们会尽快回复。",
     "send_another": "发送另一条消息",
-    "error_generic": "消息发送失败，请重试。"
+    "error_generic": "消息发送失败，请重试。",
+    "error_rate_limited": "消息过多，请稍后再试。"
+  },
+  "validation": {
+    "name_min": "姓名至少需要2个字符",
+    "name_max": "姓名不能超过100个字符",
+    "email_invalid": "请输入有效的电子邮箱地址",
+    "email_max": "电子邮箱不能超过255个字符",
+    "subject_min": "主题至少需要3个字符",
+    "subject_max": "主题不能超过200个字符",
+    "message_min": "消息至少需要10个字符",
+    "message_max": "消息不能超过5000个字符",
+    "comment_min": "评论至少需要3个字符",
+    "comment_max": "评论不能超过2000个字符",
+    "post_id_invalid": "无效的文章ID"
   },
   "hero": {
     "badge": "由GeckoAuthority提供支持",
@@ -149,7 +165,7 @@
     "search_placeholder": "搜索文章...",
     "search_button": "搜索",
     "feature1_title": "闪电般快速",
-    "feature1_description": "Next.js 13带来极致性能",
+    "feature1_description": "Next.js 14带来极致性能",
     "feature2_title": "SEO优化",
     "feature2_description": "在搜索引擎中获得更高排名",
     "feature3_title": "开源",

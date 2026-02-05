@@ -58,7 +58,7 @@
 
 ## Tech Stack
 
-- **Framework**: Next.js 14.2.21 (App Router)
+- **Framework**: Next.js 16.1.6 (App Router)
 - **Database**: Supabase (PostgreSQL)
 - **Styling**: Tailwind CSS
 - **UI Components**: shadcn/ui + Radix UI

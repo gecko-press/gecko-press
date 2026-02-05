@@ -51,6 +51,7 @@
     "success": "¡Gracias por suscribirte! Revisa tu bandeja de entrada pronto.",
     "error_duplicate": "¡Este correo ya está suscrito!",
     "error_generic": "Algo salió mal. Por favor, intente de nuevo.",
+    "error_rate_limited": "Demasiadas solicitudes. Por favor, intentalo mas tarde.",
     "privacy_note": "Sin spam, cancela en cualquier momento. Respetamos tu privacidad."
   },
   "categorySection": {
@@ -117,7 +118,8 @@
     "cancel": "Cancelar",
     "success": "¡Gracias por tu comentario! Aparecerá después de la moderación.",
     "write_another": "Escribir otro comentario",
-    "error_generic": "Error al enviar el comentario. Por favor, intente de nuevo."
+    "error_generic": "Error al enviar el comentario. Por favor, intente de nuevo.",
+    "error_rate_limited": "Demasiados comentarios. Por favor, intentalo mas tarde."
   },
   "contact": {
     "title": "Ponte en Contacto",
@@ -139,7 +141,21 @@
     "success_title": "¡Mensaje Enviado!",
     "success_message": "Gracias por contactarnos. Te responderemos lo antes posible.",
     "send_another": "Enviar otro mensaje",
-    "error_generic": "Error al enviar el mensaje. Por favor, intente de nuevo."
+    "error_generic": "Error al enviar el mensaje. Por favor, intente de nuevo.",
+    "error_rate_limited": "Demasiados mensajes. Por favor, intentalo mas tarde."
+  },
+  "validation": {
+    "name_min": "El nombre debe tener al menos 2 caracteres",
+    "name_max": "El nombre debe tener menos de 100 caracteres",
+    "email_invalid": "Por favor ingrese un correo electronico valido",
+    "email_max": "El correo debe tener menos de 255 caracteres",
+    "subject_min": "El asunto debe tener al menos 3 caracteres",
+    "subject_max": "El asunto debe tener menos de 200 caracteres",
+    "message_min": "El mensaje debe tener al menos 10 caracteres",
+    "message_max": "El mensaje debe tener menos de 5000 caracteres",
+    "comment_min": "El comentario debe tener al menos 3 caracteres",
+    "comment_max": "El comentario debe tener menos de 2000 caracteres",
+    "post_id_invalid": "ID de publicacion invalido"
   },
   "hero": {
     "badge": "Potenciado por GeckoAuthority",
@@ -149,7 +165,7 @@
     "search_placeholder": "Buscar artículos...",
     "search_button": "Buscar",
     "feature1_title": "Velocidad Relámpago",
-    "feature1_description": "Máximo rendimiento con Next.js 13",
+    "feature1_description": "Máximo rendimiento con Next.js 14",
     "feature2_title": "Optimizado para SEO",
     "feature2_description": "Mejora tu posición en los buscadores",
     "feature3_title": "Código Abierto",

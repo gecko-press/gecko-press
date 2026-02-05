@@ -8,11 +8,11 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
   );
 
   const { data: settings } = await supabase
-    .from("site_settings")
+    .from("public_site_settings")
     .select("site_url")
     .maybeSingle();
 
-  const baseUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckorapress.com";
+  const baseUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.org";
 
   return {
     rules: [

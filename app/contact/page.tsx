@@ -24,6 +24,7 @@ type ContactInfo = {
 
 export default function ContactPage() {
   const t = useTranslations("contact");
+  const tValidation = useTranslations("validation");
   const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -36,11 +37,12 @@ export default function ContactPage() {
     subject: "",
     message: "",
   });
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     async function fetchContactInfo() {
       const { data } = await supabase
-        .from("site_settings")
+        .from("public_site_settings")
         .select("contact_email, contact_address, social_links")
         .maybeSingle();
 
@@ -60,19 +62,37 @@ export default function ContactPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    setFieldErrors({});
     setSubmitting(true);
 
     try {
-      const { error: insertError } = await supabase
-        .from("contact_submissions")
-        .insert({
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-        });
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-      if (insertError) throw insertError;
+      if (res.status === 429) {
+        setError(t("error_rate_limited"));
+        setSubmitting(false);
+        return;
+      }
+
+      const data = await res.json();
+
+      if (!res.ok && data.error === "validation_failed" && data.details) {
+        const errors: Record<string, string> = {};
+        data.details.forEach((err: { path: string[]; message: string }) => {
+          if (err.path[0]) {
+            errors[err.path[0]] = err.message;
+          }
+        });
+        setFieldErrors(errors);
+        setSubmitting(false);
+        return;
+      }
+
+      if (!res.ok) throw new Error(data.error);
 
       setSubmitted(true);
       setFormData({ name: "", email: "", subject: "", message: "" });
@@ -209,9 +229,11 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder={t("form_name_placeholder")}
-                        required
-                        className="h-12"
+                        className={`h-12 ${fieldErrors.name ? "border-red-500" : ""}`}
                       />
+                      {fieldErrors.name && (
+                        <p className="text-sm text-red-600 dark:text-red-400">{tValidation(fieldErrors.name)}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">{t("form_email_label")}</Label>
@@ -221,9 +243,11 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder={t("form_email_placeholder")}
-                        required
-                        className="h-12"
+                        className={`h-12 ${fieldErrors.email ? "border-red-500" : ""}`}
                       />
+                      {fieldErrors.email && (
+                        <p className="text-sm text-red-600 dark:text-red-400">{tValidation(fieldErrors.email)}</p>
+                      )}
                     </div>
                   </div>
 
@@ -234,9 +258,11 @@ export default function ContactPage() {
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                       placeholder={t("form_subject_placeholder")}
-                      required
-                      className="h-12"
+                      className={`h-12 ${fieldErrors.subject ? "border-red-500" : ""}`}
                     />
+                    {fieldErrors.subject && (
+                      <p className="text-sm text-red-600 dark:text-red-400">{tValidation(fieldErrors.subject)}</p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -246,9 +272,11 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder={t("form_message_placeholder")}
-                      required
-                      className="min-h-[160px] resize-none"
+                      className={`min-h-[160px] resize-none ${fieldErrors.message ? "border-red-500" : ""}`}
                     />
+                    {fieldErrors.message && (
+                      <p className="text-sm text-red-600 dark:text-red-400">{tValidation(fieldErrors.message)}</p>
+                    )}
                   </div>
 
                   {error && (

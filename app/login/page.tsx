@@ -55,7 +55,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <Link href="/" className="inline-block mb-6">
-            <img src="/geckopress-logo.svg" alt="GeckoraPress" className="h-12 mx-auto" />
+            <img src="/geckopress-logo.svg" alt="GeckoPress" className="h-12 mx-auto" />
           </Link>
           <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
             {t("title")}

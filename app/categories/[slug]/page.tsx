@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { CategoryPostsGrid } from "@/components/blog/category-posts-grid";
-import { AdSensePlaceholder } from "@/components/blog/adsense-placeholder";
 import { getCategories, getCategoryBySlug, getPostsByCategory, getSiteSettings } from "@/lib/supabase/queries";
 import { notFound } from "next/navigation";
 import { CategoryPageClient } from "./category-page-client";
@@ -21,22 +19,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!category) return { title: "Category Not Found" };
 
   const settings = await getSiteSettings();
-  const baseUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckorapress.com";
+  const baseUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.org";
   const categoryUrl = `${baseUrl}/categories/${slug}`;
   const description = category.description || `Explore articles about ${category.name}`;
 
   return {
-    title: `${category.name} - GeckoraPress`,
+    title: `${category.name} - GeckoPress`,
     description,
     openGraph: {
       type: "website",
-      title: `${category.name} - GeckoraPress`,
+      title: `${category.name} - GeckoPress`,
       description,
       url: categoryUrl,
     },
     twitter: {
       card: "summary",
-      title: `${category.name} - GeckoraPress`,
+      title: `${category.name} - GeckoPress`,
       description,
     },
     alternates: {

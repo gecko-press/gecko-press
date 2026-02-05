@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { SmilePlus } from "lucide-react";
@@ -19,11 +18,11 @@ interface ReactionData {
 }
 
 const REACTION_TYPES = [
-  { type: "clap", emoji: "👏" },
-  { type: "heart", emoji: "❤️" },
-  { type: "fire", emoji: "🔥" },
-  { type: "rocket", emoji: "🚀" },
-  { type: "thinking", emoji: "🤔" },
+  { type: "clap", emoji: "\u{1F44F}" },
+  { type: "heart", emoji: "\u2764\uFE0F" },
+  { type: "fire", emoji: "\u{1F525}" },
+  { type: "rocket", emoji: "\u{1F680}" },
+  { type: "thinking", emoji: "\u{1F914}" },
 ];
 
 function getSessionId(): string {
@@ -43,34 +42,30 @@ export function ReactionButtons({ postId, className }: ReactionButtonsProps) {
   );
   const [sessionId, setSessionId] = useState<string>("");
   const [open, setOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchReactions = useCallback(async () => {
     const sid = getSessionId();
     setSessionId(sid);
 
-    const { data: allReactions } = await supabase
-      .from("post_reactions")
-      .select("reaction_type, session_id")
-      .eq("post_id", postId);
+    try {
+      const params = new URLSearchParams({ postId });
+      if (sid) params.set("sessionId", sid);
 
-    if (allReactions) {
-      const totals: Record<string, number> = {};
-      let foundUserReaction: string | null = null;
+      const res = await fetch(`/api/reactions?${params.toString()}`);
+      if (!res.ok) return;
 
-      allReactions.forEach((r) => {
-        totals[r.reaction_type] = (totals[r.reaction_type] || 0) + 1;
-        if (r.session_id === sid) {
-          foundUserReaction = r.reaction_type;
-        }
-      });
+      const { totals, userReaction } = await res.json();
 
       setReactions(
         REACTION_TYPES.map((rt) => ({
           ...rt,
           total: totals[rt.type] || 0,
-          hasReacted: foundUserReaction === rt.type,
+          hasReacted: userReaction === rt.type,
         }))
       );
+    } catch {
+      // silent fail
     }
   }, [postId]);
 
@@ -79,7 +74,8 @@ export function ReactionButtons({ postId, className }: ReactionButtonsProps) {
   }, [fetchReactions]);
 
   const handleReaction = async (reactionType: string) => {
-    if (!sessionId) return;
+    if (!sessionId || isSubmitting) return;
+    setIsSubmitting(true);
 
     const currentReaction = reactions.find((r) => r.hasReacted);
 
@@ -92,11 +88,15 @@ export function ReactionButtons({ postId, className }: ReactionButtonsProps) {
         )
       );
 
-      await supabase
-        .from("post_reactions")
-        .delete()
-        .eq("post_id", postId)
-        .eq("session_id", sessionId);
+      try {
+        await fetch("/api/reactions", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ postId, sessionId }),
+        });
+      } catch {
+        fetchReactions();
+      }
     } else {
       setReactions((prev) =>
         prev.map((r) => {
@@ -110,23 +110,23 @@ export function ReactionButtons({ postId, className }: ReactionButtonsProps) {
         })
       );
 
-      if (currentReaction) {
-        await supabase
-          .from("post_reactions")
-          .delete()
-          .eq("post_id", postId)
-          .eq("session_id", sessionId);
-      }
+      try {
+        const res = await fetch("/api/reactions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ postId, reactionType, sessionId }),
+        });
 
-      await supabase.from("post_reactions").insert({
-        post_id: postId,
-        reaction_type: reactionType,
-        session_id: sessionId,
-        count: 1,
-      });
+        if (!res.ok) {
+          fetchReactions();
+        }
+      } catch {
+        fetchReactions();
+      }
     }
 
     setOpen(false);
+    setIsSubmitting(false);
   };
 
   const userReaction = reactions.find((r) => r.hasReacted);
@@ -138,11 +138,13 @@ export function ReactionButtons({ postId, className }: ReactionButtonsProps) {
         <button
           key={reaction.type}
           onClick={() => handleReaction(reaction.type)}
+          disabled={isSubmitting}
           className={cn(
             "flex items-center justify-center gap-1 h-8 px-2 rounded-md border text-sm transition-colors",
             reaction.hasReacted
               ? "border-2 border-primary bg-primary/10"
-              : "border-border hover:bg-muted"
+              : "border-border hover:bg-muted",
+            isSubmitting && "opacity-50 cursor-not-allowed"
           )}
         >
           <span className="text-base">{reaction.emoji}</span>

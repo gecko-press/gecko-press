@@ -43,47 +43,11 @@ hljs.registerLanguage("yaml", yaml);
 hljs.registerLanguage("yml", yaml);
 hljs.registerLanguage("markdown", markdown);
 hljs.registerLanguage("md", markdown);
-import { Check, Copy } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
 
 interface CodeBlockEnhancerProps {
   children: React.ReactNode;
   className?: string;
-}
-
-function CopyButton({ code }: { code: string }) {
-  const t = useTranslations("blogPost");
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy:", err);
-    }
-  };
-
-  return (
-    <button
-      onClick={handleCopy}
-      className={cn(
-        "absolute top-2 right-2 p-1.5 rounded-md transition-all",
-        "bg-muted/80 hover:bg-muted text-muted-foreground hover:text-foreground",
-        "opacity-0 group-hover:opacity-100",
-        copied && "bg-green-500/20 text-green-500"
-      )}
-      aria-label={copied ? t("copied") : t("copy_code")}
-    >
-      {copied ? (
-        <Check className="w-4 h-4" />
-      ) : (
-        <Copy className="w-4 h-4" />
-      )}
-    </button>
-  );
 }
 
 export function CodeBlockEnhancer({ children, className }: CodeBlockEnhancerProps) {

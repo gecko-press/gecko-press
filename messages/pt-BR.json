@@ -51,6 +51,7 @@
     "success": "Obrigado por se inscrever! Verifique sua caixa de entrada em breve.",
     "error_duplicate": "Este e-mail ja esta inscrito!",
     "error_generic": "Algo deu errado. Por favor, tente novamente.",
+    "error_rate_limited": "Muitas solicitacoes. Por favor, tente novamente mais tarde.",
     "privacy_note": "Sem spam, cancele a qualquer momento. Respeitamos sua privacidade."
   },
   "categorySection": {
@@ -117,7 +118,8 @@
     "cancel": "Cancelar",
     "success": "Obrigado pelo seu comentario! Ele aparecera apos a moderacao.",
     "write_another": "Escrever outro comentario",
-    "error_generic": "Falha ao enviar comentario. Por favor, tente novamente."
+    "error_generic": "Falha ao enviar comentario. Por favor, tente novamente.",
+    "error_rate_limited": "Muitos comentarios. Por favor, tente novamente mais tarde."
   },
   "contact": {
     "title": "Entre em Contato",
@@ -139,7 +141,21 @@
     "success_title": "Mensagem Enviada!",
     "success_message": "Obrigado por entrar em contato. Responderemos o mais rapido possivel.",
     "send_another": "Enviar Outra Mensagem",
-    "error_generic": "Falha ao enviar mensagem. Por favor, tente novamente."
+    "error_generic": "Falha ao enviar mensagem. Por favor, tente novamente.",
+    "error_rate_limited": "Muitas mensagens. Por favor, tente novamente mais tarde."
+  },
+  "validation": {
+    "name_min": "O nome deve ter pelo menos 2 caracteres",
+    "name_max": "O nome deve ter menos de 100 caracteres",
+    "email_invalid": "Por favor, insira um endereco de e-mail valido",
+    "email_max": "O e-mail deve ter menos de 255 caracteres",
+    "subject_min": "O assunto deve ter pelo menos 3 caracteres",
+    "subject_max": "O assunto deve ter menos de 200 caracteres",
+    "message_min": "A mensagem deve ter pelo menos 10 caracteres",
+    "message_max": "A mensagem deve ter menos de 5000 caracteres",
+    "comment_min": "O comentario deve ter pelo menos 3 caracteres",
+    "comment_max": "O comentario deve ter menos de 2000 caracteres",
+    "post_id_invalid": "ID de postagem invalido"
   },
   "hero": {
     "badge": "Desenvolvido por GeckoAuthority",
@@ -149,7 +165,7 @@
     "search_placeholder": "Pesquisar artigos...",
     "search_button": "Pesquisar",
     "feature1_title": "Ultra Rapido",
-    "feature1_description": "Performance maxima com Next.js 13",
+    "feature1_description": "Performance maxima com Next.js 14",
     "feature2_title": "Otimizado para SEO",
     "feature2_description": "Melhore seu ranking nos motores de busca",
     "feature3_title": "Codigo Aberto",

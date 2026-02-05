@@ -8,11 +8,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   const { data: siteSettings } = await supabase
-    .from("site_settings")
+    .from("public_site_settings")
     .select("site_url")
     .maybeSingle();
 
-  const baseUrl = siteSettings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://example.com";
+  const baseUrl = siteSettings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.org";
 
   const { data: posts } = await supabase
     .from("posts")

@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { supabase } from "@/lib/supabase/client";
 import { MessageSquare, Send, Loader2, X } from "lucide-react";
 
 type CommentFormProps = {
@@ -18,28 +17,55 @@ type CommentFormProps = {
 
 export function CommentForm({ postId, parentId = null, onSuccess, onCancel, isReply = false }: CommentFormProps) {
   const t = useTranslations("comments");
+  const tValidation = useTranslations("validation");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+    setFieldErrors({});
     setLoading(true);
 
     try {
-      const { error: submitError } = await supabase.from("comments").insert({
-        post_id: postId,
-        parent_id: parentId,
-        author_name: name.trim(),
-        author_email: email.trim(),
-        content: content.trim(),
+      const res = await fetch("/api/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          post_id: postId,
+          parent_id: parentId,
+          author_name: name.trim(),
+          author_email: email.trim(),
+          content: content.trim(),
+        }),
       });
 
-      if (submitError) throw submitError;
+      if (res.status === 429) {
+        setError(t("error_rate_limited"));
+        setLoading(false);
+        return;
+      }
+
+      const data = await res.json();
+
+      if (!res.ok && data.error === "validation_failed" && data.details) {
+        const errors: Record<string, string> = {};
+        data.details.forEach((err: { path: string[]; message: string }) => {
+          if (err.path[0]) {
+            errors[err.path[0]] = err.message;
+          }
+        });
+        setFieldErrors(errors);
+        setLoading(false);
+        return;
+      }
+
+      if (!res.ok) throw new Error(data.error);
 
       setSuccess(true);
       setName("");
@@ -95,30 +121,45 @@ export function CommentForm({ postId, parentId = null, onSuccess, onCancel, isRe
 
         <div className="space-y-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input
-              placeholder={t("name_placeholder")}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              disabled={loading}
-            />
-            <Input
-              type="email"
-              placeholder={t("email_placeholder")}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              disabled={loading}
-            />
+            <div className="space-y-1">
+              <Input
+                placeholder={t("name_placeholder")}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                disabled={loading}
+                className={fieldErrors.author_name ? "border-red-500" : ""}
+              />
+              {fieldErrors.author_name && (
+                <p className="text-xs text-red-600 dark:text-red-400">{tValidation(fieldErrors.author_name)}</p>
+              )}
+            </div>
+            <div className="space-y-1">
+              <Input
+                type="email"
+                placeholder={t("email_placeholder")}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
+                className={fieldErrors.author_email ? "border-red-500" : ""}
+              />
+              {fieldErrors.author_email && (
+                <p className="text-xs text-red-600 dark:text-red-400">{tValidation(fieldErrors.author_email)}</p>
+              )}
+            </div>
           </div>
-          <Textarea
-            placeholder={t("content_placeholder")}
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-            disabled={loading}
-            rows={isReply ? 3 : 4}
-          />
+          <div className="space-y-1">
+            <Textarea
+              placeholder={t("content_placeholder")}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              disabled={loading}
+              rows={isReply ? 3 : 4}
+              className={fieldErrors.content ? "border-red-500" : ""}
+            />
+            {fieldErrors.content && (
+              <p className="text-xs text-red-600 dark:text-red-400">{tValidation(fieldErrors.content)}</p>
+            )}
+          </div>
 
           {error && (
             <p className="text-sm text-red-600 dark:text-red-400">{error}</p>

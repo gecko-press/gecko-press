@@ -51,6 +51,7 @@
     "success": "Abone olduğunuz için teşekkürler! Yakında gelen kutunuzu kontrol edin.",
     "error_duplicate": "Bu e-posta zaten kayıtlı!",
     "error_generic": "Bir hata oluştu. Lütfen tekrar deneyin.",
+    "error_rate_limited": "Cok fazla istek. Lutfen daha sonra tekrar deneyin.",
     "privacy_note": "Spam yok, istediğiniz zaman abonelikten çıkın. Gizliliğinize saygı duyuyoruz."
   },
   "categorySection": {
@@ -117,7 +118,8 @@
     "cancel": "İptal",
     "success": "Yorumunuz için teşekkürler! Moderasyondan sonra görünecektir.",
     "write_another": "Başka bir yorum yazın",
-    "error_generic": "Yorum gönderilemedi. Lütfen tekrar deneyin."
+    "error_generic": "Yorum gönderilemedi. Lütfen tekrar deneyin.",
+    "error_rate_limited": "Cok fazla yorum. Lutfen daha sonra tekrar deneyin."
   },
   "contact": {
     "title": "İletişime Geçin",
@@ -139,7 +141,21 @@
     "success_title": "Mesaj Gönderildi!",
     "success_message": "Bizimle iletişime geçtiğiniz için teşekkürler. En kısa sürede size dönüş yapacağız.",
     "send_another": "Başka Mesaj Gönder",
-    "error_generic": "Mesaj gönderilemedi. Lütfen tekrar deneyin."
+    "error_generic": "Mesaj gönderilemedi. Lütfen tekrar deneyin.",
+    "error_rate_limited": "Cok fazla mesaj. Lutfen daha sonra tekrar deneyin."
+  },
+  "validation": {
+    "name_min": "Ad en az 2 karakter olmalidir",
+    "name_max": "Ad 100 karakterden kisa olmalidir",
+    "email_invalid": "Gecerli bir e-posta adresi girin",
+    "email_max": "E-posta 255 karakterden kisa olmalidir",
+    "subject_min": "Konu en az 3 karakter olmalidir",
+    "subject_max": "Konu 200 karakterden kisa olmalidir",
+    "message_min": "Mesaj en az 10 karakter olmalidir",
+    "message_max": "Mesaj 5000 karakterden kisa olmalidir",
+    "comment_min": "Yorum en az 3 karakter olmalidir",
+    "comment_max": "Yorum 2000 karakterden kisa olmalidir",
+    "post_id_invalid": "Gecersiz yazi kimliği"
   },
   "hero": {
     "badge": "GeckoAuthority ile güçlendirilmiştir",
@@ -149,7 +165,7 @@
     "search_placeholder": "Makale ara...",
     "search_button": "Ara",
     "feature1_title": "Şimşek Hızı",
-    "feature1_description": "Next.js 13 ile maksimum performans",
+    "feature1_description": "Next.js 14 ile maksimum performans",
     "feature2_title": "SEO Optimize",
     "feature2_description": "Arama motorlarında üst sıralarda yer alın",
     "feature3_title": "Açık Kaynak",

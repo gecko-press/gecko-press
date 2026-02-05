@@ -51,6 +51,7 @@
     "success": "Thanks for subscribing! Check your inbox soon.",
     "error_duplicate": "This email is already subscribed!",
     "error_generic": "Something went wrong. Please try again.",
+    "error_rate_limited": "Too many requests. Please try again later.",
     "privacy_note": "No spam, unsubscribe anytime. We respect your privacy."
   },
   "categorySection": {
@@ -117,7 +118,8 @@
     "cancel": "Cancel",
     "success": "Thank you for your comment! It will appear after moderation.",
     "write_another": "Write another comment",
-    "error_generic": "Failed to submit comment. Please try again."
+    "error_generic": "Failed to submit comment. Please try again.",
+    "error_rate_limited": "Too many comments. Please try again later."
   },
   "contact": {
     "title": "Get in Touch",
@@ -139,7 +141,21 @@
     "success_title": "Message Sent!",
     "success_message": "Thank you for reaching out. We'll get back to you as soon as possible.",
     "send_another": "Send Another Message",
-    "error_generic": "Failed to send message. Please try again."
+    "error_generic": "Failed to send message. Please try again.",
+    "error_rate_limited": "Too many messages. Please try again later."
+  },
+  "validation": {
+    "name_min": "Name must be at least 2 characters",
+    "name_max": "Name must be less than 100 characters",
+    "email_invalid": "Please enter a valid email address",
+    "email_max": "Email must be less than 255 characters",
+    "subject_min": "Subject must be at least 3 characters",
+    "subject_max": "Subject must be less than 200 characters",
+    "message_min": "Message must be at least 10 characters",
+    "message_max": "Message must be less than 5000 characters",
+    "comment_min": "Comment must be at least 3 characters",
+    "comment_max": "Comment must be less than 2000 characters",
+    "post_id_invalid": "Invalid post ID"
   },
   "hero": {
     "badge": "Powered by GeckoAuthority",
@@ -149,7 +165,7 @@
     "search_placeholder": "Search articles...",
     "search_button": "Search",
     "feature1_title": "Lightning Fast",
-    "feature1_description": "Maximum performance with Next.js 13",
+    "feature1_description": "Maximum performance with Next.js 14",
     "feature2_title": "SEO Optimized",
     "feature2_description": "Rank higher in search engines",
     "feature3_title": "Open Source",

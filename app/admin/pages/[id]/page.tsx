@@ -90,9 +90,9 @@ export default function EditPagePage() {
       if (error) throw error;
       showSuccess(t("update_success"));
       router.push("/admin/pages");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Failed to update page:", error);
-      if (error.code === "23505") {
+      if (error instanceof Object && "code" in error && error.code === "23505") {
         showError(t("slug_exists_error"));
       } else {
         showError(t("update_error"));

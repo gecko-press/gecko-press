@@ -51,6 +51,7 @@
         "success": "Danke fuer Ihr Abonnement! Pruefen Sie bald Ihren Posteingang.",
         "error_duplicate": "Diese E-Mail ist bereits abonniert!",
         "error_generic": "Etwas ist schief gelaufen. Bitte versuchen Sie es erneut.",
+        "error_rate_limited": "Zu viele Anfragen. Bitte versuchen Sie es spaeter erneut.",
         "privacy_note": "Kein Spam, jederzeit abbestellbar. Wir respektieren Ihre Privatsphaere."
     },
     "categorySection": {
@@ -117,7 +118,8 @@
         "cancel": "Abbrechen",
         "success": "Danke fuer Ihren Kommentar! Er erscheint nach der Moderation.",
         "write_another": "Einen weiteren Kommentar schreiben",
-        "error_generic": "Kommentar konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
+        "error_generic": "Kommentar konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+        "error_rate_limited": "Zu viele Kommentare. Bitte versuchen Sie es spaeter erneut."
     },
     "contact": {
         "title": "Kontakt aufnehmen",
@@ -139,7 +141,21 @@
         "success_title": "Nachricht gesendet!",
         "success_message": "Danke fuer Ihre Kontaktaufnahme. Wir melden uns so schnell wie moeglich.",
         "send_another": "Eine weitere Nachricht senden",
-        "error_generic": "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
+        "error_generic": "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+        "error_rate_limited": "Zu viele Nachrichten. Bitte versuchen Sie es spaeter erneut."
+    },
+    "validation": {
+        "name_min": "Name muss mindestens 2 Zeichen lang sein",
+        "name_max": "Name darf maximal 100 Zeichen lang sein",
+        "email_invalid": "Bitte geben Sie eine gueltige E-Mail-Adresse ein",
+        "email_max": "E-Mail darf maximal 255 Zeichen lang sein",
+        "subject_min": "Betreff muss mindestens 3 Zeichen lang sein",
+        "subject_max": "Betreff darf maximal 200 Zeichen lang sein",
+        "message_min": "Nachricht muss mindestens 10 Zeichen lang sein",
+        "message_max": "Nachricht darf maximal 5000 Zeichen lang sein",
+        "comment_min": "Kommentar muss mindestens 3 Zeichen lang sein",
+        "comment_max": "Kommentar darf maximal 2000 Zeichen lang sein",
+        "post_id_invalid": "Ungueltige Beitrags-ID"
     },
     "hero": {
         "badge": "Betrieben von GeckoAuthority",
@@ -149,7 +165,7 @@
         "search_placeholder": "Artikel suchen...",
         "search_button": "Suchen",
         "feature1_title": "Blitzschnell",
-        "feature1_description": "Maximale Leistung mit Next.js 13",
+        "feature1_description": "Maximale Leistung mit Next.js 14",
         "feature2_title": "SEO-optimiert",
         "feature2_description": "Bessere Platzierung in Suchmaschinen",
         "feature3_title": "Open Source",

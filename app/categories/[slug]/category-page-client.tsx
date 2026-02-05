@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { ChevronLeft, Smartphone, Bot, Headphones, Gamepad2, Tag, FileText, PenLine } from "lucide-react";
 import { CategoryPostsGrid } from "@/components/blog/category-posts-grid";
-import { AdSensePlaceholder } from "@/components/blog/adsense-placeholder";
 import type { Category, Post } from "@/lib/supabase/types";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -85,8 +84,6 @@ export function CategoryPageClient({ category, posts, otherCategories }: Categor
 
           <aside className="space-y-6">
             <div className="sticky top-[110px] space-y-6">
-              <AdSensePlaceholder format="vertical" />
-
               {otherCategories.length > 0 && (
                 <div className="bg-card border rounded-lg p-6">
                   <h3 className="font-bold text-lg mb-4">{t("other_categories")}</h3>

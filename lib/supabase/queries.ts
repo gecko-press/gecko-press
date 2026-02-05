@@ -47,6 +47,57 @@ export const getHomepageCategories = unstable_cache(
   { revalidate: CACHE_REVALIDATE }
 );
 
+async function fetchHomepageCategoriesWithPosts(): Promise<{ category: Category; posts: Post[] }[]> {
+  try {
+    const { data: categories, error: catError } = await supabase
+      .from("categories")
+      .select("*")
+      .eq("show_on_homepage", true)
+      .order("name");
+
+    if (catError || !categories?.length) {
+      if (catError) console.error("fetchHomepageCategoriesWithPosts categories error:", catError);
+      return [];
+    }
+
+    const categoryIds = categories.map(c => c.id);
+    const { data: posts, error: postError } = await supabase
+      .from("posts")
+      .select("*, category:categories(*)")
+      .in("category_id", categoryIds)
+      .eq("published", true)
+      .order("published_at", { ascending: false });
+
+    if (postError) {
+      console.error("fetchHomepageCategoriesWithPosts posts error:", postError);
+      return categories.map(c => ({ category: c, posts: [] }));
+    }
+
+    const postsByCategory = new Map<string, Post[]>();
+    for (const post of posts || []) {
+      const catId = post.category_id;
+      if (!postsByCategory.has(catId)) {
+        postsByCategory.set(catId, []);
+      }
+      postsByCategory.get(catId)!.push(post);
+    }
+
+    return categories.map(category => ({
+      category,
+      posts: postsByCategory.get(category.id) || []
+    }));
+  } catch (err) {
+    console.error("fetchHomepageCategoriesWithPosts fetch error:", err);
+    return [];
+  }
+}
+
+export const getHomepageCategoriesWithPosts = unstable_cache(
+  fetchHomepageCategoriesWithPosts,
+  ["homepage-categories-with-posts"],
+  { revalidate: CACHE_REVALIDATE }
+);
+
 export async function getCategoryBySlug(slug: string): Promise<Category | null> {
   try {
     const { data, error } = await supabase
@@ -250,7 +301,7 @@ export async function deleteCategory(id: string): Promise<void> {
 async function fetchSiteSettings() {
   try {
     const { data, error } = await supabase
-      .from("site_settings")
+      .from("public_site_settings")
       .select("*")
       .maybeSingle();
 

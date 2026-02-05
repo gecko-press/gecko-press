@@ -56,7 +56,7 @@ export function Footer() {
             .is("parent_id", null)
             .order("position", { ascending: true }),
           supabase
-            .from("site_settings")
+            .from("public_site_settings")
             .select("social_links, contact_email, blog_name")
             .maybeSingle(),
         ]);

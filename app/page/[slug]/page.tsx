@@ -1,9 +1,8 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
-import { Header } from "@/components/blog/header";
-import { Footer } from "@/components/blog/footer";
 import { getSiteSettings } from "@/lib/supabase/queries";
+import { sanitizeHtml } from "@/lib/utils/sanitize";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -45,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const baseUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckorapress.com";
+  const baseUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.org";
   const pageUrl = `${baseUrl}/page/${page.slug}`;
 
   return {
@@ -102,7 +101,7 @@ export default async function PageView({ params }: Props) {
               prose-pre:bg-muted prose-pre:p-4 prose-pre:rounded-lg
               prose-code:text-sm prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
               prose-img:rounded-lg prose-img:shadow-md"
-            dangerouslySetInnerHTML={{ __html: page.content }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(page.content) }}
           />
         </article>
       </main>

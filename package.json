@@ -56,8 +56,6 @@
     "@tiptap/react": "^3.17.1",
     "@tiptap/starter-kit": "^3.17.1",
     "@types/highlight.js": "^9.12.4",
-    "@types/react": "18.2.22",
-    "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.15",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -67,6 +65,7 @@
     "eslint-config-next": "13.5.1",
     "highlight.js": "^11.11.1",
     "input-otp": "^1.2.4",
+    "isomorphic-dompurify": "^2.35.0",
     "lucide-react": "^0.446.0",
     "next": "^16.1.6",
     "next-intl": "^4.8.2",
@@ -89,6 +88,8 @@
     "@types/highlight.js": "^9.12.4",
     "@types/node": "^25.2.0",
     "critters": "^0.0.23",
-    "eslint": "^8.57.1"
+    "eslint": "^8.57.1",
+    "@types/react": "18.2.22",
+    "@types/react-dom": "18.2.7"
   }
 }

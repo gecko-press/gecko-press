@@ -51,6 +51,7 @@
         "success": "購読ありがとうございます！間もなくメールが届きます。",
         "error_duplicate": "このメールアドレスは既に登録されています。",
         "error_generic": "問題が発生しました。もう一度お試しください。",
+        "error_rate_limited": "リクエストが多すぎます。しばらくしてからもう一度お試しください。",
         "privacy_note": "スパムは送信しません。いつでも解除可能です。"
     },
     "categorySection": {
@@ -117,7 +118,8 @@
         "cancel": "キャンセル",
         "success": "コメントありがとうございます！承認後に表示されます。",
         "write_another": "別のコメントを書く",
-        "error_generic": "コメントの送信に失敗しました。もう一度お試しください。"
+        "error_generic": "コメントの送信に失敗しました。もう一度お試しください。",
+        "error_rate_limited": "コメントが多すぎます。しばらくしてからもう一度お試しください。"
     },
     "contact": {
         "title": "お問い合わせ",
@@ -139,7 +141,21 @@
         "success_title": "送信完了！",
         "success_message": "お問い合わせありがとうございます。内容を確認次第、返信させていただきます。",
         "send_another": "別のメッセージを送る",
-        "error_generic": "送信に失敗しました。もう一度お試しください。"
+        "error_generic": "送信に失敗しました。もう一度お試しください。",
+        "error_rate_limited": "メッセージが多すぎます。しばらくしてからもう一度お試しください。"
+    },
+    "validation": {
+        "name_min": "名前は2文字以上で入力してください",
+        "name_max": "名前は100文字以内で入力してください",
+        "email_invalid": "有効なメールアドレスを入力してください",
+        "email_max": "メールアドレスは255文字以内で入力してください",
+        "subject_min": "件名は3文字以上で入力してください",
+        "subject_max": "件名は200文字以内で入力してください",
+        "message_min": "メッセージは10文字以上で入力してください",
+        "message_max": "メッセージは5000文字以内で入力してください",
+        "comment_min": "コメントは3文字以上で入力してください",
+        "comment_max": "コメントは2000文字以内で入力してください",
+        "post_id_invalid": "無効な記事IDです"
     },
     "hero": {
         "badge": "GeckoAuthority 提供",
@@ -149,7 +165,7 @@
         "search_placeholder": "記事を検索...",
         "search_button": "検索",
         "feature1_title": "超高速レスポンス",
-        "feature1_description": "Next.js 13による最高のパフォーマンス",
+        "feature1_description": "Next.js 14による最高のパフォーマンス",
         "feature2_title": "SEO最適化",
         "feature2_description": "検索エンジンでの表示順位を向上",
         "feature3_title": "オープンソース",

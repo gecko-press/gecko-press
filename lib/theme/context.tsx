@@ -15,7 +15,7 @@ export type SiteSettings = {
 };
 
 const defaultSiteSettings: SiteSettings = {
-  siteName: "GeckoraPress",
+  siteName: "GeckoPress",
   siteDescription: "Modern Blog Platform",
   logoUrl: "/geckopress-logo.svg",
 };
@@ -28,7 +28,7 @@ const defaultHeroSettings: HeroSettings = {
     description: "Showcase your content with a modern, customizable blog platform built with Next.js and Supabase.",
     searchPlaceholder: "Search articles...",
     features: [
-      { icon: "Zap", title: "Lightning Fast", description: "Maximum performance with Next.js 13" },
+      { icon: "Zap", title: "Lightning Fast", description: "Maximum performance with Next.js 14" },
       { icon: "Globe", title: "SEO Optimized", description: "Rank higher in search engines" },
       { icon: "Shield", title: "Open Source", description: "Completely free under MIT license" },
     ],
@@ -76,7 +76,7 @@ const defaultConfig: ThemeConfig = {
   siteSettings: defaultSiteSettings,
 };
 
-const THEME_CACHE_KEY = "geckorapress-theme-cache";
+const THEME_CACHE_KEY = "geckopress-theme-cache";
 
 function getCachedTheme(): ThemeConfig | null {
   if (typeof window === "undefined") return null;
@@ -137,7 +137,7 @@ export function ThemeConfigProvider({ children }: { children: ReactNode }) {
             .eq("key", "global")
             .maybeSingle(),
           supabase
-            .from("site_settings")
+            .from("public_site_settings")
             .select("logo_url")
             .maybeSingle(),
         ]);
@@ -235,9 +235,9 @@ export function ThemeConfigProvider({ children }: { children: ReactNode }) {
       <FontLoader fontSetId={config.fontSet} />
       {!isReady && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-background">
-          <div className="flex flex-col items-center gap-4">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-primary" />
-            <p className="text-sm text-muted-foreground">Loading...</p>
+          <div className="relative">
+            <div className="h-12 w-12 rounded-full border-[3px] border-muted" />
+            <div className="absolute inset-0 h-12 w-12 animate-spin rounded-full border-[3px] border-transparent border-t-primary" />
           </div>
         </div>
       )}
