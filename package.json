@@ -89,6 +89,7 @@
     "@types/node": "^25.2.0",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
+    "@types/sanitize-html": "^2.16.0",
     "critters": "^0.0.23",
     "eslint": "^8.57.1"
   }
