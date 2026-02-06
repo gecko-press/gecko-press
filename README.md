@@ -8,6 +8,10 @@
   <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16-black?style=social&logo=next.js" alt="Next.js"></a>
 </p>
 <br/>
+<p align="center">
+  <img src="https://geckopress.org/geckopress-cover.jpg" alt="GeckoPress Cover" width="100%">
+</p>
+<br/>
 
 <div align="center">
   <a href="https://geckopress.org">
