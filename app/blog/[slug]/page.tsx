@@ -83,7 +83,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const siteUrl = settings?.site_url || process.env.NEXT_PUBLIC_SITE_URL || "https://geckopress.org";
   const shareUrl = `${siteUrl}/blog/${post.slug}`;
   const authorName = settings?.author_name || "GeckoPress";
-  const authorBio = settings?.author_bio || "";
+  const authorBio = settings?.author_bio || "Content creator and tech enthusiast sharing insights and reviews.";
 
   const readingTime = post.content ? calculateReadingTime(post.content) : (post.reading_time || 1);
   const wordCount = post.content ? post.content.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length : 0;
