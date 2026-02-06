@@ -1,9 +1,14 @@
 <p align="center">
-  <a href="https://github.com/gecko-press/gecko-press/stargazers"><img src="https://img.shields.io/github/stars/gecko-press/gecko-press?style=for-the-badge&color=yellow" alt="Stars" style="display: inline-block;"></a>
-  <a href="https://github.com/gecko-press/gecko-press/blob/main/LICENSE"><img src="https://img.shields.io/github/license/gecko-press/gecko-press?style=for-the-badge&color=blue" alt="License" style="display: inline-block;"></a>
-  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js" alt="Next.js" style="display: inline-block;"></a>
-  <a href="https://supabase.com/"><img src="https://img.shields.io/badge/Supabase-Database-green?style=for-the-badge&logo=supabase" alt="Supabase" style="display: inline-block;"></a>
+  <a href="https://github.com/gecko-press/gecko-press/stargazers"><img src="https://img.shields.io/github/stars/gecko-press/gecko-press?style=flat&logo=github&color=yellow" alt="Stars" style="display: inline-block;"></a>
+  &nbsp;&nbsp;
+  <a href="https://github.com/gecko-press/gecko-press/blob/main/LICENSE"><img src="https://img.shields.io/github/license/gecko-press/gecko-press?style=flat&logo=opensourceinitiative&logoColor=white&color=blue" alt="License" style="display: inline-block;"></a>
+  &nbsp;&nbsp;
+  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16-black?style=flat&logo=next.js&logoColor=white" alt="Next.js" style="display: inline-block;"></a>
+  &nbsp;&nbsp;
+  <a href="https://supabase.com/"><img src="https://img.shields.io/badge/Supabase-Database-green?style=flat&logo=supabase&logoColor=white" alt="Supabase" style="display: inline-block;"></a>
 </p>
+<br/>
+
 <br/>
 
 <div align="center">
