@@ -1,15 +1,15 @@
 <p align="center">
-<a href="https://www.google.com/search?q=https://github.com/gecko-press/gecko-press/stargazers">
-<img src="https://www.google.com/search?q=https://img.shields.io/github/stars/gecko-press/gecko-press%3Fcolor%3Dyellow%26style%3Dfor-the-badge" alt="Stars">
+<a href="https://github.com/gecko-press/gecko-press/stargazers">
+<img src="https://img.shields.io/github/stars/gecko-press/gecko-press%3Fcolor%3Dyellow%26style%3Dfor-the-badge" alt="Stars">
 </a>
-<a href="https://www.google.com/search?q=https://github.com/gecko-press/gecko-press/blob/main/LICENSE">
-<img src="https://www.google.com/search?q=https://img.shields.io/github/license/gecko-press/gecko-press%3Fcolor%3Dblue%26style%3Dfor-the-badge" alt="License">
+<a href="https://github.com/gecko-press/gecko-press/blob/main/LICENSE">
+<img src="https://img.shields.io/github/license/gecko-press/gecko-press%3Fcolor%3Dblue%26style%3Dfor-the-badge" alt="License">
 </a>
 <a href="https://nextjs.org/">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Next.js-15-black%3Fstyle%3Dfor-the-badge%26logo%3Dnext.js" alt="Next.js">
+<img src="https://img.shields.io/badge/Next.js-15-black%3Fstyle%3Dfor-the-badge%26logo%3Dnext.js" alt="Next.js">
 </a>
 <a href="https://supabase.com/">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Supabase-Database-green%3Fstyle%3Dfor-the-badge%26logo%3Dsupabase" alt="Supabase">
+<img src="https://img.shields.io/badge/Supabase-Database-green%3Fstyle%3Dfor-the-badge%26logo%3Dsupabase" alt="Supabase">
 </a>
 </p>
 
