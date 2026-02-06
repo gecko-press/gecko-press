@@ -9,7 +9,7 @@
 </p>
 <br/>
 <p align="center">
-  <img src="https://geckopress.org/geckopress-cover.jpg" alt="GeckoPress Cover" width="100%">
+  <img src="https://geckopress.org/geckopress-cover.png" alt="GeckoPress Cover" width="100%">
 </p>
 <br/>
 
