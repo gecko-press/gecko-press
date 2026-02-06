@@ -88,7 +88,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const readingTime = post.content ? calculateReadingTime(post.content) : (post.reading_time || 1);
   const wordCount = post.content ? post.content.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length : 0;
 
-  const locale = settings?.site_language || "en";
+  const locale = settings?.default_locale || "en";
   const dateLocale = locale === "tr" ? "tr-TR" : "en-US";
 
   const jsonLd = {
