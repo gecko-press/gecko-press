@@ -1,29 +1,14 @@
-"use client";
+import { getSiteSettings } from "@/lib/supabase/queries";
+import { LayoutWrapperClient } from "./layout-wrapper-client";
+import type { Locale } from "@/lib/i18n/config";
 
-import { usePathname } from "next/navigation";
-import { Header } from "@/components/blog/header";
-import { Footer } from "@/components/blog/footer";
-import { ThemeConfigProvider } from "@/lib/theme/context";
-import { I18nProvider } from "@/lib/i18n/provider";
-
-export function LayoutWrapper({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const isAdmin = pathname?.startsWith("/admin");
-  const isLogin = pathname?.startsWith("/login");
-
-  if (isAdmin || isLogin) {
-    return <ThemeConfigProvider>{children}</ThemeConfigProvider>;
-  }
+export async function LayoutWrapper({ children }: { children: React.ReactNode }) {
+  const settings = await getSiteSettings();
+  const initialLocale = (settings?.default_locale as Locale) || "en";
 
   return (
-    <ThemeConfigProvider>
-      <I18nProvider>
-        <div className="flex min-h-screen flex-col">
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
-      </I18nProvider>
-    </ThemeConfigProvider>
+    <LayoutWrapperClient initialLocale={initialLocale}>
+      {children}
+    </LayoutWrapperClient>
   );
 }

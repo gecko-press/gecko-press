@@ -1,11 +1,16 @@
 import { AdminLayoutClient } from "@/components/admin/admin-layout-client";
 import { I18nProvider } from "@/lib/i18n/provider";
+import { getSiteSettings } from "@/lib/supabase/queries";
+import type { Locale } from "@/lib/i18n/config";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSiteSettings();
+  const initialLocale = (settings?.default_locale as Locale) || "en";
+
   return (
-    <I18nProvider>
+    <I18nProvider initialLocale={initialLocale}>
       <AdminLayoutClient>{children}</AdminLayoutClient>
     </I18nProvider>
   );

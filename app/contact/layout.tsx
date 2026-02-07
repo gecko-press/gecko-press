@@ -1,27 +1,39 @@
 import { Metadata } from "next";
 import { I18nProvider } from "@/lib/i18n/provider";
+import { getSiteSettings } from "@/lib/supabase/queries";
+import type { Locale } from "@/lib/i18n/config";
 
-export const metadata: Metadata = {
-  title: "Contact Us - GeckoPress",
-  description: "Get in touch with the GeckoPress team. Send us your questions, feedback, or business inquiries.",
-  openGraph: {
-    type: "website",
-    title: "Contact Us - GeckoPress",
-    description: "Get in touch with the GeckoPress team. Send us your questions, feedback, or business inquiries.",
-  },
-  twitter: {
-    card: "summary",
-    title: "Contact Us - GeckoPress",
-    description: "Get in touch with the GeckoPress team. Send us your questions, feedback, or business inquiries.",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const siteName = settings?.blog_name || "Blog";
+  const title = `Contact Us - ${siteName}`;
+  const description = `Get in touch with the ${siteName} team. Send us your questions, feedback, or business inquiries.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      type: "website",
+      title,
+      description,
+    },
+    twitter: {
+      card: "summary",
+      title,
+      description,
+    },
+  };
+}
 
 export const dynamic = "force-dynamic";
 
-export default function ContactLayout({
+export default async function ContactLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <I18nProvider>{children}</I18nProvider>;
+  const settings = await getSiteSettings();
+  const initialLocale = (settings?.default_locale as Locale) || "en";
+
+  return <I18nProvider initialLocale={initialLocale}>{children}</I18nProvider>;
 }

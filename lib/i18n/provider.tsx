@@ -1,8 +1,8 @@
 "use client";
 
 import { NextIntlClientProvider } from 'next-intl';
-import { ReactNode, useEffect, useState, useCallback } from 'react';
-import { getLocale, defaultLocale, baseLocale, getFallbackChain, type Locale } from './config';
+import { ReactNode, useCallback } from 'react';
+import { baseLocale, getFallbackChain, type Locale } from './config';
 import trMessages from '@/messages/tr.json';
 import enMessages from '@/messages/en.json';
 import deMessages from '@/messages/de.json';
@@ -36,6 +36,25 @@ function getNestedValue(obj: unknown, path: string): unknown {
   return current;
 }
 
+function deepMerge(...objects: unknown[]): unknown {
+  const result: Record<string, unknown> = {};
+
+  for (const obj of objects) {
+    if (!obj || typeof obj !== 'object') continue;
+
+    for (const key of Object.keys(obj as Record<string, unknown>)) {
+      const value = (obj as Record<string, unknown>)[key];
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        result[key] = deepMerge(result[key] || {}, value);
+      } else if (value !== undefined) {
+        result[key] = value;
+      }
+    }
+  }
+
+  return result;
+}
+
 function mergeWithFallback(locale: string): Messages {
   const primary = messagesMap[locale] || {};
   const fallbackChain = getFallbackChain(locale);
@@ -56,40 +75,14 @@ function mergeWithFallback(locale: string): Messages {
   return deepMerge(baseFallback, ...fallbackMessages.reverse(), primary) as Messages;
 }
 
-function deepMerge(...objects: unknown[]): unknown {
-  const result: Record<string, unknown> = {};
-
-  for (const obj of objects) {
-    if (!obj || typeof obj !== 'object') continue;
-
-    for (const key of Object.keys(obj as Record<string, unknown>)) {
-      const value = (obj as Record<string, unknown>)[key];
-      if (value && typeof value === 'object' && !Array.isArray(value)) {
-        result[key] = deepMerge(result[key] || {}, value);
-      } else if (value !== undefined) {
-        result[key] = value;
-      }
-    }
-  }
-
-  return result;
+interface I18nProviderProps {
+  children: ReactNode;
+  initialLocale: Locale;
 }
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>(defaultLocale);
-  const [messages, setMessages] = useState<Messages>(() => mergeWithFallback(defaultLocale));
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    async function loadLocale() {
-      const currentLocale = await getLocale();
-      setLocale(currentLocale);
-      setMessages(mergeWithFallback(currentLocale));
-      setIsLoaded(true);
-    }
-
-    loadLocale();
-  }, []);
+export function I18nProvider({ children, initialLocale }: I18nProviderProps) {
+  const locale = initialLocale;
+  const messages = mergeWithFallback(locale);
 
   const handleError = useCallback((error: { code: string; key?: string }) => {
     if (error.code === 'MISSING_MESSAGE' && error.key) {
@@ -124,24 +117,14 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     return fullKey;
   }, [locale]);
 
-  const providerProps = {
-    locale,
-    messages,
-    timeZone: "Europe/Istanbul" as const,
-    onError: handleError,
-    getMessageFallback,
-  };
-
-  if (!isLoaded) {
-    return (
-      <NextIntlClientProvider {...providerProps} locale={defaultLocale} messages={mergeWithFallback(defaultLocale)}>
-        {children}
-      </NextIntlClientProvider>
-    );
-  }
-
   return (
-    <NextIntlClientProvider {...providerProps}>
+    <NextIntlClientProvider
+      locale={locale}
+      messages={messages}
+      timeZone="Europe/Istanbul"
+      onError={handleError}
+      getMessageFallback={getMessageFallback}
+    >
       {children}
     </NextIntlClientProvider>
   );
