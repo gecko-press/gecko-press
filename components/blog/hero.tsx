@@ -71,7 +71,7 @@ export function Hero() {
             </div>
             <h2 className="font-semibold text-sm">Lightning Fast</h2>
             <p className="text-sm text-muted-foreground text-center">
-              Maximum performance with Next.js 13
+              Maximum performance with Next.js 16
             </p>
           </div>
 
